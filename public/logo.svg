@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Outer circle background -->
+  <circle cx="100" cy="100" r="98" fill="white" stroke="#31B9AE" stroke-width="2"/>
+
+  <!-- Left lung -->
+  <ellipse cx="72" cy="115" rx="38" ry="50" fill="#f4a7b9" stroke="#d4607a" stroke-width="1.5" transform="rotate(-8, 72, 115)"/>
+  <!-- Left lung lobes -->
+  <ellipse cx="62" cy="105" rx="22" ry="30" fill="#e8c4cc" stroke="#d4607a" stroke-width="1" transform="rotate(-5, 62, 105)"/>
+  <ellipse cx="78" cy="130" rx="20" ry="28" fill="#f4a7b9" stroke="#d4607a" stroke-width="1" transform="rotate(-10, 78, 130)"/>
+
+  <!-- Right lung -->
+  <ellipse cx="128" cy="115" rx="38" ry="50" fill="#c8c8c8" stroke="#888" stroke-width="1.5" transform="rotate(8, 128, 115)"/>
+  <!-- Right lung lobes -->
+  <ellipse cx="138" cy="105" rx="22" ry="30" fill="#d8d8d8" stroke="#888" stroke-width="1" transform="rotate(5, 138, 105)"/>
+  <ellipse cx="122" cy="130" rx="20" ry="28" fill="#c8c8c8" stroke="#888" stroke-width="1" transform="rotate(10, 122, 130)"/>
+
+  <!-- Trachea -->
+  <rect x="94" y="55" width="12" height="45" rx="6" fill="#8B4513" stroke="#5a2d0c" stroke-width="1"/>
+  <!-- Trachea rings -->
+  <line x1="94" y1="65" x2="106" y2="65" stroke="#5a2d0c" stroke-width="1.5"/>
+  <line x1="94" y1="72" x2="106" y2="72" stroke="#5a2d0c" stroke-width="1.5"/>
+  <line x1="94" y1="79" x2="106" y2="79" stroke="#5a2d0c" stroke-width="1.5"/>
+  <line x1="94" y1="86" x2="106" y2="86" stroke="#5a2d0c" stroke-width="1.5"/>
+
+  <!-- Bronchi -->
+  <path d="M100 100 Q82 108 72 115" stroke="#8B4513" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M100 100 Q118 108 128 115" stroke="#8B4513" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- Stethoscope -->
+  <circle cx="100" cy="52" r="10" fill="none" stroke="#333" stroke-width="2.5"/>
+  <path d="M100 42 Q100 30 88 30 Q76 30 76 42" stroke="#333" stroke-width="2.5" fill="none"/>
+  <circle cx="76" cy="44" r="5" fill="#333"/>
+  <path d="M100 62 Q100 72 108 78 Q120 86 120 98 L120 140 Q120 155 108 158 Q96 161 92 150 L88 140" stroke="#333" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <circle cx="86" cy="137" r="7" fill="#444" stroke="#222" stroke-width="1.5"/>
+
+  <!-- Text arc top "SOCIETE BURKINABE DE PNEUMOLOGIE" -->
+  <defs>
+    <path id="topArc" d="M 20,100 A 80,80 0 1,1 180,100"/>
+  </defs>
+  <text font-size="10" font-weight="bold" font-family="Arial, sans-serif" fill="#31B9AE">
+    <textPath href="#topArc" startOffset="8%">SOCIETE BURKINABE DE PNEUMOLOGIE</textPath>
+  </text>
+
+  <!-- Text bottom "SO. BU. P" -->
+  <text x="100" y="185" text-anchor="middle" font-size="13" font-weight="900" font-family="Arial, sans-serif" fill="#31B9AE" letter-spacing="1">SO. BU. P</text>
+</svg>
