@@ -1,18 +1,6 @@
 import PageHero from "@/components/PageHero";
 import Link from "next/link";
 
-const membershipTypes = [
-  { id: "titulaire", label: "Membre Titulaire", price: "15 000 XOF", period: "/ an", target: "Médecins spécialistes en pneumologie", color: "#31B9AE", popular: false, perks: ["Accès complet à l'espace membre", "Adhésion à tous les GTT", "Toutes les formations gratuites", "Tarif préférentiel congrès", "Téléchargement des recommandations", "Attestations de participation", "Vote en Assemblée Générale"] },
-  { id: "associe", label: "Membre Associé", price: "10 000 XOF", period: "/ an", target: "Médecins généralistes, paramédicaux, chercheurs", color: "#31B9AE", popular: true, perks: ["Accès à l'espace membre", "Adhésion à 2 GTT au choix", "Formations à tarif réduit", "Tarif préférentiel congrès", "Téléchargement des recommandations", "Attestations de participation"] },
-  { id: "etudiant", label: "Membre Étudiant", price: "5 000 XOF", period: "/ an", target: "Internes, résidents, étudiants en médecine", color: "#5BCEC4", popular: false, perks: ["Accès à l'espace membre", "Adhésion à 1 GTT au choix", "Formations gratuites sélectionnées", "Tarif étudiant congrès", "Téléchargement des recommandations"] },
-];
-
-const paymentMethods = [
-  { name: "Orange Money", logo: "🟠", desc: "Paiement via votre numéro Orange", color: "#FF6B00" },
-  { name: "Wave", logo: "〰️", desc: "Paiement via l'application Wave", color: "#1BA8E0" },
-  { name: "Carte bancaire", logo: "💳", desc: "Visa, Mastercard — sécurisé SSL", color: "#065E52" },
-];
-
 export default function AdhesionPage() {
   return (
     <>
@@ -28,8 +16,8 @@ export default function AdhesionPage() {
       <section className="py-12 bg-background">
         <div className="mx-auto max-w-7xl px-4">
           <div className="text-center mb-10">
-            <p className="text-sm font-bold uppercase tracking-widest mb-2" style={{ color: "#31B9AE" }}>Pourquoi adhérer</p>
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900">Les avantages de la SOBUP</h2>
+            <p className="text-base font-bold uppercase tracking-widest mb-2" style={{ color: "#31B9AE" }}>Pourquoi adhérer</p>
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900">Les avantages de la SOBUP</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
@@ -42,11 +30,11 @@ export default function AdhesionPage() {
               { icon: "🌍", title: "Visibilité", desc: "Profil dans l'annuaire national" },
               { icon: "🗳️", title: "Gouvernance", desc: "Droit de vote en AG" },
             ].map((item) => (
-              <div key={item.title} className="text-center p-4 rounded-2xl border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all"
+              <div key={item.title} className="text-center p-5 rounded-2xl border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all"
                 style={{ "--hover-color": "#31B9AE" } as React.CSSProperties}>
-                <span className="text-2xl block mb-2">{item.icon}</span>
-                <p className="font-bold text-gray-900 text-sm mb-1">{item.title}</p>
-                <p className="text-xs text-gray-500">{item.desc}</p>
+                <span className="text-4xl block mb-3">{item.icon}</span>
+                <p className="font-bold text-gray-900 text-lg mb-1.5">{item.title}</p>
+                <p className="text-base text-gray-500">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -57,70 +45,45 @@ export default function AdhesionPage() {
       <section className="py-12" style={{ background: "#f0fafa" }}>
         <div className="mx-auto max-w-7xl px-4">
           <div className="text-center mb-10">
-            <p className="text-sm font-bold uppercase tracking-widest mb-2" style={{ color: "#31B9AE" }}>Cotisation annuelle</p>
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900">Choisissez votre formule</h2>
+            <p className="text-lg font-bold uppercase tracking-widest mb-2" style={{ color: "#31B9AE" }}>Cotisation annuelle</p>
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900">Une cotisation annuelle unique</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {membershipTypes.map((type) => (
-              <div key={type.id}
-                className={`bg-background rounded-2xl border-2 p-6 flex flex-col relative card-shadow ${type.popular ? "shadow-xl" : ""}`}
-                style={{ borderColor: type.popular ? type.color : "#e2e8f0" }}>
-                {type.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-black text-white px-4 py-1 rounded-full"
-                    style={{ background: "#e67e22" }}>
-                    ⭐ Recommandé
-                  </div>
-                )}
-                <div className="mb-5">
-                  <h3 className="font-black text-gray-900 text-lg mb-1">{type.label}</h3>
-                  <p className="text-xs text-gray-500 mb-4">{type.target}</p>
-                  <div className="flex items-end gap-1">
-                    <span className="text-4xl font-black" style={{ color: type.color }}>{type.price}</span>
-                    <span className="text-gray-400 text-sm mb-1">{type.period}</span>
-                  </div>
-                </div>
-                <ul className="space-y-2.5 mb-6 flex-1">
-                  {type.perks.map((perk) => (
-                    <li key={perk} className="flex items-start gap-2 text-sm text-gray-700">
-                      <svg className="w-4 h-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: type.color }}>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
-                      </svg>
-                      {perk}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/espace-membre"
-                  className="block w-full text-center py-3 rounded-xl font-black text-sm transition-all hover:-translate-y-0.5"
-                  style={type.popular ? { background: type.color, color: "white" } : { border: `2px solid ${type.color}`, color: type.color }}>
-                  Adhérer maintenant →
-                </Link>
+          <div className="max-w-md mx-auto">
+            <div className="bg-background rounded-3xl border-2 p-8 sm:p-10 card-shadow shadow-xl text-center" style={{ borderColor: "#31B9AE" }}>
+              <span className="inline-block text-sm font-black text-white px-4 py-1 rounded-full mb-6" style={{ background: "#e67e22" }}>⭐ Adhésion membre</span>
+              <div className="flex items-end justify-center gap-2">
+                <span className="text-6xl font-black leading-none" style={{ color: "#31B9AE" }}>30 000</span>
+                <span className="text-gray-400 text-xl font-bold mb-1">XOF</span>
               </div>
-            ))}
+              <p className="text-gray-500 text-base mt-3 mb-8">par an — valable 12 mois</p>
+              <ul className="space-y-3 mb-8 text-left max-w-sm mx-auto">
+                {[
+                  "Accès complet à l'espace membre",
+                  "Adhésion à tous les groupes de travail (GTT)",
+                  "Toutes les formations gratuites",
+                  "Tarif préférentiel au congrès annuel",
+                  "Téléchargement des recommandations",
+                  "Attestations de participation",
+                  "Droit de vote en Assemblée Générale",
+                ].map((perk) => (
+                  <li key={perk} className="flex items-start gap-2.5 text-base text-gray-700">
+                    <svg className="w-5 h-5 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "#31B9AE" }}>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {perk}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/espace-membre"
+                className="block w-full text-center py-4 rounded-xl font-black text-base text-white transition-all hover:-translate-y-0.5"
+                style={{ background: "#31B9AE" }}>
+                Adhérer maintenant →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Modes de paiement */}
-      <section className="py-12 bg-background">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-xl font-black text-gray-900">Modes de paiement acceptés</h2>
-            <p className="text-gray-500 text-sm mt-1">Paiement 100% sécurisé — reçu automatique par email</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-            {paymentMethods.map((pm) => (
-              <div key={pm.name} className="text-center p-6 rounded-2xl border-2 border-gray-100 hover:shadow-md transition-all">
-                <span className="text-4xl block mb-3">{pm.logo}</span>
-                <p className="font-black text-gray-900 mb-1">{pm.name}</p>
-                <p className="text-xs text-gray-500">{pm.desc}</p>
-              </div>
-            ))}
-          </div>
-          <p className="text-center text-xs text-gray-400 mt-6">
-            🔒 Paiement sécurisé SSL · Reçu envoyé automatiquement · Accès immédiat après paiement
-          </p>
-        </div>
-      </section>
     </>
   );
 }
