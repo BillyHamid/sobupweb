@@ -5,67 +5,84 @@ import Link from "next/link";
 import Image from "next/image";
 
 interface TitleLine { text: string; accent: boolean; }
+interface Cta { label: string; href: string; }
+interface Slide {
+  id: number;
+  titleLines: TitleLine[];
+  subtitle: string;
+  cta1: Cta;
+  cta2?: Cta;
+  image: string;
+  imageAlt: string;
+}
 
-const slides = [
+const slides: Slide[] = [
   {
     id: 1,
     titleLines: [
-      { text: "Pneumologie en Afrique :", accent: false },
-      { text: "défis et innovations", accent: true },
+      { text: "La référence nationale", accent: false },
+      { text: "en santé respiratoire", accent: true },
     ] as TitleLine[],
-    subtitle: "Tenu du 16 au 18 Décembre 2025 à Ouagadougou — retour sur les moments forts et les échanges scientifiques.",
-    cta1: { label: "S'inscrire au congrès", href: "/evenements/9eme-congres" },
-    cta2: { label: "Voir les photos", href: "/blog" },
+    subtitle: "La SOBUP, une société savante au service des professionnels et du public",
+    cta1: { label: "Découvrir la SOBUP", href: "/a-propos" },
+    cta2: { label: "Annuaire des pneumologues", href: "/annuaire" },
     image: "/baniercongres/congres-1-v2.jpeg",
     imageAlt: "9ème congrès SOBUP - Photo 1",
   },
   {
     id: 2,
     titleLines: [
-      { text: "Rencontres scientifiques", accent: true },
-      { text: "et collaborations", accent: false },
+      { text: "Au cœur de", accent: false },
+      { text: "l'expertise scientifique", accent: true },
     ] as TitleLine[],
-    subtitle: "Échanges entre pneumologues de tout le Burkina Faso et d'Afrique.",
-    cta1: { label: "S'inscrire au congrès", href: "/evenements/9eme-congres" },
-    cta2: { label: "Voir les photos", href: "/blog" },
+    subtitle: "11 groupes de travail – De la tuberculose à l'environnement, en passant par l'asthme, la BPCO, le sommeil, l'oncologie…",
+    cta1: { label: "Découvrir les GTT", href: "/gtt" },
     image: "/baniercongres/congres-2-v2.jpg",
     imageAlt: "9ème congrès SOBUP - Photo 2",
   },
   {
     id: 3,
     titleLines: [
-      { text: "Sessions plénières", accent: false },
-      { text: "et ateliers interactifs", accent: true },
+      { text: "Ne manquez aucun", accent: false },
+      { text: "rendez-vous scientifique", accent: true },
     ] as TitleLine[],
-    subtitle: "Formations et discussions approfondies sur les défis pneumologiques actuels.",
-    cta1: { label: "S'inscrire au congrès", href: "/evenements/9eme-congres" },
-    cta2: { label: "Voir les photos", href: "/blog" },
+    subtitle: "Congrès, Journée Scientifique Régionale, Webinaire…",
+    cta1: { label: "Voir l'agenda", href: "/evenements" },
     image: "/baniercongres/congres-3-v2.jpeg",
     imageAlt: "9ème congrès SOBUP - Photo 3",
   },
   {
     id: 4,
     titleLines: [
-      { text: "Réseautage professionnel", accent: true },
-      { text: "et partage d'expertises", accent: false },
+      { text: "Formez-vous", accent: false },
+      { text: "avec la SOBUP", accent: true },
     ] as TitleLine[],
-    subtitle: "Des moments d'échange et de convivialité entre membres, en marge des sessions scientifiques.",
-    cta1: { label: "S'inscrire au congrès", href: "/evenements/9eme-congres" },
-    cta2: { label: "Voir les photos", href: "/blog" },
+    subtitle: "Ateliers pratiques, webinaires, EPU, FMC, replays et attestations disponibles…",
+    cta1: { label: "Voir les formations", href: "/formations" },
     image: "/baniercongres/congres-4-v3.jpeg",
     imageAlt: "9ème congrès SOBUP - Photo 4",
   },
   {
     id: 5,
     titleLines: [
-      { text: "Évènements et congrès", accent: false },
-      { text: "à venir", accent: true },
+      { text: "Votre bibliothèque", accent: false },
+      { text: "pneumologique", accent: true },
     ] as TitleLine[],
-    subtitle: "Inscrivez-vous aux prochains évènements de la SOBUP et restez connecté.",
-    cta1: { label: "Voir tous les évènements", href: "/evenements" },
-    cta2: { label: "Adhérer à la SOBUP", href: "/adhesion" },
+    subtitle: "Newsletter SOBUP, articles scientifiques, recommandations, protocoles nationaux, guides pratiques, médiathèque — téléchargement gratuit.",
+    cta1: { label: "Accéder aux publications", href: "/publications" },
     image: "/ban1.jpg",
-    imageAlt: "Bannière SOBUP évènements",
+    imageAlt: "Publications et ressources de la SOBUP",
+  },
+  {
+    id: 6,
+    titleLines: [
+      { text: "Ensemble, faisons reculer", accent: false },
+      { text: "les maladies respiratoires", accent: true },
+    ] as TitleLine[],
+    subtitle: "Campagnes de dépistage, émissions radio, plaidoyer auprès des décideurs.",
+    cta1: { label: "Accéder aux publications", href: "/publications" },
+    image: "/ban1.jpeg",
+    imageAlt: "Communauté SOBUP réunie",
   },
 ];
 
@@ -168,7 +185,7 @@ export default function HeroCarousel() {
                 <span
                   key={i}
                   className="block"
-                  style={{ color: line.accent ? "#7EEAE4" : "#FFFFFF", whiteSpace: "nowrap" }}
+                  style={{ color: line.accent ? "#7EEAE4" : "#FFFFFF" }}
                 >
                   {line.text}
                 </span>
@@ -182,7 +199,7 @@ export default function HeroCarousel() {
             />
 
             {/* Subtitle */}
-            <p className="text-base md:text-lg leading-relaxed mb-8 max-w-lg" style={{ color: "rgba(255,255,255,0.78)" }}>
+            <p className="text-lg md:text-xl leading-relaxed mb-8 max-w-lg" style={{ color: "rgba(255,255,255,0.78)" }}>
               {slide.subtitle}
             </p>
 
@@ -195,17 +212,19 @@ export default function HeroCarousel() {
               >
                 {slide.cta1.label}
               </Link>
-              <Link
-                href={slide.cta2.href}
-                className="px-6 py-3 rounded-xl font-black text-sm border transition-all hover:-translate-y-0.5"
-                style={{
-                  color: "#7EEAE4",
-                  borderColor: "rgba(49,185,174,0.45)",
-                  background: "rgba(49,185,174,0.1)",
-                }}
-              >
-                {slide.cta2.label}
-              </Link>
+              {slide.cta2 && (
+                <Link
+                  href={slide.cta2.href}
+                  className="px-6 py-3 rounded-xl font-black text-sm border transition-all hover:-translate-y-0.5"
+                  style={{
+                    color: "#7EEAE4",
+                    borderColor: "rgba(49,185,174,0.45)",
+                    background: "rgba(49,185,174,0.1)",
+                  }}
+                >
+                  {slide.cta2.label}
+                </Link>
+              )}
             </div>
 
             {/* Progress dots + inline nav */}
@@ -294,6 +313,7 @@ export default function HeroCarousel() {
                   height: "92%",
                   border: "5px solid rgba(49,185,174,0.55)",
                   transform: "rotate(2deg)",
+                  background: "#0B3D38",
                 }}
               >
                 <Image
@@ -301,6 +321,7 @@ export default function HeroCarousel() {
                   alt={slide.imageAlt}
                   fill
                   className="object-cover"
+                  style={{ transform: "scale(0.88)" }}
                   sizes="(max-width: 640px) 80vw, 460px"
                   priority={slide.id === 1}
                 />
