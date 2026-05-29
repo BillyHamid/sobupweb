@@ -40,18 +40,7 @@ const upcomingEvents = [
     type: "Congrès",
     badge: "bg-accent text-white",
     href: "/evenements/9eme-congres",
-    image: "/baniercongres/congres-4.jpeg",
-  },
-  {
-    date: "22",
-    month: "Juin",
-    year: "2026",
-    title: "Webinaire : Prise en charge de l'asthme sévère",
-    location: "En ligne",
-    type: "Webinaire",
-    badge: "bg-primary text-white",
-    href: "/evenements/webinaire-asthme",
-    image: null,
+    image: "/baniercongres/congres-4-v3.jpeg",
   },
 ];
 
@@ -92,22 +81,9 @@ const latestNews = [
 
 const journalArticles = [
   {
-    type: "Article original",
-    title: "Prévalence de la silicose chez les mineurs artisanaux au Burkina Faso",
-    authors: "Ouédraogo K., Sawadogo B., et al.",
-    year: "2026",
-  },
-  {
-    type: "Éditorial",
-    title: "Vers une pneumologie africaine : défis et perspectives",
-    authors: "Pr. Zoungrana O.",
-    year: "2026",
-  },
-  {
-    type: "Cas clinique",
-    title: "Aspergillome pulmonaire sur séquelle de tuberculose — à propos d'un cas",
-    authors: "Compaoré Y., Traoré S.",
-    year: "2026",
+    tag: "GT Environnement et Travail",
+    title: "Prise en charge des pathologies respiratoires professionnelles indemnisables (déclaration et réparation)",
+    date: "31 juillet",
   },
 ];
 
@@ -156,10 +132,11 @@ export default function Home() {
               <div className="relative">
                 <div className="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full overflow-hidden shadow-xl ring-4 ring-white">
                   <Image
-                    src="/president-sobup.png"
+                    src="/baniercongres/presi.jpeg"
                     alt="Portrait du Président de la SOBUP"
                     fill
-                    className="object-cover object-[center_15%]"
+                    className="object-cover"
+                    style={{ objectPosition: "60% 12%", transformOrigin: "60% 22%", transform: "scale(1.15)" }}
                     sizes="(max-width: 640px) 288px, (max-width: 768px) 320px, 384px"
                     priority
                   />
@@ -243,14 +220,14 @@ export default function Home() {
             {/* Left — promo */}
             <div className="md:col-span-2 bg-primary rounded-2xl p-8 text-white">
               <span className="text-4xl block mb-4">📖</span>
-              <h2 className="text-2xl font-bold mb-3">Journal Scientifique SOBUP</h2>
+              <h2 className="text-2xl font-bold mb-3">Newsletter SOBUP</h2>
               <p className="text-blue-100 text-sm leading-relaxed mb-6">
-                Publication officielle de la SOBUP — articles originaux, éditoriaux,
-                cas cliniques et revues de la littérature en pneumologie africaine.
+                La lettre d&apos;information officielle de la SOBUP — actualités de la société,
+                comptes-rendus d&apos;événements, mot du président et vie de la communauté.
               </p>
               <Link href="/journal"
                 className="inline-block bg-background text-primary hover:bg-gray-50 px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors">
-                Consulter le journal
+                Consulter la newsletter
               </Link>
             </div>
             {/* Right — articles */}
@@ -265,12 +242,12 @@ export default function Home() {
                 <div key={i}
                   className="bg-background rounded-xl p-5 border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all group cursor-pointer card-shadow">
                   <span className="text-xs font-semibold bg-secondary-light text-secondary px-2.5 py-1 rounded-full">
-                    {article.type}
+                    {article.tag}
                   </span>
                   <h4 className="font-semibold text-gray-900 group-hover:text-primary mt-2 mb-1 text-sm leading-snug">
                     {article.title}
                   </h4>
-                  <p className="text-xs text-gray-400">{article.authors} — {article.year}</p>
+                  <p className="text-xs text-gray-400">{article.date}</p>
                 </div>
               ))}
             </div>

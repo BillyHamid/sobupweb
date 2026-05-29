@@ -2,14 +2,12 @@ import PageHero from "@/components/PageHero";
 import Link from "next/link";
 
 const events = [
-  { id: "9eme-congres", type: "Congrès", date: "15–17 Mai 2026", location: "Hôtel Laïco Ouaga 2000, Ouagadougou", title: "9ème Congrès annuel de la SOBUP", desc: "Pneumologie en Afrique : défis et innovations. 3 jours de conférences, ateliers pratiques et soumissions d'abstracts.", fee: "30 000 XOF membres / 50 000 XOF non-membres", status: "upcoming", badge: "Inscriptions ouvertes", badgeBg: "#E8F9F7", badgeColor: "#259689", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80&fit=crop" },
-  { id: "webinaire-asthme", type: "Webinaire", date: "22 Juin 2026", location: "En ligne (Zoom)", title: "Prise en charge de l'asthme sévère en Afrique", desc: "Webinaire du GT Asthme & Allergie sur les nouveaux protocoles de prise en charge de l'asthme sévère.", fee: "Gratuit pour les membres", status: "upcoming", badge: "Gratuit membres", badgeBg: "#E8F9F7", badgeColor: "#31B9AE", image: "https://images.unsplash.com/photo-1588776814546-1ffbb9e0a75a?w=600&q=80&fit=crop" },
-  { id: "atelier-spirometrie", type: "Atelier", date: "10 Juillet 2026", location: "CHU Yalgado Ouédraogo", title: "Atelier pratique de spirométrie", desc: "Formation pratique intensive sur la réalisation et l'interprétation des explorations fonctionnelles respiratoires.", fee: "15 000 XOF membres / 25 000 XOF non-membres", status: "upcoming", badge: "Places limitées", badgeBg: "#fef3c7", badgeColor: "#d97706", image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80&fit=crop" },
-  { id: "webinaire-tb", type: "Webinaire", date: "5 Septembre 2026", location: "En ligne", title: "Tuberculose résistante : mise à jour 2026", desc: "GT Tuberculose — Nouvelles recommandations OMS et adaptation au contexte burkinabè.", fee: "Gratuit pour les membres", status: "upcoming", badge: "À venir", badgeBg: "#f1f5f9", badgeColor: "#64748b", image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&q=80&fit=crop" },
+  { id: "journee-regionale", type: "Journée", date: "19 Novembre 2026", location: "Koudougou, Burkina Faso", title: "1ère Journée Scientifique Régionale", desc: "Première journée scientifique régionale de la SOBUP — conférences, communications et échanges autour de la santé respiratoire.", badge: "À venir", badgeBg: "#f1f5f9", badgeColor: "#64748b", image: "/ban1.jpeg" },
+  { id: "9eme-congres", type: "Congrès", date: "16 – 18 Décembre 2027", location: "Ouagadougou, Burkina Faso", title: "9ème Congrès de la SOBUP", desc: "Pneumologie en Afrique : défis et innovations — conférences, ateliers pratiques et soumissions d'abstracts.", badge: "Inscriptions ouvertes", badgeBg: "#E8F9F7", badgeColor: "#259689", image: "/baniercongres/congres-4-v3.jpeg" },
 ];
 
 const typeColors: Record<string, string> = {
-  "Congrès": "#7c3aed", "Webinaire": "#31B9AE", "Atelier": "#d97706", "Conférence": "#dc2626",
+  "Congrès": "#7c3aed", "Journée": "#0891b2", "Webinaire": "#31B9AE", "Atelier": "#d97706", "Conférence": "#dc2626",
 };
 
 export default function EvenementsPage() {
@@ -86,12 +84,6 @@ export default function EvenementsPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                     </svg>
                     {ev.location}
-                  </span>
-                  <span className="flex items-center gap-1.5 font-semibold" style={{ color: "#31B9AE" }}>
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    {ev.fee}
                   </span>
                 </div>
               </div>

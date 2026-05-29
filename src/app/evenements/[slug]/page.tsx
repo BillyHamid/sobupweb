@@ -11,9 +11,9 @@ import { useParams } from "next/navigation";
 const heroSlides = [
   {
     id: 1,
-    tag: "Congrès & Journal Régional Scientifique",
+    tag: "Congrès",
     title: "Pneumologie en Afrique : défis et innovations",
-    subtitle: "16 au 18 Décembre 2027 — Ouagadougou, Burkina Faso",
+    subtitle: "",
     image: "/congresobup/congres-3.jpg",
   },
   {
@@ -128,9 +128,11 @@ function HeroCarousel() {
             {slide.title}
           </h1>
           <div className="mb-5 rounded-full" style={{ height: "3px", width: "52px", background: "var(--accent)" }} />
-          <p className="leading-relaxed mb-8" style={{ color: "rgba(255,255,255,.72)", fontSize: "clamp(.88rem, 1.2vw, 1rem)" }}>
-            {slide.subtitle}
-          </p>
+          {slide.subtitle && (
+            <p className="leading-relaxed mb-8" style={{ color: "rgba(255,255,255,.72)", fontSize: "clamp(.88rem, 1.2vw, 1rem)" }}>
+              {slide.subtitle}
+            </p>
+          )}
           <div className="flex flex-wrap gap-3 mb-8">
             <Link href="/espace-membre"
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-black text-white text-sm transition-all hover:-translate-y-0.5"
@@ -194,14 +196,16 @@ const retraites = [
     nom: "Pr. Dramane Konaté",
     titre: "Professeur de Pneumologie — CHU Yalgado Ouédraogo",
     annees: "1988 – 2026",
-    photo: "/bureau/photo-placeholder.jpg",
+    photo: "/retraite/retraite1.jpeg",
+    pos: "50% 26%",
     texte: "38 années de service au chevet des patients et à la formation de générations de pneumologues. Votre rigueur et votre engagement resteront un modèle pour tous.",
   },
   {
     nom: "Dr. Mariam Sawadogo",
     titre: "Pneumologue — Centre Hospitalier Régional de Bobo-Dioulasso",
     annees: "1992 – 2026",
-    photo: "/bureau/photo-placeholder.jpg",
+    photo: "/retraite/retraite2.jpeg",
+    pos: "50% 15%",
     texte: "Pionnière de la pneumologie pédiatrique au Burkina Faso, vous avez consacré votre carrière aux enfants les plus vulnérables. Nous vous souhaitons une retraite méritée.",
   },
 ];
@@ -225,23 +229,25 @@ export default function EventDetailPage() {
       {/* ── HÉROS CAROUSEL ───────────────────────────────────── */}
       <HeroCarousel />
 
-      {/* ── BANDE INFO RAPIDE ────────────────────────────────── */}
-      <div style={{ background: "var(--primary)" }}>
-        <div className="mx-auto max-w-7xl px-6 py-4">
-          <div className="flex flex-wrap items-center justify-center gap-6 text-white text-sm font-semibold">
-            {[
-              { icon: "📅", text: "15 – 17 Mai 2026" },
-              { icon: "📍", text: "Hôtel Laïco Ouaga 2000" },
-              { icon: "🌐", text: "Présentiel + Online" },
-              { icon: "📝", text: "Abstracts : avant le 30 Avril" },
-            ].map((item) => (
-              <div key={item.text} className="flex items-center gap-2">
-                <span>{item.icon}</span>
-                <span style={{ color: "rgba(255,255,255,.9)" }}>{item.text}</span>
-              </div>
-            ))}
-          </div>
+      {/* ── BANDE INFO RAPIDE (défilante) ─────────────────────── */}
+      <div className="overflow-hidden" style={{ background: "var(--primary)" }}>
+        <div className="flex w-max py-4" style={{ animation: "marquee-infos 18s linear infinite" }}>
+          {[0, 1, 2, 3].map((dup) => (
+            <div key={dup} className="flex items-center shrink-0" aria-hidden={dup !== 0}>
+              {[
+                { icon: "📅", text: "16 au 19 Décembre 2027" },
+                { icon: "📍", text: "Azalaï Hôtel, Ouagadougou" },
+                { icon: "🌐", text: "Présentiel" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 px-10 text-white text-sm font-semibold whitespace-nowrap">
+                  <span>{item.icon}</span>
+                  <span style={{ color: "rgba(255,255,255,.9)" }}>{item.text}</span>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
+        <style>{`@keyframes marquee-infos { from { transform: translateX(0); } to { transform: translateX(-25%); } }`}</style>
       </div>
 
       {/* ── CONTENU PRINCIPAL ────────────────────────────────── */}
@@ -260,54 +266,8 @@ export default function EventDetailPage() {
                 Sortie de la 7ème Promotion de Pneumologues du Burkina Faso
               </h2>
 
-              <div className="rounded-3xl overflow-hidden mb-8 shadow-lg">
+              <div className="rounded-3xl overflow-hidden shadow-lg">
                 <Image src="/congres-5.jpeg" alt="Cérémonie 7ème promotion SOBUP" width={1200} height={800} className="w-full h-auto" style={{ display: "block" }} />
-              </div>
-
-              <div className="grid sm:grid-cols-3 gap-5 mb-8">
-                {[
-                  { chiffre: "7ème", label: "Promotion formée au Burkina" },
-                  { chiffre: "12", label: "Nouveaux pneumologues diplômés" },
-                  { chiffre: "2026", label: "Année historique pour la SOBUP" },
-                ].map((stat) => (
-                  <div key={stat.label} className="rounded-2xl p-5 text-center" style={{ background: "var(--primary-light)", border: "1px solid var(--secondary-light)" }}>
-                    <p className="text-3xl font-black mb-1" style={{ color: "var(--primary)" }}>{stat.chiffre}</p>
-                    <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="rounded-2xl p-6 border-l-4" style={{ background: "var(--primary-light)", borderColor: "var(--primary)" }}>
-                <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-                  Le 9ème Congrès annuel de la SOBUP célébrera la sortie officielle de la <strong>7ème promotion de pneumologues</strong> formés entièrement au Burkina Faso. Cette étape historique marque la consolidation d&apos;une filière nationale de formation spécialisée en pneumologie, fruit de plus d&apos;une décennie d&apos;efforts collectifs de la SOBUP, des CHU et du Ministère de la Santé.
-                </p>
-                <p className="text-gray-700 leading-relaxed text-sm sm:text-base mt-3">
-                  La cérémonie de remise des diplômes se tiendra le <strong>17 Mai à 15h30</strong>, en présence des autorités sanitaires et des parrains de la promotion.
-                </p>
-              </div>
-            </section>
-
-            {/* ── PROGRAMME ─────────────────────────────────── */}
-            <section>
-              <div className="flex items-center gap-3 mb-2">
-                <span className="h-1 w-10 rounded-full" style={{ background: "var(--primary)" }} />
-                <span className="text-xs font-black uppercase tracking-widest" style={{ color: "var(--primary)" }}>Agenda</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-6 section-title">Programme scientifique</h2>
-              <div className="space-y-5">
-                {program.map((day) => (
-                  <div key={day.day} className="rounded-2xl border border-gray-100 overflow-hidden card-shadow">
-                    <div className="px-5 py-3 font-bold text-white text-sm" style={{ background: "var(--primary)" }}>{day.day}</div>
-                    <ul className="px-5 py-4 space-y-2.5">
-                      {day.sessions.map((s, i) => (
-                        <li key={i} className="text-sm text-gray-600 flex items-start gap-2.5">
-                          <span className="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={{ background: "var(--secondary)" }} />
-                          {s}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
               </div>
             </section>
 
@@ -324,24 +284,36 @@ export default function EventDetailPage() {
 
               <div className="grid sm:grid-cols-2 gap-6">
                 {retraites.map((p) => (
-                  <div key={p.nom} className="rounded-3xl overflow-hidden shadow-md border border-gray-100">
-                    <div className="h-2 w-full" style={{ background: "linear-gradient(to right, var(--accent), var(--warning))" }} />
-                    <div className="p-6">
-                      <div className="flex items-start gap-4 mb-4">
-                        <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0 border-2" style={{ borderColor: "var(--accent-light)" }}>
-                          <div className="w-full h-full flex items-center justify-center text-2xl font-black text-white" style={{ background: "linear-gradient(135deg, var(--accent), var(--warning))" }}>
-                            {p.nom.split(" ").map(w => w[0]).join("").slice(0, 2)}
-                          </div>
-                        </div>
-                        <div>
-                          <h3 className="font-black text-gray-900 text-base leading-tight">{p.nom}</h3>
-                          <p className="text-xs text-gray-500 mt-0.5">{p.titre}</p>
-                          <span className="inline-block mt-1.5 text-xs font-bold px-2 py-0.5 rounded-full text-white" style={{ background: "var(--accent)" }}>
-                            {p.annees}
-                          </span>
-                        </div>
+                  <div key={p.nom} className="group rounded-3xl overflow-hidden bg-white shadow-lg border border-gray-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                    {/* Bande accent haut */}
+                    <div className="h-1.5 w-full" style={{ background: "linear-gradient(to right, var(--accent), var(--warning))" }} />
+                    {/* Portrait — corps entier */}
+                    <div className="relative h-[440px] overflow-hidden" style={{ background: "radial-gradient(130% 85% at 50% 22%, #0a7265 0%, #0B3D38 72%)" }}>
+                      {/* motif points */}
+                      <div className="absolute inset-0 pointer-events-none opacity-[.07]" style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
+                      {/* halo sol */}
+                      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-40 h-6 rounded-[50%] blur-md" style={{ background: "rgba(0,0,0,.35)" }} />
+                      <Image
+                        src={p.photo}
+                        alt={p.nom}
+                        fill
+                        className="object-contain object-bottom transition-transform duration-500 group-hover:scale-[1.03]"
+                        sizes="(max-width: 640px) 100vw, 460px"
+                      />
+                      {/* Badge expert */}
+                      <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black shadow-md backdrop-blur-sm" style={{ background: "rgba(255,255,255,.92)", color: "var(--accent)" }}>
+                        <span>🎖️</span> Expert honoré
                       </div>
-                      <p className="text-sm text-gray-600 leading-relaxed italic border-l-2 pl-3" style={{ borderColor: "var(--accent-light)" }}>
+                      {/* Années de service */}
+                      <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-md" style={{ background: "var(--accent)" }}>
+                        {p.annees}
+                      </div>
+                    </div>
+                    {/* Identité + hommage */}
+                    <div className="p-6">
+                      <h3 className="text-lg font-black text-gray-900 leading-tight">{p.nom}</h3>
+                      <p className="text-sm mt-0.5 font-semibold" style={{ color: "var(--primary)" }}>{p.titre}</p>
+                      <p className="mt-4 text-sm text-gray-600 leading-relaxed italic border-l-2 pl-4" style={{ borderColor: "var(--accent-light)" }}>
                         &ldquo;{p.texte}&rdquo;
                       </p>
                     </div>
@@ -364,17 +336,22 @@ export default function EventDetailPage() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-8 items-start">
-                    {/* Portrait */}
-                    <div className="shrink-0">
-                      <div className="relative w-32 h-32 sm:w-40 sm:h-40">
-                        <div className="absolute inset-0 rounded-full opacity-30 blur-xl" style={{ background: "var(--primary)" }} />
-                        <div className="relative w-full h-full rounded-full overflow-hidden border-2" style={{ borderColor: "rgba(49,185,174,.4)" }}>
-                          <div className="w-full h-full flex items-center justify-center text-4xl font-black text-white/60" style={{ background: "rgba(49,185,174,.12)" }}>
-                            PK
-                          </div>
+                    {/* Portrait — bannière d'hommage */}
+                    <div className="shrink-0 mx-auto sm:mx-0">
+                      <div className="relative w-48 sm:w-56">
+                        <div className="absolute -inset-2 rounded-2xl opacity-30 blur-xl" style={{ background: "var(--primary)" }} />
+                        <div className="relative rounded-2xl overflow-hidden border-2 shadow-xl" style={{ borderColor: "rgba(49,185,174,.4)", aspectRatio: "3 / 4" }}>
+                          <Image
+                            src="/RIP.jpeg"
+                            alt="Hommage au Professeur Georges OUEDRAOGO"
+                            fill
+                            className="object-cover"
+                            style={{ objectPosition: "47% 33%" }}
+                            sizes="(max-width: 640px) 70vw, 224px"
+                          />
                         </div>
-                        {/* Icône fleur */}
-                        <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center text-base" style={{ background: "rgba(49,185,174,.2)", border: "1px solid rgba(49,185,174,.3)" }}>
+                        {/* Bougie */}
+                        <div className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full flex items-center justify-center text-base shadow-lg" style={{ background: "#0a3830", border: "1px solid rgba(49,185,174,.4)" }}>
                           🕯️
                         </div>
                       </div>
@@ -382,26 +359,23 @@ export default function EventDetailPage() {
 
                     {/* Texte */}
                     <div className="flex-1">
-                      <h3 className="text-xl sm:text-2xl font-black text-white mb-1">Pr. Bila Konaté</h3>
+                      <h3 className="text-xl sm:text-2xl font-black text-white mb-1">Pr. Georges OUEDRAOGO</h3>
                       <p className="text-sm mb-1" style={{ color: "var(--primary-mid)" }}>
-                        Fondateur de la Société Burkinabè de Pneumologie
+                        Pneumologue — Enseignant-Chercheur
                       </p>
-                      <p className="text-xs mb-5" style={{ color: "rgba(255,255,255,.35)" }}>1952 – 2025</p>
+                      <p className="text-xs mb-5" style={{ color: "rgba(255,255,255,.35)" }}>03 juin 1960 – 11 février 2025</p>
 
                       <div className="h-px w-full mb-5 opacity-10" style={{ background: "var(--primary)" }} />
 
                       <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,.65)" }}>
-                        La SOBUP pleure la disparition du Professeur Bila Konaté, l&apos;un de ses membres fondateurs et figure tutélaire de la pneumologie burkinabè. Homme de science, de conviction et de générosité, il a consacré plus de trente ans à structurer la spécialité au Burkina Faso et à former ceux qui constituent aujourd&apos;hui le socle de notre société savante.
-                      </p>
-                      <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,.65)" }}>
-                        Son œuvre — clinique, académique et institutionnelle — demeure le fondement sur lequel nous continuons de bâtir. Le 9ème Congrès lui rend hommage.
+                        La SOBUP rend hommage au Professeur Georges OUEDRAOGO, pionnier de la pneumologie au Burkina Faso. Enseignant-chercheur et formateur d&apos;exception, il a consacré sa carrière à faire grandir la spécialité et à transmettre son savoir à des générations de praticiens.
                       </p>
 
                       <div className="mt-6 rounded-xl px-4 py-3 inline-block" style={{ background: "rgba(49,185,174,.1)", border: "1px solid rgba(49,185,174,.2)" }}>
-                        <p className="text-xs italic" style={{ color: "rgba(255,255,255,.5)" }}>
-                          &ldquo; La santé respiratoire n&apos;est pas un privilège — c&apos;est un droit que nous devons conquérir ensemble. &rdquo;
+                        <p className="text-sm italic" style={{ color: "rgba(255,255,255,.7)" }}>
+                          &ldquo; Un pionnier de la pneumologie au Burkina Faso, un formateur d&apos;exception, un chercheur engagé, un homme d&apos;une humanité rare. &rdquo;
                         </p>
-                        <p className="text-xs mt-1 font-semibold" style={{ color: "var(--primary-mid)" }}>— Pr. Bila Konaté</p>
+                        <p className="text-xs mt-1 font-semibold" style={{ color: "var(--primary-mid)" }}>— Hommage de la SOBUP</p>
                       </div>
                     </div>
                   </div>
@@ -409,26 +383,25 @@ export default function EventDetailPage() {
               </div>
             </section>
 
-            {/* ── INFOS PRATIQUES ─────────────────────────── */}
+            {/* ── PROGRAMME ─────────────────────────────────── */}
             <section>
               <div className="flex items-center gap-3 mb-2">
                 <span className="h-1 w-10 rounded-full" style={{ background: "var(--primary)" }} />
-                <span className="text-xs font-black uppercase tracking-widest" style={{ color: "var(--primary)" }}>Logistique</span>
+                <span className="text-xs font-black uppercase tracking-widest" style={{ color: "var(--primary)" }}>Agenda</span>
               </div>
-              <h2 className="text-2xl font-black text-gray-900 mb-5 section-title">Informations pratiques</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {[
-                  { icon: "📅", label: "Dates", value: "15, 16 et 17 Mai 2026" },
-                  { icon: "📍", label: "Lieu", value: "Hôtel Laïco Ouaga 2000, Ouagadougou" },
-                  { icon: "🌐", label: "Format", value: "Présentiel + diffusion en ligne" },
-                  { icon: "📝", label: "Deadline abstracts", value: "30 Avril 2026" },
-                ].map((info) => (
-                  <div key={info.label} className="flex gap-3 p-4 rounded-xl" style={{ background: "var(--primary-light)" }}>
-                    <span className="text-xl">{info.icon}</span>
-                    <div>
-                      <p className="text-xs text-gray-400 font-medium">{info.label}</p>
-                      <p className="font-bold text-gray-900 text-sm">{info.value}</p>
-                    </div>
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-6 section-title">Programme scientifique</h2>
+              <div className="space-y-5">
+                {program.map((day) => (
+                  <div key={day.day} className="rounded-2xl border border-gray-100 overflow-hidden card-shadow">
+                    <div className="px-5 py-3 font-bold text-white text-sm" style={{ background: "var(--primary)" }}>{day.day}</div>
+                    <ul className="px-5 py-4 space-y-2.5">
+                      {day.sessions.map((s, i) => (
+                        <li key={i} className="text-sm text-gray-600 flex items-start gap-2.5">
+                          <span className="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={{ background: "var(--secondary)" }} />
+                          {s}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>

@@ -13,10 +13,10 @@ const slides = [
       { text: "Pneumologie en Afrique :", accent: false },
       { text: "défis et innovations", accent: true },
     ] as TitleLine[],
-    subtitle: "Du 16 au 18 Décembre 2027 à Ouagadougou — Moments forts et échanges scientifiques.",
+    subtitle: "Tenu du 16 au 18 Décembre 2025 à Ouagadougou — retour sur les moments forts et les échanges scientifiques.",
     cta1: { label: "S'inscrire au congrès", href: "/evenements/9eme-congres" },
     cta2: { label: "Voir les photos", href: "/blog" },
-    image: "/baniercongres/congres-1.jpeg",
+    image: "/baniercongres/congres-1-v2.jpeg",
     imageAlt: "9ème congrès SOBUP - Photo 1",
   },
   {
@@ -28,7 +28,7 @@ const slides = [
     subtitle: "Échanges entre pneumologues de tout le Burkina Faso et d'Afrique.",
     cta1: { label: "S'inscrire au congrès", href: "/evenements/9eme-congres" },
     cta2: { label: "Voir les photos", href: "/blog" },
-    image: "/baniercongres/congres-2.jpeg",
+    image: "/baniercongres/congres-2-v2.jpg",
     imageAlt: "9ème congrès SOBUP - Photo 2",
   },
   {
@@ -40,7 +40,7 @@ const slides = [
     subtitle: "Formations et discussions approfondies sur les défis pneumologiques actuels.",
     cta1: { label: "S'inscrire au congrès", href: "/evenements/9eme-congres" },
     cta2: { label: "Voir les photos", href: "/blog" },
-    image: "/baniercongres/congres-3.jpeg",
+    image: "/baniercongres/congres-3-v2.jpeg",
     imageAlt: "9ème congrès SOBUP - Photo 3",
   },
   {
@@ -49,10 +49,10 @@ const slides = [
       { text: "Réseautage professionnel", accent: true },
       { text: "et partage d'expertises", accent: false },
     ] as TitleLine[],
-    subtitle: "Connexions durables au sein de la communauté pneumologique africaine.",
+    subtitle: "Des moments d'échange et de convivialité entre membres, en marge des sessions scientifiques.",
     cta1: { label: "S'inscrire au congrès", href: "/evenements/9eme-congres" },
     cta2: { label: "Voir les photos", href: "/blog" },
-    image: "/baniercongres/congres-4.jpeg",
+    image: "/baniercongres/congres-4-v3.jpeg",
     imageAlt: "9ème congrès SOBUP - Photo 4",
   },
   {
@@ -255,14 +255,17 @@ export default function HeroCarousel() {
 
           {/* RIGHT — Circular image */}
           <div
-            className="hidden sm:flex justify-center items-center"
+            className="flex justify-center items-center order-first sm:order-none"
             style={{
               opacity: transitioning ? 0 : 1,
               transform: transitioning ? "scale(0.94) translateX(20px)" : "scale(1) translateX(0)",
               transition: "opacity .45s ease, transform .45s ease",
             }}
           >
-            <div className="relative flex items-center justify-center" style={{ width: "500px", height: "500px" }}>
+            <div
+              className="relative flex items-center justify-center"
+              style={{ width: "min(460px, 80vw)", aspectRatio: "1 / 1" }}
+            >
 
               {/* Outer dashed ring */}
               <div
@@ -275,10 +278,9 @@ export default function HeroCarousel() {
 
               {/* Glow blob */}
               <div
-                className="absolute"
+                className="absolute rounded-full"
                 style={{
-                  width: "440px", height: "440px",
-                  borderRadius: "50%",
+                  width: "96%", height: "96%",
                   background: "radial-gradient(circle, rgba(49,185,174,0.28) 0%, transparent 70%)",
                   filter: "blur(24px)",
                 }}
@@ -286,11 +288,10 @@ export default function HeroCarousel() {
 
               {/* Circular image */}
               <div
-                className="relative overflow-hidden shadow-2xl"
+                className="relative overflow-hidden shadow-2xl rounded-full"
                 style={{
-                  width: "460px",
-                  height: "460px",
-                  borderRadius: "50%",
+                  width: "92%",
+                  height: "92%",
                   border: "5px solid rgba(49,185,174,0.55)",
                   transform: "rotate(2deg)",
                 }}
@@ -300,7 +301,7 @@ export default function HeroCarousel() {
                   alt={slide.imageAlt}
                   fill
                   className="object-cover"
-                  sizes="460px"
+                  sizes="(max-width: 640px) 80vw, 460px"
                   priority={slide.id === 1}
                 />
               </div>
@@ -309,7 +310,7 @@ export default function HeroCarousel() {
               <div
                 className="absolute flex items-center gap-2 rounded-2xl shadow-xl px-4 py-2.5"
                 style={{
-                  bottom: "30px", left: "-10px",
+                  bottom: "6%", left: "-10px",
                   background: "rgba(255,255,255,0.97)",
                   backdropFilter: "blur(8px)",
                 }}

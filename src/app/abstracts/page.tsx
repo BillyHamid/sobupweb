@@ -11,9 +11,9 @@ export default function AbstractsPage() {
     <>
       <PageHero
         title="Soumission d'abstracts"
-        subtitle="Déposez vos travaux scientifiques — communications orales, posters, cas cliniques — pour le 9ème Congrès SOBUP."
+        subtitle="Déposez vos travaux scientifiques — communications orales, posters, cas cliniques — pour la Journée Scientifique Régionale."
         breadcrumb={[{ label: "Accueil", href: "/" }, { label: "Abstracts" }]}
-        tag="Congrès 2026 — Deadline : 30 Avril 2026"
+        tag={`Journée Scientifique ${annee} — Soumissions du 31 Juillet au 30 Septembre`}
         shape="sharp"
       />
 
@@ -23,8 +23,8 @@ export default function AbstractsPage() {
           <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5 flex items-center gap-4 mb-8">
             <span className="text-3xl">⏰</span>
             <div>
-              <p className="font-black text-amber-900">Deadline de soumission : 30 Avril 2026</p>
-              <p className="text-sm text-amber-700">Les abstracts acceptés seront notifiés avant le 10 Mai 2026. Les auteurs devront s'inscrire au congrès pour présenter leur travail.</p>
+              <p className="font-black text-amber-900">Période de soumission : du 31 Juillet au 30 Septembre {annee}</p>
+              <p className="text-sm text-amber-700">Les abstracts acceptés seront notifiés après la clôture des soumissions. Les auteurs devront s'inscrire à la journée scientifique pour présenter leur travail.</p>
             </div>
           </div>
 
