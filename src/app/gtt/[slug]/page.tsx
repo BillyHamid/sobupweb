@@ -22,17 +22,18 @@ const gttData: Record<string, GTT> = {
     color: "#dc2626",
     bg: "#fef2f2",
     coordinateurs: ["Dr OUEDRAOGO Julienne", "Dr LOABA Abdou Eric", "Dr ZONGO Marthe"],
-    desc: "Le GT Tuberculose apporte l'expertise pneumologique au Programme National de Lutte contre la Tuberculose pour améliorer la prise en charge et le dépistage au Burkina Faso.",
+    desc: "",
     objectives: [
-      "Apporter l'expertise pneumologique au PNT pour l'adaptation des recommandations internationales aux spécificités locales.",
+      
       "Organiser la formation continue des professionnels de santé sur le diagnostic et la prise en charge de la tuberculose.",
       "Coordonner des projets de recherche opérationnelle.",
       "Contribuer aux campagnes nationales de dépistage et de sensibilisation sur la tuberculose.",
+      "Apporter l'expertise pneumologique au PNT pour l'adaptation des recommandations internationales aux spécificités locales."
     ],
     actions: [
       "Commémoration de la Journée Mondiale de la Tuberculose (JMT) 2026",
       "Campagnes de dépistage en milieu carcéral, sites d'orpaillage, camps PDI et enfants malnutris",
-      "Émissions radiophoniques et télévisées pour la Journée mondiale de lutte contre la tuberculose",
+      "Émissions radiophoniques et télévisées ",
     ],
     resources: [
       { title: "Guide technique de lutte contre la tuberculose (10ème édition, 2025)", icon: "📋" },
@@ -50,7 +51,7 @@ const gttData: Record<string, GTT> = {
     color: "#ea580c",
     bg: "#fff7ed",
     coordinateurs: ["Dr OUEDRAOGO Guy Alain", "Dr OUEDRAOGO Abdramane"],
-    desc: "Ce groupe travaille à adapter les recommandations sur les pneumonies communautaires et nosocomiales aux réalités locales, et à rédiger des protocoles nationaux d'antibiothérapie raisonnée.",
+    desc: "",
     objectives: [
       "Adapter les recommandations internationales sur la prise en charge des pneumonies communautaires et nosocomiales aux réalités locales.",
       "Rédiger des protocoles nationaux d'antibiothérapie raisonnée et de diagnostic des infections fongiques.",
@@ -58,7 +59,7 @@ const gttData: Record<string, GTT> = {
       "Conduire des projets de recherche.",
     ],
     actions: [
-      "Webinaire sur les infections respiratoires basses (en collaboration avec la Société de pathologie infectieuse)",
+      "Webinaire sur les infections respiratoires basses (en collaboration avec la Société Burkinabè de Pathologies Infectieuses et Tropicales)",
       "Rédaction en cours d'un guide de prise en charge des infections respiratoires basses",
     ],
     resources: [
@@ -73,7 +74,7 @@ const gttData: Record<string, GTT> = {
     color: "#2563eb",
     bg: "#eff6ff",
     coordinateurs: ["Dr MINOUNGOU J. Christian", "Dr OUEDRAOGO Patricia"],
-    desc: "Ce groupe travaille sur la prise en charge optimale de l'asthme et des pathologies allergiques dans le contexte burkinabè, notamment via l'École de l'asthme.",
+    desc: "",
     objectives: [
       "Adapter les recommandations internationales au contexte burkinabè.",
       "Rédiger des protocoles nationaux de prise en charge de l'asthme et des allergies respiratoires.",
@@ -98,7 +99,7 @@ const gttData: Record<string, GTT> = {
     color: "#7c3aed",
     bg: "#f5f3ff",
     coordinateurs: ["Dr MAÏGA Moumouni", "Dr DEMBELE Ousmane"],
-    desc: "Dédié au cancer du poumon et aux tumeurs thoraciques, ce GTT œuvre pour améliorer le dépistage précoce et la prise en charge multidisciplinaire au Burkina Faso.",
+    desc: "",
     objectives: [
       "Adapter les recommandations internationales pour le diagnostic et la prise en charge du cancer du poumon au Burkina Faso.",
       "Produire des supports de formation à destination des professionnels de santé.",
@@ -106,10 +107,9 @@ const gttData: Record<string, GTT> = {
     ],
     actions: [
       "Participation aux réunions de concertation pluridisciplinaires (RCP) locales",
-      "Mise en place progressive d'un registre des cas de cancers thoraciques",
     ],
     resources: [
-      { title: "Compte rendu type de RCP (Réunion de Concertation Pluridisciplinaire)", icon: "📋" },
+      { title: "Momentanément indisponible", icon: "📋" },
     ],
   },
 
@@ -120,7 +120,7 @@ const gttData: Record<string, GTT> = {
     color: "#374151",
     bg: "#f9fafb",
     coordinateurs: ["Dr BOUGMA Ghislain", "Dr SOUBEIGA Dimitri"],
-    desc: "Ce groupe travaille sur la prise en charge de la BPCO et le sevrage tabagique, en adaptant les recommandations GOLD au contexte burkinabè.",
+    desc: "",
     objectives: [
       "Adapter les recommandations internationales (GOLD) sur la BPCO et le sevrage tabagique au contexte burkinabè.",
       "Rédiger des protocoles nationaux pour la prise en charge des exacerbations de BPCO et le sevrage tabagique.",
@@ -128,12 +128,9 @@ const gttData: Record<string, GTT> = {
       "Conduire des projets de recherche sur la BPCO, les facteurs de risque environnementaux et professionnels.",
     ],
     actions: [
-      "Commémorations annuelles des Journées sans tabac et de la BPCO",
-      "Élaboration d'un protocole de prise en charge des exacerbations de BPCO",
+      "Commémorations de la Journée sans tabac 2026",
     ],
     resources: [
-      { title: "Questionnaire de dépistage BPCO", icon: "📋" },
-      { title: "Brochure « J'arrête de fumer »", icon: "📄" },
       { title: "Vidéo sur les techniques d'inhalation", icon: "🎬" },
     ],
   },
@@ -145,7 +142,7 @@ const gttData: Record<string, GTT> = {
     color: "#4f46e5",
     bg: "#eef2ff",
     coordinateurs: ["Dr ZIDA Dominique", "Dr OUEDRAOGO Armel"],
-    desc: "Ce groupe adapte les recommandations sur le syndrome d'apnées du sommeil et la VNI aux ressources disponibles au Burkina Faso, et sensibilise sur les troubles respiratoires du sommeil.",
+    desc: "",
     objectives: [
       "Adapter les recommandations internationales sur le syndrome d'apnées du sommeil (SAS) et la VNI aux ressources disponibles au Burkina.",
       "Rédiger des protocoles nationaux pour le diagnostic du SAS et la VNI à domicile.",
@@ -175,7 +172,7 @@ const gttData: Record<string, GTT> = {
       "Conduire des projets de recherche sur les maladies respiratoires chez l'enfant et les déterminants environnementaux.",
     ],
     actions: [
-      "Participation au dépistage de la tuberculose chez les enfants malnutris",
+      "Participation au dépistage de la tuberculose chez les enfants dénutris",
     ],
     resources: [],
   },
@@ -222,7 +219,7 @@ const gttData: Record<string, GTT> = {
     color: "#31B9AE",
     bg: "#E8F9F7",
     coordinateurs: ["Dr BAZONGO Moussa", "Dr KOALGA Richard", "Dr DELMA Eric"],
-    desc: "Ce groupe adapte les recommandations internationales sur l'endoscopie bronchique et les gestes pleuraux aux ressources disponibles au Burkina Faso.",
+    desc: "",
     objectives: [
       "Adapter les recommandations internationales sur l'endoscopie bronchique et les gestes pleuraux aux ressources du Burkina.",
       "Rédiger des protocoles nationaux.",
@@ -230,8 +227,8 @@ const gttData: Record<string, GTT> = {
       "Conduire des projets de recherche.",
     ],
     actions: [
-      "Formation à la pleuroscopie (théorique et pratique)",
-      "Élaboration d'algorithmes pour la prise en charge des épanchements pleuraux",
+      
+      "",
     ],
     resources: [],
   },
@@ -243,7 +240,7 @@ const gttData: Record<string, GTT> = {
     color: "#16a34a",
     bg: "#f0fdf4",
     coordinateurs: ["Dr KUIRE Marcel", "Dr NACANABO Rachel"],
-    desc: "Ce groupe adapte les recommandations sur les pathologies respiratoires professionnelles et environnementales au cadre juridique et sanitaire burkinabè.",
+    desc: "",
     objectives: [
       "Adapter les recommandations internationales sur les pathologies respiratoires professionnelles et environnementales au cadre juridique et sanitaire burkinabè.",
       "Rédiger des protocoles nationaux (référentiel des maladies indemnisables, fiches de déclaration).",

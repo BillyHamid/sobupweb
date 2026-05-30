@@ -29,21 +29,7 @@ export default function GTTPage() {
       {/* Intro */}
       <section className="py-12 bg-background">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {[
-              { icon: "📋", label: "Recommandations nationales", desc: "Chaque GTT produit des recommandations adaptées au contexte burkinabè." },
-              { icon: "🎓", label: "Formations spécialisées", desc: "Modules e-learning, webinaires et ateliers pratiques par spécialité." },
-              { icon: "🤝", label: "Espace collaboratif", desc: "Forum privé et partage de ressources entre membres du groupe." },
-            ].map((item) => (
-              <div key={item.label} className="flex gap-4 p-5 rounded-2xl border border-gray-100 card-shadow">
-                <span className="text-2xl shrink-0">{item.icon}</span>
-                <div>
-                  <p className="font-bold text-gray-900 text-sm mb-1">{item.label}</p>
-                  <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          
 
           {/* GTT grid */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">

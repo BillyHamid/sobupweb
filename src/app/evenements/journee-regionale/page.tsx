@@ -4,8 +4,8 @@ import Image from "next/image";
 const heroImages = [
   "/baniercongres/congres-1-v2.jpeg",
   "/baniercongres/congres-2-v2.jpg",
-  "/baniercongres/congres-3-v2.jpeg",
-  "/baniercongres/congres-4-v3.jpeg",
+  "/baniercongres/congres-3-v3.jpeg",
+  "/baniercongres/congres-4-v3.JPG",
 ];
 
 const objectifs = [

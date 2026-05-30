@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const events = [
   { id: "journee-regionale", type: "Journée", date: "19 Novembre 2026", location: "Koudougou, Burkina Faso", title: "1ère Journée Scientifique Régionale", desc: "Première journée scientifique régionale de la SOBUP — conférences, communications et échanges autour de la santé respiratoire.", badge: "À venir", badgeBg: "#f1f5f9", badgeColor: "#64748b", image: "/ban1.jpeg" },
-  { id: "9eme-congres", type: "Congrès", date: "16 – 18 Décembre 2027", location: "Ouagadougou, Burkina Faso", title: "9ème Congrès de la SOBUP", desc: "Pneumologie en Afrique : défis et innovations — conférences, ateliers pratiques et soumissions d'abstracts.", badge: "Inscriptions ouvertes", badgeBg: "#E8F9F7", badgeColor: "#259689", image: "/baniercongres/congres-4-v3.jpeg" },
+  { id: "9eme-congres", type: "Congrès", date: "16 – 18 Décembre 2027", location: "Ouagadougou, Burkina Faso", title: "9ème Congrès de la SOBUP", desc: "Pneumologie en Afrique : défis et innovations — conférences, ateliers pratiques et soumissions d'abstracts.", badge: "Inscriptions ouvertes", badgeBg: "#E8F9F7", badgeColor: "#259689", image: "/baniercongres/congres-4-v3.JPG" },
 ];
 
 const typeColors: Record<string, string> = {

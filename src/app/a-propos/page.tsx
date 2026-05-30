@@ -26,7 +26,7 @@ export default function AProposPage() {
     <>
       <PageHero
         title="À propos de la SOBUP"
-        subtitle="Société savante de référence en santé respiratoire au Burkina Faso depuis plus de 15 ans."
+        subtitle="Société savante de référence en santé respiratoire au Burkina Faso depuis 2007."
         breadcrumb={[{ label: "Accueil", href: "/" }, { label: "À propos" }]}
         shape="wave"
       />
@@ -43,7 +43,7 @@ export default function AProposPage() {
               La <strong>Société Burkinabè de Pneumologie (SOBUP)</strong> est une société savante médicale créée conformément à la législation en vigueur au Burkina Faso, dont le siège social se trouve à Ouagadougou, au Service de Pneumologie du CHU Yalgado Ouédraogo.
             </p>
             <p className="text-gray-600 leading-relaxed mb-4">
-              Association apolitique, non confessionnelle et à but non lucratif, la SOBUP rassemble les pneumologues, médecins généralistes, internes, résidents, paramédicaux et chercheurs autour d'une mission commune : améliorer la santé respiratoire de tous les Burkinabè.
+              Association apolitique, non confessionnelle et à but non lucratif, la SOBUP rassemble les pneumologues, médecins généralistes, internes, résidents, paramédicaux et chercheurs autour d&apos;une mission commune : améliorer la santé respiratoire de tous les Burkinabè.
             </p>
             <p className="text-gray-600 leading-relaxed">
               Notre devise — <em>« La santé respiratoire, un droit pour tout Burkinabè »</em> — guide chacune de nos actions de formation, de recherche et de plaidoyer.
@@ -61,10 +61,7 @@ export default function AProposPage() {
                 <p className="text-2xl font-black" style={{ color: "#31B9AE" }}>8</p>
                 <p className="text-xs text-gray-500 font-medium">Congrès organisés</p>
               </div>
-              <div className="bg-primary-light rounded-xl px-5 py-3 text-center">
-                <p className="text-2xl font-black" style={{ color: "#31B9AE" }}>99 ans</p>
-                <p className="text-xs text-gray-500 font-medium">Durée statutaire</p>
-              </div>
+             
             </div>
           </div>
           <div className="relative rounded-3xl overflow-hidden shadow-xl" style={{ aspectRatio: "4/3" }}>
@@ -97,7 +94,7 @@ export default function AProposPage() {
               <span className="text-3xl block mb-4">🎯</span>
               <h3 className="text-xl font-black text-gray-900 mb-3">Notre Mission</h3>
               <p className="text-gray-600 text-base leading-relaxed">
-                Promouvoir l'excellence en pneumologie à travers la formation continue, la recherche scientifique, la production de recommandations adaptées au contexte national et le plaidoyer auprès des décideurs.
+                Promouvoir l&apos;excellence en pneumologie à travers la formation continue, la recherche scientifique, la production de recommandations adaptées au contexte national et le plaidoyer auprès des décideurs.
               </p>
             </div>
             <div className="bg-background rounded-2xl p-8 shadow-sm border-t-4 card-shadow" style={{ borderColor: "#e67e22" }}>

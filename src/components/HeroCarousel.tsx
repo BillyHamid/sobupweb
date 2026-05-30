@@ -48,7 +48,7 @@ const slides: Slide[] = [
     ] as TitleLine[],
     subtitle: "Congrès, Journée Scientifique Régionale, Webinaire…",
     cta1: { label: "Voir l'agenda", href: "/evenements" },
-    image: "/baniercongres/congres-3-v2.jpeg",
+    image: "/baniercongres/congres-3-v3.jpeg",
     imageAlt: "9ème congrès SOBUP - Photo 3",
   },
   {
@@ -57,9 +57,9 @@ const slides: Slide[] = [
       { text: "Formez-vous", accent: false },
       { text: "avec la SOBUP", accent: true },
     ] as TitleLine[],
-    subtitle: "Ateliers pratiques, webinaires, EPU, FMC, replays et attestations disponibles…",
+    subtitle: "Ateliers pratiques, webinaires, EPU, FMC — Replay et attestations disponibles…",
     cta1: { label: "Voir les formations", href: "/formations" },
-    image: "/baniercongres/congres-4-v3.jpeg",
+    image: "/baniercongres/congres-4-v3.JPG",
     imageAlt: "9ème congrès SOBUP - Photo 4",
   },
   {
@@ -68,7 +68,7 @@ const slides: Slide[] = [
       { text: "Votre bibliothèque", accent: false },
       { text: "pneumologique", accent: true },
     ] as TitleLine[],
-    subtitle: "Newsletter SOBUP, articles scientifiques, recommandations, protocoles nationaux, guides pratiques, médiathèque — téléchargement gratuit.",
+    subtitle: "Newsletter SOBUP, articles scientifiques, recommandations, protocoles nationaux, guides pratiques, médiathèque — Téléchargement gratuit",
     cta1: { label: "Accéder aux publications", href: "/publications" },
     image: "/ban1.jpg",
     imageAlt: "Publications et ressources de la SOBUP",
@@ -79,40 +79,25 @@ const slides: Slide[] = [
       { text: "Ensemble, faisons reculer", accent: false },
       { text: "les maladies respiratoires", accent: true },
     ] as TitleLine[],
-    subtitle: "Campagnes de dépistage, émissions radio, plaidoyer auprès des décideurs.",
+    subtitle: "Campagnes de dépistage, émissions radio, plaidoyer auprès des décideurs",
     cta1: { label: "Accéder aux publications", href: "/publications" },
-    image: "/ban1.jpeg",
+    image: "/baniercongres/congres-6-v2.jpeg",
     imageAlt: "Communauté SOBUP réunie",
   },
 ];
 
-const AUTOPLAY_MS = 6000;
-
 export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   const goTo = useCallback((index: number) => {
     if (transitioning || index === current) return;
     setTransitioning(true);
-    setProgress(0);
     setTimeout(() => { setCurrent(index); setTransitioning(false); }, 450);
   }, [transitioning, current]);
 
   const next = useCallback(() => goTo((current + 1) % slides.length), [current, goTo]);
   const prev = useCallback(() => goTo((current - 1 + slides.length) % slides.length), [current, goTo]);
-
-  useEffect(() => {
-    setProgress(0);
-    const start = Date.now();
-    const id = setInterval(() => {
-      const pct = Math.min(((Date.now() - start) / AUTOPLAY_MS) * 100, 100);
-      setProgress(pct);
-      if (pct >= 100) next();
-    }, 50);
-    return () => clearInterval(id);
-  }, [current, next]);
 
   useEffect(() => {
     const fn = (e: KeyboardEvent) => {
@@ -252,7 +237,7 @@ export default function HeroCarousel() {
                     {i === current && (
                       <span
                         className="absolute inset-y-0 left-0 rounded-full"
-                        style={{ background: "#7EEAE4", width: `${progress}%`, transition: "width .05s linear" }}
+                        style={{ background: "#7EEAE4", width: "100%" }}
                       />
                     )}
                   </button>
