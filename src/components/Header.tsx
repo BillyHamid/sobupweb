@@ -67,6 +67,7 @@ const navigation = [
     href: "/annuaire",
     children: [
       { name: "Annuaire des pneumologues", href: "/annuaire" },
+      { name: "Liste des membres de la SOBUP", href: "/annuaire/membres" },
       { name: "Carte interactive", href: "/carte" },
     ],
   },
@@ -107,7 +108,7 @@ export default function Header() {
       {/* ── Main nav ── */}
       <nav className="bg-background border-b border-gray-100">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="flex h-[120px] items-center gap-1">
+          <div className="flex h-[90px] items-center gap-1">
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -120,10 +121,10 @@ export default function Header() {
                 priority
               />
               <div className="hidden sm:block">
-                <p className="font-black text-5xl leading-none" style={{ color: "#E91E63" }}>
+                <p className="font-black text-4xl leading-none" style={{ color: "#E91E63" }}>
                   SOBUP
                 </p>
-                <p className="text-sm text-gray-400 font-semibold leading-tight mt-1">
+                <p className="text-xs text-gray-400 font-semibold leading-tight mt-1">
                   Société Burkinabè de Pneumologie
                 </p>
               </div>

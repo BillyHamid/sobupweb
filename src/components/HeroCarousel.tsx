@@ -100,6 +100,11 @@ export default function HeroCarousel() {
   const prev = useCallback(() => goTo((current - 1 + slides.length) % slides.length), [current, goTo]);
 
   useEffect(() => {
+    const id = setInterval(() => next(), 5000);
+    return () => clearInterval(id);
+  }, [next]);
+
+  useEffect(() => {
     const fn = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") next();
       if (e.key === "ArrowLeft") prev();

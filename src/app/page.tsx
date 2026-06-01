@@ -7,6 +7,30 @@ import Newsletter from "@/components/Newsletter";
 
 const upcomingEvents = [
   {
+    date: "31",
+    month: "Juil",
+    year: "2026",
+    title: "Prise en charge des pathologies respiratoires professionnelles indemnisables (déclaration et réparation)",
+    location: "Ouagadougou, Burkina Faso",
+    type: "EPU",
+    badge: "bg-green-600 text-white",
+    href: "/gtt/environnement-travail",
+    image: "/ev-environnement-travail.jpg",
+    gtt: "GT Environnement & Travail",
+  },
+  {
+    date: "8",
+    month: "Août",
+    year: "2026",
+    title: "2ème session de l'École de l'Asthme et des Allergies",
+    location: "CHUP Charles de Gaulle, Ouagadougou",
+    type: "Formation",
+    badge: "bg-blue-600 text-white",
+    href: "/gtt/asthme-allergie",
+    image: "/ev-asthme-v3.jpg",
+    gtt: "GT Asthme & Allergies · GT Pneumo-Pédiatrie",
+  },
+  {
     date: "19",
     month: "Nov",
     year: "2026",
@@ -156,7 +180,7 @@ export default function Home() {
               </svg>
             </Link>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {upcomingEvents.map((ev, i) => (
               <Link key={i} href={ev.href}
                 className="group bg-background rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 card-shadow">
@@ -194,13 +218,21 @@ export default function Home() {
                   <h3 className="font-bold text-gray-900 group-hover:text-primary transition-colors text-base leading-snug mb-3">
                     {ev.title}
                   </h3>
-                  <p className="flex items-center gap-1.5 text-xs text-gray-400">
+                  <p className="flex items-center gap-1.5 text-xs text-gray-400 mb-2">
                     <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                         d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     </svg>
                     {ev.location}
                   </p>
+                  {"gtt" in ev && ev.gtt && (
+                    <p className="flex items-center gap-1.5 text-xs font-medium" style={{ color: "#31B9AE" }}>
+                      <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      {(ev as { gtt: string }).gtt}
+                    </p>
+                  )}
                 </div>
               </Link>
             ))}
@@ -213,22 +245,42 @@ export default function Home() {
       ══════════════════════════════════════ */}
       <section className="py-16 bg-primary-light/40">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid md:grid-cols-5 gap-8 items-start">
-            {/* Left — promo */}
-            <div className="md:col-span-2 bg-primary rounded-2xl p-8 text-white">
-              <span className="text-4xl block mb-4">📖</span>
-              <h2 className="text-2xl font-bold mb-3">Newsletter SOBUP</h2>
-              <p className="text-blue-100 text-sm leading-relaxed mb-6">
-                La lettre d&apos;information officielle de la SOBUP — actualités de la société,
-                comptes-rendus d&apos;événements, mot du président et vie de la communauté.
-              </p>
-              <Link href="/journal"
-                className="inline-block bg-background text-primary hover:bg-gray-50 px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors">
-                Consulter la newsletter
-              </Link>
-            </div>
+          <div className="grid md:grid-cols-7 gap-8 items-start">
+            {/* Left — couverture du dernier numéro */}
+            <Link
+              href="/journal"
+              className="md:col-span-2 group block relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 bg-white"
+            >
+              <div className="relative">
+                <Image
+                  src="/newletter.jpg"
+                  alt="Couverture Newsletter SOBUP N°1 — Avril 2026"
+                  width={1200}
+                  height={1700}
+                  className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+                {/* Badge numéro */}
+                <span
+                  className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black shadow-md backdrop-blur-sm"
+                  style={{ background: "rgba(255,255,255,.95)", color: "#0a7265" }}
+                >
+                  📖 N°1 · Avril 2026
+                </span>
+                {/* CTA bas avec dégradé */}
+                <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/85 via-black/40 to-transparent">
+                  <span
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black text-white shadow-lg"
+                    style={{ background: "#e67e22" }}
+                  >
+                    Lire le numéro
+                    <span className="transition-transform group-hover:translate-x-1">→</span>
+                  </span>
+                </div>
+              </div>
+            </Link>
             {/* Right — articles */}
-            <div className="md:col-span-3 space-y-4">
+            <div className="md:col-span-5 space-y-4">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-bold text-gray-900 text-lg">Derniers articles</h3>
                 <Link href="/journal" className="text-primary text-sm font-medium hover:underline">
@@ -327,6 +379,67 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════
+          NOS PARTENAIRES
+      ══════════════════════════════════════ */}
+      <section className="relative py-20 overflow-hidden" style={{ background: "linear-gradient(135deg, #0B3D38 0%, #0a5c52 50%, #0d7a6e 100%)" }}>
+        {/* Texture points */}
+        <div className="absolute inset-0 pointer-events-none opacity-[.06]"
+          style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+        {/* Halos décoratifs */}
+        <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(49,185,174,.25) 0%, transparent 70%)", filter: "blur(40px)" }} />
+        <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(230,126,34,.2) 0%, transparent 70%)", filter: "blur(40px)" }} />
+
+        <div className="relative mx-auto max-w-7xl px-4">
+          {/* En-tête */}
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[.22em] px-4 py-2 rounded-full mb-4"
+              style={{ background: "rgba(49,185,174,.18)", border: "1px solid rgba(49,185,174,.35)", color: "#7EEAE4" }}>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#7EEAE4" }} />
+              Ils nous font confiance
+            </span>
+            <h2 className="text-2xl md:text-3xl font-black text-white">Nos partenaires</h2>
+            <div className="w-10 h-1 rounded-full mx-auto mt-3" style={{ background: "#e67e22" }} />
+          </div>
+
+          {/* Logos */}
+          <div className="flex flex-wrap items-center justify-center gap-8">
+            {[
+              { src: "/PATS.jpeg", alt: "PATS", name: "PATS" },
+              { src: "/SAPLF.jpg", alt: "SAPLF", name: "SAPLF" },
+            ].map((p) => (
+              <div key={p.alt}
+                className="group relative flex flex-col items-center gap-5 px-16 py-10 rounded-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                style={{ background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.12)", backdropFilter: "blur(8px)" }}>
+                {/* Halo hover */}
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: "rgba(49,185,174,.08)", border: "1px solid rgba(49,185,174,.3)" }} />
+                {/* Logo */}
+                <div className="relative w-52 h-24 flex items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.src}
+                    alt={p.alt}
+                    className="max-h-24 max-w-[208px] w-auto object-contain"
+                  />
+                </div>
+                <span className="relative text-xs font-bold tracking-widest uppercase text-white/50">
+                  {p.name}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Ligne bas */}
+          <p className="text-center text-xs text-white/30 mt-12">
+            Vous souhaitez devenir partenaire ?{" "}
+            <Link href="/contact" className="underline hover:text-white/60 transition-colors">Contactez-nous</Link>
+          </p>
         </div>
       </section>
     </>

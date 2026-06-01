@@ -448,13 +448,6 @@ export default async function GTTDetailPage({ params }: { params: Promise<{ slug
                     <p className="font-semibold text-gray-900">Trimestrielle</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">🏢</span>
-                  <div>
-                    <p className="text-xs text-gray-400">Institution de rattachement</p>
-                    <p className="font-semibold text-gray-900">SOBUP — CHU Yalgado</p>
-                  </div>
-                </div>
               </div>
               <div className="mt-5 pt-4 border-t border-gray-100">
                 <Link
