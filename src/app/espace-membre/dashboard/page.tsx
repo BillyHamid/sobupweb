@@ -54,10 +54,10 @@ export default function DashboardHomePage() {
   const nbGtt = user?.gttMemberships?.length ?? 0;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 lg:space-y-8">
 
       {/* ══════════════ HERO BIENVENUE ══════════════ */}
-      <section className="relative rounded-3xl overflow-hidden p-8 lg:p-10"
+      <section className="relative rounded-2xl sm:rounded-3xl overflow-hidden p-5 sm:p-7 lg:p-10"
         style={{ background: "linear-gradient(135deg, #0B3D38 0%, #065E52 60%, #31B9AE 130%)" }}>
         {/* Décors */}
         <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full opacity-20"
@@ -65,27 +65,27 @@ export default function DashboardHomePage() {
         <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full opacity-10"
           style={{ background: "radial-gradient(circle, #ffffff, transparent)" }} />
 
-        <div className="relative grid lg:grid-cols-3 gap-8 items-center">
+        <div className="relative grid lg:grid-cols-3 gap-6 lg:gap-8 items-center">
           <div className="lg:col-span-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-white px-3 py-1 rounded-full mb-3"
+            <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-black uppercase tracking-widest text-white px-3 py-1 rounded-full mb-3"
               style={{ background: "rgba(126,234,228,0.18)", border: "1px solid rgba(126,234,228,0.3)" }}>
               <Sparkles className="w-3 h-3" /> Espace collaboratif
             </span>
-            <h1 className="text-2xl lg:text-3xl font-black text-white mb-2 leading-tight">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white mb-2 leading-tight">
               Bonjour {shortName} 👋
             </h1>
-            <p className="text-white/70 text-sm lg:text-base max-w-xl leading-relaxed">
+            <p className="text-white/70 text-xs sm:text-sm lg:text-base max-w-xl leading-relaxed">
               Bienvenue dans votre espace collaboratif SOBUP. Suivez vos activités scientifiques,
               vos groupes de travail et vos formations en un seul endroit.
             </p>
-            <div className="flex flex-wrap gap-3 mt-5">
+            <div className="flex flex-wrap gap-2 sm:gap-3 mt-5">
               <Link href="/espace-membre/dashboard/gtt"
-                className="px-5 py-2.5 rounded-xl font-black text-white text-xs transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-black text-white text-xs transition-all hover:-translate-y-0.5 hover:shadow-lg"
                 style={{ background: "#e67e22" }}>
                 Accéder à mes GTT →
               </Link>
               <Link href="/espace-membre/dashboard/formations"
-                className="px-5 py-2.5 rounded-xl font-black text-xs border-2 transition-all hover:-translate-y-0.5"
+                className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-black text-xs border-2 transition-all hover:-translate-y-0.5"
                 style={{ color: "#7EEAE4", borderColor: "rgba(126,234,228,0.4)", background: "rgba(49,185,174,0.1)" }}>
                 Voir mes formations
               </Link>
@@ -93,7 +93,7 @@ export default function DashboardHomePage() {
           </div>
 
           {/* Carte cotisation */}
-          <div className="relative rounded-2xl p-5 backdrop-blur-sm"
+          <div className="relative rounded-2xl p-4 sm:p-5 backdrop-blur-sm"
             style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}>
             <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: "#7EEAE4" }}>
               Statut membre
@@ -121,19 +121,19 @@ export default function DashboardHomePage() {
       </section>
 
       {/* ══════════════ STATS RAPIDES ══════════════ */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {buildStats(nbGtt).map((s) => {
           const Icon = s.icon;
           return (
-            <div key={s.label} className="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: s.bg }}>
-                  <Icon className="w-5 h-5" style={{ color: s.color }} />
+            <div key={s.label} className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between mb-2 sm:mb-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center" style={{ background: s.bg }}>
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: s.color }} />
                 </div>
                 <TrendingUp className="w-4 h-4 text-gray-300" />
               </div>
-              <p className="text-2xl font-black text-gray-900">{s.value}</p>
-              <p className="text-xs text-gray-500 font-medium mt-0.5">{s.label}</p>
+              <p className="text-xl sm:text-2xl font-black text-gray-900">{s.value}</p>
+              <p className="text-xs text-gray-500 font-medium mt-0.5 leading-tight">{s.label}</p>
               <p className="text-[10px] font-bold mt-2" style={{ color: s.color }}>
                 {s.trend}
               </p>
@@ -143,31 +143,31 @@ export default function DashboardHomePage() {
       </section>
 
       {/* ══════════════ GRILLE PRINCIPALE ══════════════ */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
 
         {/* Activité récente */}
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100">
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <div>
-              <h2 className="font-black text-gray-900">Activité récente</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Vos dernières interactions sur la SOBUP</p>
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <h2 className="font-black text-gray-900 text-sm sm:text-base truncate">Activité récente</h2>
+              <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 truncate">Vos dernières interactions sur la SOBUP</p>
             </div>
-            <button className="text-xs font-bold flex items-center gap-1" style={{ color: "#31B9AE" }}>
-              Tout voir <ArrowUpRight className="w-3 h-3" />
+            <button className="text-xs font-bold flex items-center gap-1 shrink-0" style={{ color: "#31B9AE" }}>
+              <span className="hidden sm:inline">Tout voir</span><ArrowUpRight className="w-3 h-3" />
             </button>
           </div>
           <div className="p-2">
             {activites.map((act, i) => {
               const Icon = act.icon;
               return (
-                <div key={i} className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                <div key={i} className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{ background: `${act.color}15` }}>
                     <Icon className="w-4 h-4" style={{ color: act.color }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-gray-900 text-sm leading-snug">{act.titre}</p>
-                    <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{act.desc}</p>
+                    <p className="font-bold text-gray-900 text-xs sm:text-sm leading-snug">{act.titre}</p>
+                    <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 line-clamp-1">{act.desc}</p>
                   </div>
                   <span className="text-[10px] text-gray-400 font-medium shrink-0 whitespace-nowrap">{act.time}</span>
                 </div>
@@ -178,14 +178,14 @@ export default function DashboardHomePage() {
 
         {/* Prochains événements */}
         <div className="bg-white rounded-2xl border border-gray-100">
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <div>
-              <h2 className="font-black text-gray-900">Agenda</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Vos prochains événements</p>
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <h2 className="font-black text-gray-900 text-sm sm:text-base">Agenda</h2>
+              <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5">Vos prochains événements</p>
             </div>
-            <Calendar className="w-4 h-4 text-gray-300" />
+            <Calendar className="w-4 h-4 text-gray-300 shrink-0" />
           </div>
-          <div className="p-4 space-y-3">
+          <div className="p-3 sm:p-4 space-y-3">
             {evenements.map((ev, i) => (
               <Link key={i} href="/evenements"
                 className="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:border-primary/30 hover:shadow-sm transition-all group">
@@ -210,8 +210,8 @@ export default function DashboardHomePage() {
 
       {/* ══════════════ RACCOURCIS ══════════════ */}
       <section>
-        <h2 className="font-black text-gray-900 mb-4">Accès rapides</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <h2 className="font-black text-gray-900 mb-4 text-sm sm:text-base">Accès rapides</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {[
             { label: "Soumettre un abstract", desc: "Pour le 9ème Congrès", icon: "📝", href: "/abstracts", color: "#31B9AE" },
             { label: "Annuaire SOBUP", desc: "119 membres", icon: "📇", href: "/annuaire", color: "#e67e22" },
@@ -219,9 +219,9 @@ export default function DashboardHomePage() {
             { label: "Vendredis SOBUP", desc: "Cas cliniques", icon: "🫁", href: "/evenements", color: "#0ea5e9" },
           ].map((s) => (
             <Link key={s.label} href={s.href}
-              className="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all">
-              <div className="text-3xl mb-3">{s.icon}</div>
-              <p className="font-black text-gray-900 text-sm">{s.label}</p>
+              className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all">
+              <div className="text-2xl sm:text-3xl mb-2 sm:mb-3">{s.icon}</div>
+              <p className="font-black text-gray-900 text-xs sm:text-sm leading-tight">{s.label}</p>
               <p className="text-xs text-gray-400 mt-1">{s.desc}</p>
               <div className="flex items-center gap-1 text-xs font-bold mt-3" style={{ color: s.color }}>
                 Accéder <ArrowUpRight className="w-3 h-3" />

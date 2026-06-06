@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import GTTJoinModal from "./GTTJoinModal";
 import { useSessionUser } from "@/lib/userSession";
@@ -12,7 +12,27 @@ interface Props {
   variant?: "sidebar" | "card";
 }
 
-export default function GTTJoinButton({ gttName, gttColor, label = "Rejoindre ce groupe", variant = "sidebar" }: Props) {
+export default function GTTJoinButton(props: Props) {
+  return (
+    <Suspense fallback={<GTTJoinButtonFallback {...props} />}>
+      <GTTJoinButtonInner {...props} />
+    </Suspense>
+  );
+}
+
+function GTTJoinButtonFallback({ gttColor, label = "Rejoindre ce groupe", variant = "sidebar" }: Props) {
+  return (
+    <button
+      className={`font-bold text-white text-sm ${variant === "sidebar" ? "block w-full text-center py-2.5 rounded-xl" : "inline-block px-5 py-2.5 rounded-xl"}`}
+      style={{ background: gttColor }}
+      disabled
+    >
+      {label}
+    </button>
+  );
+}
+
+function GTTJoinButtonInner({ gttName, gttColor, label = "Rejoindre ce groupe", variant = "sidebar" }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

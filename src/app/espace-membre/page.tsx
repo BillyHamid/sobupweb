@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { authenticate, MEMBERS } from "@/data/members";
 
 export default function EspaceMembrePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen" style={{ background: "#f0fafa" }} />}>
+      <EspaceMembreContent />
+    </Suspense>
+  );
+}
+
+function EspaceMembreContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextUrl = searchParams?.get("next");

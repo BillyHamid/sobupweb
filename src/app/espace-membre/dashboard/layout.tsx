@@ -161,40 +161,78 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Topbar */}
         <header className="bg-white border-b border-gray-100 sticky top-0 z-20">
-          <div className="px-6 py-3 flex items-center gap-4">
+          <div className="px-3 sm:px-4 lg:px-6 py-3 flex items-center gap-2 sm:gap-3 lg:gap-4">
             {/* Burger mobile */}
-            <button className="lg:hidden p-2 rounded-lg hover:bg-gray-100" onClick={() => setMobileNavOpen(true)}>
+            <button
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 shrink-0"
+              onClick={() => setMobileNavOpen(true)}
+              aria-label="Ouvrir le menu"
+            >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
               </svg>
             </button>
 
-            {/* Search */}
-            <div className="flex-1 max-w-md relative">
+            {/* Logo mobile (visible si pas de search) */}
+            <Link href="/" className="lg:hidden flex items-center gap-2 shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="SOBUP" className="w-7 h-7 object-contain" />
+              <span className="font-black text-sm" style={{ color: "#31B9AE" }}>SOBUP</span>
+            </Link>
+
+            {/* Search — masquée sur mobile, visible à partir de md */}
+            <div className="hidden md:block flex-1 max-w-md relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input type="text" placeholder="Rechercher dans l'espace membre..."
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors bg-gray-50" />
+              <input
+                type="text"
+                placeholder="Rechercher dans l'espace membre..."
+                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors bg-gray-50"
+              />
             </div>
 
+            {/* Spacer pour mobile */}
+            <div className="flex-1 md:hidden" />
+
             {/* Actions */}
-            <div className="flex items-center gap-2">
-              <button className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {/* Bouton recherche mobile (alternative au champ caché) */}
+              <button
+                className="md:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                aria-label="Rechercher"
+              >
+                <Search className="w-5 h-5 text-gray-600" />
+              </button>
+
+              <button className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors" aria-label="Notifications">
                 <Bell className="w-5 h-5 text-gray-600" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ background: "#e67e22" }} />
               </button>
+
               <div className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-gray-100">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-white font-black text-xs"
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-white font-black text-xs shrink-0"
                   style={{ background: "linear-gradient(135deg, #31B9AE, #065E52)" }}>
                   {user.avatar}
                 </div>
-                <p className="text-xs font-bold text-gray-700">{user.name.split(" ").slice(0, 2).join(" ")}</p>
+                <p className="text-xs font-bold text-gray-700 hidden lg:block truncate max-w-[140px]">
+                  {user.name.split(" ").slice(0, 2).join(" ")}
+                </p>
               </div>
+
+              {/* Avatar seul sur mobile */}
+              <Link
+                href="/espace-membre/dashboard/profil"
+                className="sm:hidden w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-xs"
+                style={{ background: "linear-gradient(135deg, #31B9AE, #065E52)" }}
+                aria-label="Mon profil"
+              >
+                {user.avatar}
+              </Link>
             </div>
           </div>
         </header>
 
         {/* Page content */}
-        <div className="flex-1 p-6 lg:p-8">
+        <div className="flex-1 p-4 sm:p-5 lg:p-8">
           {children}
         </div>
       </main>
