@@ -1,15 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { authenticate, MEMBERS } from "@/data/members";
 
 export default function EspaceMembrePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextUrl = searchParams?.get("next");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [showDemo, setShowDemo] = useState(false);
   const isSignup = mode === "signup";
 
   const inputCls =
     "w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:border-transparent transition-all";
   const ringStyle = { "--tw-ring-color": "#31B9AE" } as React.CSSProperties;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (isSignup) {
+      // Simulation : inscription désactivée — orienter vers contact
+      setError("L'inscription se fait par adhésion. Contactez le secrétariat SOBUP.");
+      return;
+    }
+
+    const member = authenticate(email, password);
+    if (!member) {
+      setError("Identifiants invalides. Vérifiez votre email et mot de passe.");
+      return;
+    }
+
+    // Stocker le membre connecté (sans le mot de passe)
+    if (typeof window !== "undefined") {
+      const { password: _pwd, ...safe } = member;
+      void _pwd;
+      localStorage.setItem("sobup_user", JSON.stringify(safe));
+      window.dispatchEvent(new Event("sobup_user_changed"));
+    }
+
+    // Si une intention de redirection existe (ex: depuis "Rejoindre un GTT"), on l'honore
+    let destination = "/espace-membre/dashboard";
+    if (nextUrl) {
+      destination = nextUrl;
+    } else if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("sobup_after_login_redirect");
+      if (stored) {
+        destination = stored;
+        localStorage.removeItem("sobup_after_login_redirect");
+      }
+    }
+    router.push(destination);
+  };
+
+  const fillDemo = (memberEmail: string) => {
+    setEmail(memberEmail);
+    setPassword("sobup2026");
+    setError(null);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4" style={{ background: "#f0fafa" }}>
@@ -26,6 +79,20 @@ export default function EspaceMembrePage() {
           </p>
         </div>
 
+        {/* Bandeau d'intention si redirection depuis un GTT */}
+        {nextUrl && !isSignup && (
+          <div className="mb-5 p-3 rounded-xl border flex items-start gap-2.5"
+            style={{ background: "#fff7ed", borderColor: "#fdba74" }}>
+            <span className="text-lg shrink-0">🔐</span>
+            <div>
+              <p className="text-xs font-black text-gray-900">Connexion requise pour adhérer</p>
+              <p className="text-[11px] text-gray-600 mt-0.5">
+                Identifiez-vous pour rejoindre le GTT. Vous serez automatiquement renvoyé après votre connexion.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Card */}
         <div className="bg-background rounded-3xl shadow-xl p-8 border border-gray-100">
           {/* Onglets Connexion / Inscription */}
@@ -34,7 +101,7 @@ export default function EspaceMembrePage() {
               <button
                 key={key}
                 type="button"
-                onClick={() => setMode(key)}
+                onClick={() => { setMode(key); setError(null); }}
                 className="py-2.5 rounded-lg text-sm font-bold transition-all"
                 style={mode === key ? { background: "#31B9AE", color: "white" } : { color: "#64748b" }}
               >
@@ -43,7 +110,7 @@ export default function EspaceMembrePage() {
             ))}
           </div>
 
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {isSignup && (
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1.5">Nom complet</label>
@@ -53,18 +120,40 @@ export default function EspaceMembrePage() {
 
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-1.5">Email professionnel</label>
-              <input type="email" placeholder="votre.email@hopital.bf" className={inputCls} style={ringStyle} />
+              <input
+                type="email"
+                placeholder="prenom.nom@sobup.bf"
+                className={inputCls}
+                style={ringStyle}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
 
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-1.5">Mot de passe</label>
-              <input type="password" placeholder="••••••••" className={inputCls} style={ringStyle} />
+              <input
+                type="password"
+                placeholder="••••••••"
+                className={inputCls}
+                style={ringStyle}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
 
             {isSignup && (
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1.5">Confirmer le mot de passe</label>
                 <input type="password" placeholder="••••••••" className={inputCls} style={ringStyle} />
+              </div>
+            )}
+
+            {error && (
+              <div className="p-3 rounded-xl text-xs font-bold border" style={{ background: "#fef2f2", color: "#dc2626", borderColor: "#fecaca" }}>
+                ⚠ {error}
               </div>
             )}
 
@@ -120,28 +209,57 @@ export default function EspaceMembrePage() {
               </button>
             </p>
           )}
-
         </div>
 
-        {/* Accès direct */}
-        <div className="mt-6 bg-background rounded-2xl border border-gray-100 p-5 card-shadow">
-          <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Accès rapide après connexion</p>
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { icon: "🔬", label: "Mes GTT" },
-              { icon: "🎓", label: "Mes formations" },
-              { icon: "📜", label: "Mes attestations" },
-              { icon: "💳", label: "Ma cotisation" },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-2 p-2.5 rounded-lg text-xs font-semibold text-gray-600" style={{ background: "#f0fafa" }}>
-                <span>{item.icon}</span> {item.label}
+        {/* Comptes de démo */}
+        {!isSignup && (
+          <div className="mt-6 bg-background rounded-2xl border border-gray-100 p-5 card-shadow">
+            <button
+              onClick={() => setShowDemo(!showDemo)}
+              className="w-full flex items-center justify-between text-left"
+            >
+              <div>
+                <p className="text-xs font-black text-gray-700 uppercase tracking-wide">🔑 Comptes de démonstration</p>
+                <p className="text-xs text-gray-400 mt-0.5">Cliquez sur un membre pour pré-remplir le formulaire</p>
               </div>
-            ))}
+              <span className="text-xs font-black" style={{ color: "#31B9AE" }}>
+                {showDemo ? "Masquer" : "Afficher"}
+              </span>
+            </button>
+
+            {showDemo && (
+              <div className="mt-4 space-y-1 max-h-60 overflow-y-auto pr-1">
+                {MEMBERS.map((m) => (
+                  <button
+                    key={m.email}
+                    type="button"
+                    onClick={() => fillDemo(m.email)}
+                    className="w-full flex items-center gap-3 p-2.5 rounded-lg text-left hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-black shrink-0"
+                      style={{ background: m.isBureau ? "#31B9AE" : "#94a3b8" }}>
+                      {m.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-gray-900 truncate">{m.name}</p>
+                      <p className="text-[10px] text-gray-400 truncate">{m.email}</p>
+                    </div>
+                    {m.isBureau && (
+                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full shrink-0"
+                        style={{ background: "#E8F9F7", color: "#31B9AE" }}>BUREAU</span>
+                    )}
+                  </button>
+                ))}
+                <div className="mt-3 p-3 rounded-lg text-xs font-medium" style={{ background: "#fff7ed", color: "#92400e" }}>
+                  💡 Mot de passe pour tous les comptes démo : <strong>sobup2026</strong>
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         <p className="text-center text-xs text-gray-400 mt-4">
-          🔒 Connexion sécurisée SSL · Support : <a href="mailto:contact@sobup.bf" style={{ color: "#31B9AE" }}>contact@sobup.bf</a>
+          🔒 Connexion sécurisée SSL · Support : <a href="mailto:sobup01@gmail.com" style={{ color: "#31B9AE" }}>sobup01@gmail.com</a>
         </p>
       </div>
     </div>

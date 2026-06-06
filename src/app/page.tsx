@@ -39,7 +39,7 @@ const upcomingEvents = [
     type: "Journée",
     badge: "bg-secondary text-white",
     href: "/evenements/journee-regionale",
-    image: "/baniercongres/ban1.jpeg",
+    image: "/ban1.jpeg",
   },
   {
     date: "16",

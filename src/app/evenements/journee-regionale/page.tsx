@@ -12,21 +12,9 @@ const objectifs = [
   { icon: "🤝", titre: "Rapprocher", desc: "Amener l'expertise et les activités de la SOBUP au plus près des praticiens des régions." },
   { icon: "🎓", titre: "Former", desc: "Renforcer les compétences des professionnels de santé régionaux en pneumologie." },
   { icon: "🫁", titre: "Dépister", desc: "Sensibiliser et dépister les maladies respiratoires auprès des populations locales." },
-  { icon: "🔗", titre: "Fédérer", desc: "Bâtir un réseau régional durable de collègues engagés pour la santé respiratoire." },
+  { icon: "🔗", titre: "Fédérer", desc: "Bâtir un réseau régional durable de professionnels de santé engagés pour la santé respiratoire." },
 ];
 
-const programme = [
-  { h: "08h00", t: "Accueil et enregistrement des participants" },
-  { h: "09h00", t: "Cérémonie d'ouverture officielle" },
-  { h: "09h30", t: "Conférence inaugurale — La pneumologie de proximité au Burkina Faso" },
-  { h: "10h30", t: "Pause & visite des stands" },
-  { h: "11h00", t: "Symposium — Prise en charge des pathologies respiratoires en région" },
-  { h: "12h30", t: "Déjeuner & networking" },
-  { h: "14h00", t: "Ateliers pratiques — spirométrie, sevrage tabagique, urgences respiratoires" },
-  { h: "15h30", t: "Table ronde — Collaboration ville-hôpital et référencement des patients" },
-  { h: "16h30", t: "Communications libres & présentation des posters" },
-  { h: "17h30", t: "Synthèse, recommandations régionales et clôture" },
-];
 
 const infos = [
   { icon: "📅", label: "Date", value: "19 Novembre 2026" },
@@ -96,7 +84,7 @@ export default function JourneeRegionalePage() {
             style={{ fontSize: "clamp(1.9rem, 4.5vw, 3.4rem)", animation: "jr-up .7s ease both", animationDelay: ".15s" }}
           >
             <span className="block">Rapprocher les activités SOBUP</span>
-            <span className="block" style={{ color: "#7EEAE4" }}>vers les collègues et les patients en régions</span>
+            <span className="block" style={{ color: "#7EEAE4" }}>vers les professionnels de santé et les patients en régions</span>
           </h1>
 
           {/* Barre accent */}
@@ -187,35 +175,6 @@ export default function JourneeRegionalePage() {
         </div>
       </section>
 
-      {/* ════════════════ PROGRAMME ════════════════ */}
-      <section className="py-16 bg-background">
-        <div className="mx-auto max-w-4xl px-4">
-          <div className="text-center mb-12">
-            <p className="text-sm font-bold uppercase tracking-widest mb-2" style={{ color: "#31B9AE" }}>Au programme</p>
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900 section-title">Déroulé de la journée</h2>
-          </div>
-          <div className="relative">
-            {/* Ligne verticale */}
-            <div className="absolute top-2 bottom-2 left-[68px] sm:left-[84px] w-px" style={{ background: "linear-gradient(to bottom, var(--primary), var(--secondary-light))" }} />
-            <div className="space-y-5">
-              {programme.map((p) => (
-                <div key={p.h} className="relative flex items-start gap-4 sm:gap-6">
-                  <div className="shrink-0 w-14 sm:w-16 text-right">
-                    <span className="text-sm font-black" style={{ color: "#31B9AE" }}>{p.h}</span>
-                  </div>
-                  <div className="relative shrink-0 mt-1.5">
-                    <span className="block w-3.5 h-3.5 rounded-full ring-4 ring-white" style={{ background: "#31B9AE" }} />
-                  </div>
-                  <div className="flex-1 bg-background rounded-xl border border-gray-100 px-5 py-3.5 card-shadow">
-                    <p className="text-sm text-gray-700 font-medium">{p.t}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <p className="text-center text-xs text-gray-400 mt-8">Programme prévisionnel — susceptible d&apos;ajustements.</p>
-        </div>
-      </section>
 
       {/* ════════════════ INFOS PRATIQUES ════════════════ */}
       <section className="py-16" style={{ background: "#f0fafa" }}>
@@ -242,7 +201,7 @@ export default function JourneeRegionalePage() {
         <div className="relative mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-black mb-3">Participez à la 1ère Journée Régionale</h2>
           <p className="text-white/80 text-sm sm:text-base mb-8 max-w-xl mx-auto">
-            Rejoignez vos collègues à Koudougou pour une journée de science, de partage et d&apos;engagement
+            Rejoignez vos professionnels de santé à Koudougou pour une journée de science, de partage et d&apos;engagement
             au service de la santé respiratoire des régions.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">

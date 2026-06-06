@@ -2,8 +2,10 @@ import PageHero from "@/components/PageHero";
 import Link from "next/link";
 
 const events = [
+  { id: "gtt/environnement-travail", type: "EPU", date: "31 Juillet 2026", location: "Ouagadougou, Burkina Faso", title: "Prise en charge des pathologies respiratoires professionnelles indemnisables (déclaration et réparation)", desc: "Éducation médicale continue organisée par le GT Environnement & Travail sur la déclaration et la réparation des pathologies respiratoires professionnelles.", badge: "À venir", badgeBg: "#f0fdf4", badgeColor: "#16a34a", gtt: "GT Environnement & Travail", image: "/ev-environnement-travail.jpg" },
+  { id: "gtt/asthme-allergie", type: "Formation", date: "8 Août 2026", location: "CHUP Charles de Gaulle, Ouagadougou", title: "2ème session de l'École de l'Asthme et des Allergies", desc: "Deuxième session de formation de l'École de l'Asthme, organisée conjointement par le GT Asthme & Allergies et le GT Pneumo-Pédiatrie.", badge: "À venir", badgeBg: "#eff6ff", badgeColor: "#2563eb", gtt: "GT Asthme & Allergies · GT Pneumo-Pédiatrie", image: "/ev-asthme-v3.jpg" },
   { id: "journee-regionale", type: "Journée", date: "19 Novembre 2026", location: "Koudougou, Burkina Faso", title: "1ère Journée Scientifique Régionale", desc: "Première journée scientifique régionale de la SOBUP — conférences, communications et échanges autour de la santé respiratoire.", badge: "À venir", badgeBg: "#f1f5f9", badgeColor: "#64748b", image: "/ban1.jpeg" },
-  { id: "9eme-congres", type: "Congrès", date: "16 – 18 Décembre 2027", location: "Ouagadougou, Burkina Faso", title: "9ème Congrès de la SOBUP", desc: "Pneumologie en Afrique : défis et innovations — conférences, ateliers pratiques et soumissions d'abstracts.", badge: "Inscriptions ouvertes", badgeBg: "#E8F9F7", badgeColor: "#259689", image: "/baniercongres/congres-4-v3.JPG" },
+  { id: "9eme-congres", type: "Congrès", date: "16 – 19 Décembre 2027", location: "Sopatel Silmande Hôtel, Ouagadougou", title: "9ème Congrès de la SOBUP", desc: "Pneumologie en Afrique : défis et innovations — conférences, ateliers pratiques et soumissions d'abstracts.", badge: "Inscriptions ouvertes", badgeBg: "#E8F9F7", badgeColor: "#259689", image: "/baniercongres/congres-4-v3.JPG" },
 ];
 
 const typeColors: Record<string, string> = {
@@ -85,6 +87,14 @@ export default function EvenementsPage() {
                     </svg>
                     {ev.location}
                   </span>
+                  {"gtt" in ev && ev.gtt && (
+                    <span className="flex items-center gap-1.5 font-medium" style={{ color: "#31B9AE" }}>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      </svg>
+                      {(ev as { gtt: string }).gtt}
+                    </span>
+                  )}
                 </div>
               </div>
             </Link>

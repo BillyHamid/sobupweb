@@ -1,5 +1,6 @@
 import PageHero from "@/components/PageHero";
 import Link from "next/link";
+import GTTJoinButton from "@/components/GTTJoinButton";
 
 interface GTT {
   name: string;
@@ -451,12 +452,11 @@ export default async function GTTDetailPage({ params }: { params: Promise<{ slug
               </div>
               <div className="mt-5 pt-4 border-t border-gray-100">
                 <Link
-                  href="/adhesion"
-                  className="block w-full text-center py-2.5 rounded-xl font-bold text-white text-sm transition-all hover:-translate-y-0.5"
-                  style={{ background: gtt.color }}
+                  href="#"
+                  className="hidden"
                 >
-                  Rejoindre ce groupe
                 </Link>
+                <GTTJoinButton gttName={gtt.name} gttColor={gtt.color} />
               </div>
             </div>
 

@@ -43,18 +43,10 @@ const navigation = [
       { name: "Soumettre un abstract", href: "/abstracts" },
     ],
   },
-  {
-    name: "Formations",
-    href: "/formations",
-    children: [
-      { name: "Échographie thoracique", href: "/formations/echographie-thoracique" },
-      { name: "Pleuroscopie médicale", href: "/formations/pleuroscopie-medicale" },
-      { name: "Rédaction scientifique", href: "/formations/redaction-scientifique" },
-    ],
-  },
+  { name: "Formations", href: "/formations" },
   {
     name: "Publications",
-    href: "/publications",
+    href: "#",
     children: [
       { name: "Blog SOBUP", href: "/blog" },
       { name: "Publication Scientifique", href: "/publications-scientifiques" },
@@ -68,7 +60,6 @@ const navigation = [
     children: [
       { name: "Annuaire des pneumologues", href: "/annuaire" },
       { name: "Liste des membres de la SOBUP", href: "/annuaire/membres" },
-      { name: "Carte interactive", href: "/carte" },
     ],
   },
   { name: "Nous contacter", href: "/contact", button: true },
