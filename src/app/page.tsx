@@ -7,11 +7,12 @@ import Newsletter from "@/components/Newsletter";
 
 const upcomingEvents = [
   {
-    date: "31",
+    date: "24",
     month: "Juil",
     year: "2026",
+    time: "15h30 – 17h30",
     title: "Prise en charge des pathologies respiratoires professionnelles indemnisables (déclaration et réparation)",
-    location: "Ouagadougou, Burkina Faso",
+    location: "Salle de conférence de la CARFO, Ouagadougou",
     type: "EPU",
     badge: "bg-green-600 text-white",
     href: "/gtt/environnement-travail",
@@ -24,10 +25,10 @@ const upcomingEvents = [
     year: "2026",
     title: "2ème session de l'École de l'Asthme et des Allergies",
     location: "CHUP Charles de Gaulle, Ouagadougou",
-    type: "Formation",
+    type: "",
     badge: "bg-blue-600 text-white",
     href: "/gtt/asthme-allergie",
-    image: "/ev-asthme-v3.jpg",
+    image: "/ev-asthme-ecole.png",
     gtt: "GT Asthme & Allergies · GT Pneumo-Pédiatrie",
   },
   {
@@ -39,7 +40,7 @@ const upcomingEvents = [
     type: "Journée",
     badge: "bg-secondary text-white",
     href: "/evenements/journee-regionale",
-    image: "/ban1.jpeg",
+    image: "/ev-journee-regionale.jpg",
   },
   {
     date: "16",
@@ -50,7 +51,7 @@ const upcomingEvents = [
     type: "Congrès",
     badge: "bg-accent text-white",
     href: "/evenements/9eme-congres",
-    image: "/baniercongres/congres-4-v3.JPG",
+    image: "/congres-6.jpg",
   },
 ];
 
@@ -89,13 +90,6 @@ const latestNews = [
   },
 ];
 
-const journalArticles = [
-  {
-    tag: "GT Environnement et Travail",
-    title: "Prise en charge des pathologies respiratoires professionnelles indemnisables (déclaration et réparation)",
-    date: "31 juillet",
-  },
-];
 
 
 /* ─── Page ─── */
@@ -186,7 +180,7 @@ export default function Home() {
                 className="group bg-background rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 card-shadow">
                 {/* Image or color banner */}
                 {ev.image ? (
-                  <div className="relative h-44 overflow-hidden">
+                  <div className="relative h-64 sm:h-72 overflow-hidden">
                     <Image
                       src={ev.image}
                       alt={ev.title}
@@ -195,9 +189,11 @@ export default function Home() {
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"/>
-                    <span className={`absolute top-3 left-3 ${ev.badge} text-xs font-bold px-3 py-1 rounded-full shadow`}>
-                      {ev.type}
-                    </span>
+                    {ev.type && (
+                      <span className={`absolute top-3 left-3 ${ev.badge} text-xs font-bold px-3 py-1 rounded-full shadow`}>
+                        {ev.type}
+                      </span>
+                    )}
                     <div className="absolute bottom-3 left-4 flex items-baseline gap-1.5 text-white">
                       <span className="text-3xl font-black leading-none">{ev.date}</span>
                       <span className="text-sm font-medium opacity-90">{ev.month} {ev.year}</span>
@@ -218,6 +214,15 @@ export default function Home() {
                   <h3 className="font-bold text-gray-900 group-hover:text-primary transition-colors text-base leading-snug mb-3">
                     {ev.title}
                   </h3>
+                  {"time" in ev && ev.time && (
+                    <p className="flex items-center gap-1.5 text-xs font-semibold mb-2" style={{ color: "#e67e22" }}>
+                      <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {(ev as { time: string }).time}
+                    </p>
+                  )}
                   <p className="flex items-center gap-1.5 text-xs text-gray-400 mb-2">
                     <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -241,15 +246,14 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════
-          JOURNAL SOBUP
+          JOURNAL SOBUP (Newsletter — centrée)
       ══════════════════════════════════════ */}
       <section className="py-16 bg-primary-light/40">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid md:grid-cols-7 gap-8 items-start">
-            {/* Left — couverture du dernier numéro */}
+          <div className="flex justify-center">
             <Link
               href="/journal"
-              className="md:col-span-2 group block relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 bg-white"
+              className="group block relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 bg-white w-full max-w-md"
             >
               <div className="relative">
                 <Image
@@ -258,7 +262,7 @@ export default function Home() {
                   width={1200}
                   height={1700}
                   className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
-                  sizes="(max-width: 768px) 100vw, 40vw"
+                  sizes="(max-width: 768px) 100vw, 28rem"
                 />
                 {/* Badge numéro */}
                 <span
@@ -279,27 +283,6 @@ export default function Home() {
                 </div>
               </div>
             </Link>
-            {/* Right — articles */}
-            <div className="md:col-span-5 space-y-4">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-bold text-gray-900 text-lg">Derniers articles</h3>
-                <Link href="/journal" className="text-primary text-sm font-medium hover:underline">
-                  Tout voir →
-                </Link>
-              </div>
-              {journalArticles.map((article, i) => (
-                <div key={i}
-                  className="bg-background rounded-xl p-5 border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all group cursor-pointer card-shadow">
-                  <span className="text-xs font-semibold bg-secondary-light text-secondary px-2.5 py-1 rounded-full">
-                    {article.tag}
-                  </span>
-                  <h4 className="font-semibold text-gray-900 group-hover:text-primary mt-2 mb-1 text-sm leading-snug">
-                    {article.title}
-                  </h4>
-                  <p className="text-xs text-gray-400">{article.date}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -412,6 +395,7 @@ export default function Home() {
             {[
               { src: "/PATS.jpeg", alt: "PATS", name: "PATS" },
               { src: "/SAPLF.jpg", alt: "SAPLF", name: "SAPLF" },
+              { src: "/PNT.jpg", alt: "Programme National Tuberculose — Burkina Faso", name: "PNT" },
             ].map((p) => (
               <div key={p.alt}
                 className="group relative flex flex-col items-center gap-5 px-16 py-10 rounded-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer"

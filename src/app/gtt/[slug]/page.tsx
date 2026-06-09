@@ -12,7 +12,18 @@ interface GTT {
   desc: string;
   objectives: string[];
   actions: string[];
-  resources: { title: string; icon: string }[];
+  resources: {
+    title: string;
+    icon: string;
+    /** Chemin vers le fichier dans /public (ex: "/docs/gtt/tuberculose/guide-2025.pdf"). Si omis, la ressource s'affiche en "bientôt disponible". */
+    file?: string;
+    /** URL externe (Drive, OMS…) — utilisé si `file` n'est pas fourni. */
+    url?: string;
+    /** Taille lisible (ex: "2.4 Mo"). Optionnel. */
+    size?: string;
+    /** Format affiché (PDF, DOCX, XLSX…). Auto-déduit du `file` si omis. */
+    format?: string;
+  }[];
 }
 
 const gttData: Record<string, GTT> = {
@@ -37,11 +48,36 @@ const gttData: Record<string, GTT> = {
       "Émissions radiophoniques et télévisées ",
     ],
     resources: [
-      { title: "Guide technique de lutte contre la tuberculose (10ème édition, 2025)", icon: "📋" },
-      { title: "Guide de prise en charge de la tuberculose chez l'enfant", icon: "📄" },
-      { title: "Guide TB/VIH", icon: "📄" },
-      { title: "Guide de prise en charge de la Tuberculose Pharmacorésistante (TB-MR/RR)", icon: "📋" },
-      { title: "Plan Stratégique National de lutte contre la tuberculose (PSN-TB)", icon: "📊" },
+      {
+        title: "Guide technique de lutte contre la tuberculose (10ème édition, 2025)",
+        icon: "📋",
+        file: "/docs/gtt/tuberculose/guide-technique-tb-2025.pdf",
+        size: "5,4 Mo",
+      },
+      {
+        title: "Guide de prise en charge de la tuberculose chez l'enfant (2025)",
+        icon: "📄",
+        file: "/docs/gtt/tuberculose/guide-tb-enfant-2025.pdf",
+        size: "2,6 Mo",
+      },
+      {
+        title: "Guide TB/VIH (6ème édition, 2024)",
+        icon: "📄",
+        file: "/docs/gtt/tuberculose/guide-tb-vih-2024.pdf",
+        size: "2,2 Mo",
+      },
+      {
+        title: "Guide de prise en charge de la Tuberculose Pharmacorésistante (TB-MR/RR, 2026)",
+        icon: "📋",
+        file: "/docs/gtt/tuberculose/guide-tb-resistante-2026.pdf",
+        size: "3,3 Mo",
+      },
+      {
+        title: "Plan Stratégique National de lutte contre la tuberculose (PSN-TB 2024-2026)",
+        icon: "📊",
+        file: "/docs/gtt/tuberculose/psn-tb-2024-2026.pdf",
+        size: "3,7 Mo",
+      },
     ],
   },
 
@@ -88,7 +124,71 @@ const gttData: Record<string, GTT> = {
       "Commémoration de la Journée mondiale de l'asthme",
     ],
     resources: [
-      { title: "Capsule vidéo sur l'utilisation des inhalateurs", icon: "🎬" },
+      // ── Chambre d'inhalation ──────────────────────────────────
+      {
+        title: "Chambre d'inhalation — Français",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1xAUr_6Nt7H1LqcgtAuLjLJqHZTIT0Lsr/view?usp=sharing",
+        format: "Vidéo · FR",
+      },
+      {
+        title: "Chambre d'inhalation — Dioula",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1oXqacz04kPD9bNaZItzOZu1DVPTzgC-l/view?usp=sharing",
+        format: "Vidéo · Dioula",
+      },
+      {
+        title: "Chambre d'inhalation — Mooré",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1_5eWazgaL8GR7MX38-QI7M7p9XJyLJ1N/view?usp=sharing",
+        format: "Vidéo · Mooré",
+      },
+      // ── Aérosol doseur ────────────────────────────────────────
+      {
+        title: "Aérosol doseur — Français",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1-oEIdS9gNld0ZgSdJDlb--QZLQm4VjBf/view?usp=sharing",
+        format: "Vidéo · FR",
+      },
+      {
+        title: "Aérosol doseur — Dioula",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1o5meQwXkIxIRzrpBX66MDzmVoGlL1W9f/view?usp=sharing",
+        format: "Vidéo · Dioula",
+      },
+      {
+        title: "Aérosol doseur — Mooré",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1ypY_VXLNtkaa8wlwaPQwjrxWjeIlgSmM/view?usp=sharing",
+        format: "Vidéo · Mooré",
+      },
+      // ── Diskus (poudre sèche) ────────────────────────────────
+      {
+        title: "Utilisation du Diskus — Français",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1xkmAaV3RSbqhWVJHwM3z1dMTHAQsPJ2V/view?usp=sharing",
+        format: "Vidéo · FR",
+      },
+      {
+        title: "Utilisation du Diskus — Dioula",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/15KZPVyJEEOAdaER0TF2A8_QXXiffFyys/view?usp=sharing",
+        format: "Vidéo · Dioula",
+      },
+      {
+        title: "Utilisation du Diskus — Mooré",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1aJXxZlowHU5btcfUgraZRDbVMx--j1um/view?usp=sharing",
+        format: "Vidéo · Mooré",
+      },
+      // ── Replay ──────────────────────────────────────────────
+      {
+        title: "Vidéo récapitulative du lancement de l'École de l'asthme de Ouagadougou",
+        icon: "🎞️",
+        file: "/docs/gtt/asthme-allergie/lancement-ecole-asthme-ouagadougou.mp4",
+        format: "MP4",
+        size: "18 Mo",
+      },
       { title: "Liste des prochaines sessions de l'École de l'asthme", icon: "📅" },
     ],
   },
@@ -109,9 +209,7 @@ const gttData: Record<string, GTT> = {
     actions: [
       "Participation aux réunions de concertation pluridisciplinaires (RCP) locales",
     ],
-    resources: [
-      { title: "Momentanément indisponible", icon: "📋" },
-    ],
+    resources: [],
   },
 
   "tabac-bpco": {
@@ -132,7 +230,44 @@ const gttData: Record<string, GTT> = {
       "Commémorations de la Journée sans tabac 2026",
     ],
     resources: [
-      { title: "Vidéo sur les techniques d'inhalation", icon: "🎬" },
+      // ── Handihaler ────────────────────────────────────────────
+      {
+        title: "Utilisation du Handihaler — Français",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1HPSfJ5AmMvW7ddrYaFeusB14gj-I2Y4K/view?usp=sharing",
+        format: "Vidéo · FR",
+      },
+      {
+        title: "Utilisation du Handihaler — Dioula",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1BdM4nTh3wa2BArmkWLOY8_lWz6B9NIE6/view?usp=sharing",
+        format: "Vidéo · Dioula",
+      },
+      {
+        title: "Utilisation du Handihaler — Mooré",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1iGYR_1-gOBUG3DsJVNUXlxhYJgzIf9CB/view?usp=sharing",
+        format: "Vidéo · Mooré",
+      },
+      // ── Turbuhaler ────────────────────────────────────────────
+      {
+        title: "Utilisation du Turbuhaler — Français",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1BGgFQRMnw-ceXzWChiK4r5XTohtVp0Td/view?usp=sharing",
+        format: "Vidéo · FR",
+      },
+      {
+        title: "Utilisation du Turbuhaler — Dioula",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1DiOihns6sL0WvdZYXI8sZcFNd_HdfBC2/view?usp=sharing",
+        format: "Vidéo · Dioula",
+      },
+      {
+        title: "Utilisation du Turbuhaler — Mooré",
+        icon: "🎬",
+        url: "https://drive.google.com/file/d/1YPXKKpDo1r1ok8eUttbz4sF0jY7-uXFu/view?usp=sharing",
+        format: "Vidéo · Mooré",
+      },
     ],
   },
 
@@ -379,26 +514,84 @@ export default async function GTTDetailPage({ params }: { params: Promise<{ slug
                   </span>
                 </div>
                 <div className="space-y-3">
-                  {gtt.resources.map((r, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-primary/30 hover:shadow-sm transition-all group cursor-pointer"
-                    >
-                      <span className="text-2xl shrink-0">{r.icon}</span>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 text-sm group-hover:text-primary transition-colors leading-snug">
-                          {r.title}
-                        </p>
-                      </div>
-                      <svg
-                        className="w-4 h-4 text-gray-300 group-hover:text-primary transition-colors shrink-0"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  {gtt.resources.map((r, i) => {
+                    const href = r.file ?? r.url;
+                    const isDownload = !!r.file;
+                    const isExternal = !r.file && !!r.url;
+                    const isPending = !href;
+                    const format =
+                      r.format ??
+                      (r.file ? r.file.split(".").pop()?.toUpperCase() : undefined);
+
+                    const meta = [format, r.size].filter(Boolean).join(" · ");
+
+                    const inner = (
+                      <>
+                        <span className="text-2xl shrink-0">{r.icon}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-gray-900 text-sm group-hover:text-primary transition-colors leading-snug">
+                            {r.title}
+                          </p>
+                          {(meta || isPending) && (
+                            <p className="text-[11px] text-gray-400 mt-0.5">
+                              {isPending ? "Bientôt disponible" : meta}
+                            </p>
+                          )}
+                        </div>
+                        {isExternal ? (
+                          <svg
+                            className="w-4 h-4 text-gray-300 group-hover:text-primary transition-colors shrink-0"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            aria-label="Lien externe"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                          </svg>
+                        ) : (
+                          <svg
+                            className={`w-4 h-4 shrink-0 transition-colors ${
+                              isPending
+                                ? "text-gray-200"
+                                : "text-gray-300 group-hover:text-primary"
+                            }`}
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            aria-label={isPending ? "Indisponible" : "Télécharger"}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                          </svg>
+                        )}
+                      </>
+                    );
+
+                    const baseCls =
+                      "flex items-center gap-4 p-4 rounded-xl border border-gray-100 transition-all group";
+                    const interactiveCls =
+                      "hover:border-primary/30 hover:shadow-sm cursor-pointer";
+
+                    if (isPending) {
+                      return (
+                        <div
+                          key={i}
+                          className={`${baseCls} opacity-60 cursor-not-allowed`}
+                          aria-disabled
+                        >
+                          {inner}
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <a
+                        key={i}
+                        href={href}
+                        {...(isDownload ? { download: true } : { target: "_blank", rel: "noopener noreferrer" })}
+                        className={`${baseCls} ${interactiveCls}`}
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                      </svg>
-                    </div>
-                  ))}
+                        {inner}
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
             ) : (

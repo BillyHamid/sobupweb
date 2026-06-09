@@ -37,8 +37,8 @@ const slides: Slide[] = [
     ] as TitleLine[],
     subtitle: "11 groupes de travail – De la tuberculose à l'environnement, en passant par l'asthme, la BPCO, le sommeil, l'oncologie…",
     cta1: { label: "Découvrir les GTT", href: "/gtt" },
-    image: "/baniercongres/congres-2-v2.jpg",
-    imageAlt: "9ème congrès SOBUP - Photo 2",
+    image: "/baniercongres/gtt-network.png",
+    imageAlt: "Les 11 Groupes de Travail Thématiques de la SOBUP",
   },
   {
     id: 3,
@@ -70,8 +70,8 @@ const slides: Slide[] = [
     ] as TitleLine[],
     subtitle: "Newsletter SOBUP, articles scientifiques, recommandations, protocoles nationaux, guides pratiques, médiathèque — Téléchargement gratuit",
     cta1: { label: "Accéder aux publications", href: "/publications" },
-    image: "/ban1.jpg",
-    imageAlt: "Publications et ressources de la SOBUP",
+    image: "/baniercongres/bibliotheque.jpg",
+    imageAlt: "Médecin consultant la bibliothèque pneumologique en ligne SOBUP",
   },
   {
     id: 6,
@@ -276,18 +276,17 @@ export default function HeroCarousel() {
               style={{ width: "min(460px, 80vw)", aspectRatio: "1 / 1" }}
             >
 
-              {/* Outer dashed ring */}
+              {/* Outer dashed square frame */}
               <div
-                className="absolute inset-0 rounded-full"
+                className="absolute inset-0 rounded-[44px]"
                 style={{
                   border: "2px dashed rgba(49,185,174,0.3)",
-                  animation: "spin 30s linear infinite",
                 }}
               />
 
               {/* Glow blob */}
               <div
-                className="absolute rounded-full"
+                className="absolute rounded-[44px]"
                 style={{
                   width: "96%", height: "96%",
                   background: "radial-gradient(circle, rgba(49,185,174,0.28) 0%, transparent 70%)",
@@ -295,23 +294,22 @@ export default function HeroCarousel() {
                 }}
               />
 
-              {/* Circular image */}
+              {/* Image container — carré arrondi pour tous les slides */}
               <div
-                className="relative overflow-hidden shadow-2xl rounded-full"
+                className="relative overflow-hidden shadow-2xl rounded-[36px]"
                 style={{
                   width: "92%",
                   height: "92%",
                   border: "5px solid rgba(49,185,174,0.55)",
-                  transform: "rotate(2deg)",
-                  background: "#0B3D38",
+                  background: (slide.id === 2 || slide.id === 5) ? "#ffffff" : "#0B3D38",
                 }}
               >
                 <Image
                   src={slide.image}
                   alt={slide.imageAlt}
                   fill
-                  className="object-cover"
-                  style={{ transform: "scale(0.88)" }}
+                  className={(slide.id === 2 || slide.id === 5) ? "object-contain" : "object-cover"}
+                  style={(slide.id === 2 || slide.id === 5) ? { padding: "8px" } : {}}
                   sizes="(max-width: 640px) 80vw, 460px"
                   priority={slide.id === 1}
                 />

@@ -54,22 +54,8 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Partners */}
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <p className="text-sm text-gray-500 text-center mb-4">
-            Partenaires scientifiques
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-6 text-gray-500 text-sm">
-            <span className="hover:text-secondary transition-colors">SAPLF</span>
-            <span className="text-gray-700">|</span>
-            <span className="hover:text-secondary transition-colors">PATS</span>
-            <span className="text-gray-700">|</span>
-            <span className="hover:text-secondary transition-colors">PNT</span>
-          </div>
-        </div>
-
         {/* Bottom */}
-        <div className="mt-8 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
               <span className="text-white font-bold text-sm">S</span>

@@ -109,13 +109,25 @@ export default function GouvernancePage() {
           <h2 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
             <span className="text-2xl">🔍</span> Commissaire aux comptes
           </h2>
-          <div className="bg-background rounded-xl px-6 py-4 flex items-center gap-4 border border-gray-100 shadow-sm w-fit">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center text-xl" style={{ background: "#E8F9F7" }}>
-              📊
-            </div>
-            <div>
-              <p className="font-black text-gray-900 text-sm">Marcel KUIRE</p>
-              <p className="text-xs text-gray-400">Commissaire aux comptes — Hôpital du district de Boulmigou</p>
+          <div className="inline-block">
+            <div className="bg-background rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all group card-shadow text-center" style={{ width: "280px" }}>
+              <div className="relative flex items-center justify-center overflow-hidden h-64">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/bureau/marcel-kuire.jpeg"
+                  alt="Portrait — Marcel KUIRE"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+              <div className="p-4">
+                <p className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#5BCEC4" }}>
+                  Commissaire aux comptes
+                </p>
+                <h3 className="font-black text-gray-900 text-sm mb-1 group-hover:text-primary transition-colors">
+                  Marcel KUIRE
+                </h3>
+                <p className="text-xs text-gray-400">Hôpital du district de Boulmiougou</p>
+              </div>
             </div>
           </div>
         </div>
@@ -131,9 +143,9 @@ export default function GouvernancePage() {
             {[
               { name: "Pr Gisèle BADOUM", institution: "CHU Yalgado Ouédraogo", title: "Conseiller Technique", photo: "/bureau/pr-gisele-badoum.jpeg" },
               { name: "Pr Kadiatou BONCOUNGOU", institution: "CHU Yalgado Ouédraogo", title: "Conseiller Technique", photo: "/bureau/pr-kadiatou-boncoungou.jpeg" },
-              { name: "Dr Emile BIRBA", institution: "CHU Souro Sanou", title: "Conseiller Technique", photo: null },
-              { name: "Dr Adama ZIGANI", institution: "CNLAT", title: "Conseiller Technique", photo: null },
-              { name: "Dr Célestine KI", institution: "SP CNLS/IST", title: "Conseiller Technique", photo: null },
+              { name: "Dr Emile BIRBA", institution: "CHU Souro Sanou", title: "Conseiller Technique", photo: "/bureau/emile-birba.jpg" },
+              { name: "Dr Adama ZIGANI", institution: "CNLAT", title: "Conseiller Technique", photo: "/bureau/zigani.jpeg" },
+              { name: "Dr Célestine KI", institution: "SP CNLS/IST", title: "Conseiller Technique", photo: "/bureau/ki-celestine.jpeg" },
             ].map((person, i) => (
               <div key={i} className="bg-background rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all group card-shadow text-center">
                 <div
