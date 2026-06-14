@@ -1,17 +1,49 @@
 import PageHero from "@/components/PageHero";
 
 const recommandations = [
-  { title: "Prise en charge de la tuberculose multirésistante au Burkina Faso", gtt: "GT Tuberculose", year: "2025", pathology: "Tuberculose", pages: 48, downloads: 312 },
-  { title: "Guide national de prise en charge de l'asthme de l'adulte", gtt: "GT Asthme & Allergie", year: "2024", pathology: "Asthme", pages: 64, downloads: 287 },
-  { title: "Recommandations pour la prise en charge de la BPCO", gtt: "GT Tabac & BPCO", year: "2024", pathology: "BPCO", pages: 52, downloads: 245 },
-  { title: "Protocole de réalisation et d'interprétation de la spirométrie", gtt: "GT EFR", year: "2024", pathology: "EFR", pages: 32, downloads: 198 },
-  { title: "Prise en charge du cancer du poumon au Burkina Faso", gtt: "GT Oncologie thoracique", year: "2023", pathology: "Oncologie", pages: 70, downloads: 176 },
-  { title: "Guide de prise en charge des pneumonies communautaires", gtt: "GT Infections non TB", year: "2023", pathology: "Infections", pages: 40, downloads: 221 },
-  { title: "Syndrome d'apnées du sommeil : diagnostic et traitement", gtt: "GT Sommeil & VNI", year: "2023", pathology: "Sommeil", pages: 36, downloads: 154 },
-  { title: "Asthme de l'enfant : guide pour le praticien burkinabè", gtt: "GT Pneumo-pédiatrie", year: "2022", pathology: "Asthme", pages: 44, downloads: 189 },
+  {
+    title: "Guide technique de lutte contre la tuberculose (10ème édition, 2025)",
+    gtt: "GT Tuberculose",
+    year: "2025",
+    pathology: "Tuberculose",
+    size: "5,4 Mo",
+    file: "/docs/gtt/tuberculose/guide-technique-tb-2025.pdf",
+  },
+  {
+    title: "Guide de prise en charge de la Tuberculose Pharmacorésistante (TB-MR/RR, 2026)",
+    gtt: "GT Tuberculose",
+    year: "2026",
+    pathology: "Tuberculose",
+    size: "3,3 Mo",
+    file: "/docs/gtt/tuberculose/guide-tb-resistante-2026.pdf",
+  },
+  {
+    title: "Guide de prise en charge de la tuberculose chez l'enfant (2025)",
+    gtt: "GT Tuberculose",
+    year: "2025",
+    pathology: "Tuberculose",
+    size: "2,6 Mo",
+    file: "/docs/gtt/tuberculose/guide-tb-enfant-2025.pdf",
+  },
+  {
+    title: "Guide TB/VIH (6ème édition, 2024)",
+    gtt: "GT Tuberculose",
+    year: "2024",
+    pathology: "Tuberculose",
+    size: "2,2 Mo",
+    file: "/docs/gtt/tuberculose/guide-tb-vih-2024.pdf",
+  },
+  {
+    title: "Plan Stratégique National de lutte contre la tuberculose (PSN-TB 2024-2026)",
+    gtt: "GT Tuberculose",
+    year: "2024",
+    pathology: "Tuberculose",
+    size: "3,7 Mo",
+    file: "/docs/gtt/tuberculose/psn-tb-2024-2026.pdf",
+  },
 ];
 
-const pathologies = ["Toutes", "Tuberculose", "Asthme", "BPCO", "Oncologie", "Infections", "EFR", "Sommeil"];
+const pathologies = ["Toutes", "Tuberculose"];
 
 const pathologyColors: Record<string, { bg: string; color: string }> = {
   "Tuberculose": { bg: "#fef2f2", color: "#dc2626" },
@@ -74,18 +106,21 @@ export default function RecommandationsPage() {
                   <div className="flex items-center gap-3 text-xs text-gray-400 mb-4 flex-wrap">
                     <span>📌 {rec.gtt}</span>
                     <span>• {rec.year}</span>
-                    <span>• {rec.pages}p</span>
-                    <span>• {rec.downloads} téléchargements</span>
+                    <span>• PDF · {rec.size}</span>
                   </div>
                   <div className="mt-auto">
-                    <button
+                    <a
+                      href={rec.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
                       className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm text-white transition-all hover:-translate-y-0.5"
                       style={{ background: "#31B9AE" }}>
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                       </svg>
                       Télécharger PDF
-                    </button>
+                    </a>
                   </div>
                 </div>
               );

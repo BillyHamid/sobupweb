@@ -17,10 +17,9 @@ const objectifs = [
 
 
 const infos = [
-  { icon: "📅", label: "Date", value: "19 Novembre 2026" },
+  { icon: "📅", label: "Date", value: "19 – 21 Novembre 2026" },
   { icon: "📍", label: "Lieu", value: "Koudougou, Burkina Faso" },
   { icon: "🌐", label: "Format", value: "Présentiel" },
-  { icon: "👥", label: "Public", value: "Pneumologues, médecins, paramédicaux & étudiants" },
 ];
 
 export default function JourneeRegionalePage() {
@@ -102,7 +101,7 @@ export default function JourneeRegionalePage() {
           {/* Chips infos */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-9" style={{ animation: "jr-up .7s ease both", animationDelay: ".34s" }}>
             {[
-              { icon: "📅", text: "19 Novembre 2026" },
+              { icon: "📅", text: "19 – 21 Novembre 2026" },
               { icon: "📍", text: "Koudougou, Burkina Faso" },
               { icon: "🌐", text: "Présentiel" },
             ].map((c) => (

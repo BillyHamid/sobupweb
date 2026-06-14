@@ -32,7 +32,7 @@ const upcomingEvents = [
     gtt: "GT Asthme & Allergies · GT Pneumo-Pédiatrie",
   },
   {
-    date: "19",
+    date: "19-21",
     month: "Nov",
     year: "2026",
     title: "1ère Journée Scientifique Régionale",

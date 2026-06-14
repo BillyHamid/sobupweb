@@ -49,7 +49,7 @@ const navigation = [
     href: "#",
     children: [
       { name: "Blog SOBUP", href: "/blog" },
-      { name: "Publication Scientifique", href: "/publications-scientifiques" },
+      { name: "Recommandations", href: "/recommandations" },
       { name: "Newsletter SOBUP", href: "/journal" },
       { name: "Mediatheque", href: "/mediatheque" },
     ],

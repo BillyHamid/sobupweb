@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  Video, Image as ImageIcon, FileText, Play, Download, Eye,
-  Calendar, Clock, ArrowUpRight, Sparkles, Film,
+  Video, Image as ImageIcon, FileText, Download, Eye,
+  Calendar, ArrowUpRight, Sparkles, Film, X,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────
@@ -33,84 +33,38 @@ const ACCENT = {
 const MEDIA_LIBRARY = {
   videos: {
     label: "Vidéos",
-    count: "4 vidéos",
+    count: "1 vidéo",
     icon: Video,
     accent: "rose" as const,
     headline: "L'univers SOBUP en mouvement.",
     items: [
       {
-        title: "9ème Congrès SOBUP — Temps forts & discours officiels",
-        desc: "Retour en images sur les moments clés du 9ème Congrès de la Société Burkinabè de Pneumologie à Ouagadougou.",
-        thumb: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=900&q=80&fit=crop",
-        duration: "18:42",
-        date: "Décembre 2025",
+        title: "Vidéo récapitulative du lancement de l'École de l'asthme de Ouagadougou",
+        gtt: "GT Asthme & Allergie",
+        src: "/docs/gtt/asthme-allergie/lancement-ecole-asthme-ouagadougou.mp4",
         featured: true,
-      },
-      {
-        title: "Journée Mondiale du Sommeil — Table ronde SOBUP 2026",
-        desc: "150 participants, 13 spécialités médicales réunies autour du syndrome d'apnée du sommeil.",
-        thumb: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=600&q=80&fit=crop",
-        duration: "12:05",
-        date: "Mars 2026",
-        featured: false,
-      },
-      {
-        title: "Interview — Pr Martial OUÉDRAOGO, Président fondateur",
-        desc: "Retour sur 19 ans de pneumologie burkinabè et la vision pour l'avenir de la SOBUP.",
-        thumb: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80&fit=crop",
-        duration: "08:30",
-        date: "Février 2026",
-        featured: false,
-      },
-      {
-        title: "Formation Échographie Thoracique — Atelier pratique",
-        desc: "Séquences de formation en petits groupes supervisés lors de la première session SOBUP.",
-        thumb: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&q=80&fit=crop",
-        duration: "06:15",
-        date: "Janvier 2026",
-        featured: false,
       },
     ],
   },
   photos: {
     label: "Photos",
-    count: "4 albums",
+    count: "12 photos",
     icon: ImageIcon,
     accent: "blue" as const,
     headline: "Nos moments forts en images.",
     items: [
-      {
-        title: "9ème Congrès SOBUP",
-        desc: "Cérémonies, conférences, ateliers et moments de networking du congrès.",
-        thumb: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&q=80&fit=crop",
-        count: "28 photos",
-        date: "Décembre 2025",
-        featured: true,
-      },
-      {
-        title: "Assemblée Générale Élective 2026",
-        desc: "La passation de témoin et l'élection du nouveau bureau de la SOBUP.",
-        thumb: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80&fit=crop",
-        count: "14 photos",
-        date: "Février 2026",
-        featured: false,
-      },
-      {
-        title: "Journée Mondiale du Sommeil",
-        desc: "Table ronde pluridisciplinaire au BRAVIA Hôtel, Ouagadougou.",
-        thumb: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80&fit=crop",
-        count: "21 photos",
-        date: "Mars 2026",
-        featured: false,
-      },
-      {
-        title: "Hommage — Pr Bernard KOFFI N'GORAN",
-        desc: "Cérémonie d'hommage à Abidjan — délégation SOBUP présente.",
-        thumb: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=600&q=80&fit=crop",
-        count: "16 photos",
-        date: "Mars 2026",
-        featured: false,
-      },
+      { src: "/mediatheque/congres-1.jpg" },
+      { src: "/mediatheque/congres-3.jpg" },
+      { src: "/mediatheque/congres-4.jpg" },
+      { src: "/mediatheque/congres-5.jpeg" },
+      { src: "/mediatheque/congres-6.jpg" },
+      { src: "/mediatheque/congres-7.jpeg" },
+      { src: "/mediatheque/congres-8.jpg" },
+      { src: "/mediatheque/ev-journee-regionale.jpg" },
+      { src: "/mediatheque/ff.jpeg" },
+      { src: "/mediatheque/photo-1.jpeg" },
+      { src: "/mediatheque/photo-2.jpeg" },
+      { src: "/mediatheque/photo-3.jpeg" },
     ],
   },
   documents: {
@@ -185,8 +139,22 @@ type TabKey = keyof typeof MEDIA_LIBRARY;
 ───────────────────────────────────────────── */
 export default function MediathequePage() {
   const [activeTab, setActiveTab] = useState<TabKey>("videos");
+  const [lightbox, setLightbox] = useState<number | null>(null);
   const category = MEDIA_LIBRARY[activeTab];
   const ac = ACCENT[category.accent];
+
+  // Fermer la lightbox avec Échap + navigation flèches
+  useEffect(() => {
+    if (lightbox === null) return;
+    const total = MEDIA_LIBRARY.photos.items.length;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+      else if (e.key === "ArrowRight") setLightbox((i) => (i === null ? null : (i + 1) % total));
+      else if (e.key === "ArrowLeft") setLightbox((i) => (i === null ? null : (i - 1 + total) % total));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
 
   return (
     <section
@@ -291,126 +259,124 @@ export default function MediathequePage() {
         {/* ── VIDÉOS ── */}
         {activeTab === "videos" && (
           <div className="animate-fade-in" key="videos">
-            <div className="grid lg:grid-cols-12 gap-5">
-
-              {/* Grande vidéo à la une */}
-              {MEDIA_LIBRARY.videos.items.filter((v) => v.featured).map((v, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {MEDIA_LIBRARY.videos.items.map((v, i) => (
                 <div key={i}
-                  className="lg:col-span-7 relative rounded-3xl overflow-hidden group cursor-pointer shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1">
+                  className="relative rounded-3xl overflow-hidden group shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 bg-black md:col-span-2 lg:col-span-1">
                   <div className="aspect-video w-full relative">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={v.thumb} alt={v.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                    <div className="absolute inset-0"
-                      style={{ background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.2) 50%, transparent 100%)" }} />
-                    {/* Badge + durée */}
-                    <div className="absolute top-4 left-4">
-                      <span className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white px-2.5 py-1 rounded-full"
-                        style={{ background: ACCENT.rose.hex }}>
-                        <Sparkles className="w-3 h-3" /> À LA UNE
-                      </span>
-                    </div>
-                    <div className="absolute top-4 right-4 flex items-center gap-1 text-white text-xs font-bold bg-black/50 px-2 py-1 rounded-lg backdrop-blur-sm">
-                      <Clock className="w-3 h-3" /> {v.duration}
-                    </div>
-                    {/* Bouton play */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-20 h-20 rounded-full bg-white/95 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
-                        <Play className="w-8 h-8 ml-1" style={{ fill: ACCENT.rose.hex, color: ACCENT.rose.hex }} />
+                    <video
+                      src={`${v.src}#t=0.5`}
+                      controls
+                      preload="metadata"
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                    {v.featured && (
+                      <div className="absolute top-4 left-4 pointer-events-none">
+                        <span className="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-white px-2.5 py-1 rounded-full"
+                          style={{ background: ACCENT.rose.hex }}>
+                          <Sparkles className="w-3 h-3" /> À LA UNE
+                        </span>
                       </div>
-                    </div>
-                    {/* Infos bas */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <h3 className="text-white text-xl font-extrabold leading-tight mb-1">{v.title}</h3>
-                      <p className="text-white/70 text-sm mb-2 line-clamp-2">{v.desc}</p>
-                      <p className="text-white/50 text-xs flex items-center gap-1">
-                        <Calendar className="w-3 h-3" /> {v.date}
+                    )}
+                  </div>
+                  <div className="p-5 bg-gray-900">
+                    {"gtt" in v && v.gtt && (
+                      <p className="text-[11px] font-black uppercase tracking-widest mb-1.5" style={{ color: ACCENT.rose.hex }}>
+                        {v.gtt}
                       </p>
-                    </div>
+                    )}
+                    <h3 className="text-white text-base md:text-lg font-extrabold leading-snug">{v.title}</h3>
                   </div>
                 </div>
               ))}
-
-              {/* Vidéos secondaires */}
-              <div className="lg:col-span-5 flex flex-col gap-4">
-                {MEDIA_LIBRARY.videos.items.filter((v) => !v.featured).map((v, i) => (
-                  <div key={i}
-                    className="flex gap-3 bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all group cursor-pointer">
-                    <div className="relative w-36 shrink-0 overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={v.thumb} alt={v.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      <div className="absolute inset-0 bg-black/20" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center">
-                          <Play className="w-3.5 h-3.5 ml-0.5" style={{ fill: ACCENT.rose.hex, color: ACCENT.rose.hex }} />
-                        </div>
-                      </div>
-                      <div className="absolute bottom-1.5 right-1.5 text-[10px] font-bold text-white bg-black/60 px-1.5 py-0.5 rounded-md backdrop-blur-sm">
-                        {v.duration}
-                      </div>
-                    </div>
-                    <div className="p-3 flex flex-col justify-between flex-1 min-w-0">
-                      <div>
-                        <h4 className="text-sm font-black text-gray-900 leading-snug line-clamp-2 mb-1 group-hover:text-rose-500 transition-colors">{v.title}</h4>
-                        <p className="text-xs text-gray-500 line-clamp-2">{v.desc}</p>
-                      </div>
-                      <p className="text-xs text-gray-400 flex items-center gap-1 mt-2">
-                        <Calendar className="w-3 h-3" /> {v.date}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
+
+            {MEDIA_LIBRARY.videos.items.length < 4 && (
+              <p className="text-center text-sm text-gray-500 mt-8 italic">
+                D&apos;autres vidéos seront ajoutées dès que les GTT déposeront leurs supports.
+              </p>
+            )}
           </div>
         )}
 
         {/* ── PHOTOS ── */}
         {activeTab === "photos" && (
-          <div className="animate-fade-in grid grid-cols-2 lg:grid-cols-4 gap-4" key="photos">
+          <div className="animate-fade-in grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" key="photos">
             {MEDIA_LIBRARY.photos.items.map((p, i) => (
-              <div key={i}
-                className="relative rounded-2xl overflow-hidden group cursor-pointer shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-                style={{ aspectRatio: "4/5", animationDelay: `${i * 60}ms` }}>
+              <button
+                key={i}
+                onClick={() => setLightbox(i)}
+                className="relative rounded-2xl overflow-hidden group shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                style={{ aspectRatio: "4/5" }}
+                aria-label={`Agrandir la photo ${i + 1}`}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.thumb} alt={p.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                {/* Gradient bas permanent */}
-                <div className="absolute inset-0"
-                  style={{ background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)" }} />
-                {/* Overlay bleu au survol */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: "rgba(59,130,246,0.35)" }} />
-                {/* Badge featured */}
-                {p.featured && (
-                  <div className="absolute top-3 left-3">
-                    <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-white px-2 py-0.5 rounded-full"
-                      style={{ background: ACCENT.blue.hex }}>
-                      <Sparkles className="w-2.5 h-2.5" /> À LA UNE
-                    </span>
-                  </div>
-                )}
-                {/* Compteur */}
-                <div className="absolute top-3 right-3 text-xs font-bold text-white bg-black/50 px-2 py-0.5 rounded-lg backdrop-blur-sm">
-                  {p.count}
-                </div>
-                {/* Bouton voir album hover */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-black text-white shadow-xl"
+                <img
+                  src={p.src}
+                  alt={`Photo ${i + 1}`}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                  style={{ background: "rgba(59,130,246,0.45)" }}>
+                  <span className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-black text-white shadow-xl"
                     style={{ background: ACCENT.blue.hex }}>
-                    <Eye className="w-4 h-4" /> Voir l&apos;album
-                  </button>
+                    <Eye className="w-4 h-4" /> Agrandir
+                  </span>
                 </div>
-                {/* Infos bas */}
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="text-white font-black text-sm leading-tight">{p.title}</p>
-                  <p className="text-white/60 text-xs mt-0.5 flex items-center gap-1">
-                    <Calendar className="w-3 h-3" /> {p.date}
-                  </p>
-                </div>
-              </div>
+              </button>
             ))}
+          </div>
+        )}
+
+        {/* ── LIGHTBOX PHOTOS ── */}
+        {lightbox !== null && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setLightbox(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/90 backdrop-blur-sm animate-fade-in"
+          >
+            <button
+              onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
+              className="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+              aria-label="Fermer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const total = MEDIA_LIBRARY.photos.items.length;
+                setLightbox((lightbox - 1 + total) % total);
+              }}
+              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors text-2xl font-black"
+              aria-label="Précédente"
+            >
+              ‹
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const total = MEDIA_LIBRARY.photos.items.length;
+                setLightbox((lightbox + 1) % total);
+              }}
+              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors text-2xl font-black"
+              aria-label="Suivante"
+            >
+              ›
+            </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={MEDIA_LIBRARY.photos.items[lightbox].src}
+              alt={`Photo ${lightbox + 1}`}
+              onClick={(e) => e.stopPropagation()}
+              className="max-h-[88vh] max-w-[92vw] object-contain rounded-xl shadow-2xl"
+            />
+            <p className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/70 text-xs font-semibold">
+              {lightbox + 1} / {MEDIA_LIBRARY.photos.items.length}
+            </p>
           </div>
         )}
 
