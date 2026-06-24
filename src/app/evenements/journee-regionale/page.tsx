@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import JourneeInscriptionButton from "@/components/JourneeInscriptionButton";
 
 const heroImages = [
   "/baniercongres/congres-1-v2.jpeg",
@@ -113,14 +114,7 @@ export default function JourneeRegionalePage() {
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-3" style={{ animation: "jr-up .7s ease both", animationDelay: ".4s" }}>
-            <Link
-              href="/espace-membre"
-              className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-black text-white text-sm shadow-lg transition-all hover:-translate-y-0.5"
-              style={{ background: "#e67e22", boxShadow: "0 12px 34px rgba(230,126,34,.4)" }}
-            >
-              S&apos;inscrire à la journée
-              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" /></svg>
-            </Link>
+            <JourneeInscriptionButton label="S'inscrire à la journée" variant="primary" />
             <Link
               href="/abstracts"
               className="inline-flex items-center px-7 py-3.5 rounded-xl font-bold text-sm transition-all hover:bg-white/20"
@@ -204,9 +198,7 @@ export default function JourneeRegionalePage() {
             au service de la santé respiratoire des régions.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link href="/espace-membre" className="px-7 py-3.5 rounded-xl font-black text-white text-sm transition-all hover:-translate-y-0.5" style={{ background: "#e67e22" }}>
-              S&apos;inscrire maintenant
-            </Link>
+            <JourneeInscriptionButton label="S'inscrire maintenant" variant="primary" />
             <Link href="/evenements" className="px-7 py-3.5 rounded-xl font-bold text-sm transition-all hover:bg-white/20" style={{ color: "#fff", border: "1px solid rgba(255,255,255,.3)", background: "rgba(255,255,255,.08)" }}>
               ← Tous les événements
             </Link>

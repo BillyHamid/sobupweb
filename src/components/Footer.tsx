@@ -4,7 +4,6 @@ const footerLinks = {
   "La SOBUP": [
     { name: "Présentation", href: "/a-propos" },
     { name: "Gouvernance", href: "/gouvernance" },
-    { name: "Statuts", href: "/statuts" },
     { name: "Adhérer", href: "/adhesion" },
   ],
   "Scientifique": [
@@ -16,13 +15,10 @@ const footerLinks = {
   "Activités": [
     { name: "Événements", href: "/evenements" },
     { name: "Formations", href: "/formations" },
-    { name: "Webinaires", href: "/formations/webinaires" },
     { name: "Médiathèque", href: "/mediatheque" },
   ],
   "Ressources": [
     { name: "Annuaire", href: "/annuaire" },
-    { name: "Carte interactive", href: "/carte" },
-    { name: "Newsletter", href: "/newsletter" },
     { name: "Contact", href: "/contact" },
   ],
 };

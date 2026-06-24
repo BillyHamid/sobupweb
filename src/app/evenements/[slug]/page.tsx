@@ -297,7 +297,7 @@ export default function EventDetailPage() {
             {congressHistory.slice(0, 7).map((c, i) => {
               const num = i + 1;
               const folders = ["1er_congres", "2econgres", "3econgres", "4econgres", "5econgres", "6econgres", "7econgres"];
-              const livretsDisponibles = [1, 2, 3, 4];
+              const livretsDisponibles = [1, 2, 3, 4, 5, 6, 7];
               const available = livretsDisponibles.includes(num);
               const href = `/${folders[i]}/livret-resumes.pdf`;
 

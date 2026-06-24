@@ -33,7 +33,7 @@ const ACCENT = {
 const MEDIA_LIBRARY = {
   videos: {
     label: "Vidéos",
-    count: "1 vidéo",
+    count: "9 vidéos",
     icon: Video,
     accent: "rose" as const,
     headline: "L'univers SOBUP en mouvement.",
@@ -44,27 +44,101 @@ const MEDIA_LIBRARY = {
         src: "/docs/gtt/asthme-allergie/lancement-ecole-asthme-ouagadougou.mp4",
         featured: true,
       },
+      {
+        title: "Chambre d'inhalation — Capsule pédagogique (français)",
+        gtt: "École de l'Asthme",
+        src: "/mediatheque/chambre-inhalation-francais.mp4",
+        featured: false,
+      },
+      {
+        title: "Chambre d'inhalation — Capsule pédagogique (mooré)",
+        gtt: "École de l'Asthme",
+        src: "/mediatheque/chambre-inhalation-moore.mp4",
+        featured: false,
+      },
+      {
+        title: "Chambre d'inhalation — Capsule pédagogique (dioula)",
+        gtt: "École de l'Asthme",
+        src: "/mediatheque/chambre-inhalation-dioula.mp4",
+        featured: false,
+      },
+      {
+        title: "Utilisation du Diskus — Capsule de sensibilisation (français)",
+        gtt: "École de l'Asthme",
+        src: "/mediatheque/diskus-francais.mp4",
+        featured: false,
+      },
+      {
+        title: "Utilisation du Diskus — Capsule de sensibilisation (mooré)",
+        gtt: "École de l'Asthme",
+        src: "/mediatheque/diskus-moore.mp4",
+        featured: false,
+      },
+      {
+        title: "Aérosol doseur — Capsule de sensibilisation (français)",
+        gtt: "École de l'Asthme",
+        src: "/mediatheque/aerosol-doseur-francais.mp4",
+        featured: false,
+      },
+      {
+        title: "Aérosol doseur — Capsule de sensibilisation (mooré)",
+        gtt: "École de l'Asthme",
+        src: "/mediatheque/aerosol-doseur-moore.mp4",
+        featured: false,
+      },
+      {
+        title: "Lancement de l'École de l'Asthme — Ouagadougou",
+        gtt: "GT Asthme & Allergie",
+        src: "/mediatheque/lancement-ecole-asthme.mp4",
+        featured: false,
+      },
     ],
   },
   photos: {
     label: "Photos",
-    count: "12 photos",
+    count: "31 photos",
     icon: ImageIcon,
     accent: "blue" as const,
     headline: "Nos moments forts en images.",
     items: [
-      { src: "/mediatheque/congres-1.jpg" },
-      { src: "/mediatheque/congres-3.jpg" },
-      { src: "/mediatheque/congres-4.jpg" },
-      { src: "/mediatheque/congres-5.jpeg" },
-      { src: "/mediatheque/congres-6.jpg" },
-      { src: "/mediatheque/congres-7.jpeg" },
-      { src: "/mediatheque/congres-8.jpg" },
-      { src: "/mediatheque/ev-journee-regionale.jpg" },
-      { src: "/mediatheque/ff.jpeg" },
-      { src: "/mediatheque/photo-1.jpeg" },
-      { src: "/mediatheque/photo-2.jpeg" },
-      { src: "/mediatheque/photo-3.jpeg" },
+      // Activités SOBUP — 2026
+      { src: "/mediatheque/congres-1.jpg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/congres-3.jpg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/congres-4.jpg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/congres-5.jpeg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/congres-6.jpg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/congres-7.jpeg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/congres-8.jpg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/ev-journee-regionale.jpg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/ff.jpeg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/photo-1.jpeg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/photo-2.jpeg", ordinal: "Activités SOBUP", year: "2026" },
+      { src: "/mediatheque/photo-3.jpeg", ordinal: "Activités SOBUP", year: "2026" },
+      // 1er Congrès — 2011
+      { src: "/1er_congres/photo-1.jpeg", ordinal: "1ᵉʳ Congrès", year: "2011" },
+      { src: "/1er_congres/photo-2.jpeg", ordinal: "1ᵉʳ Congrès", year: "2011" },
+      { src: "/1er_congres/photo-3.jpeg", ordinal: "1ᵉʳ Congrès", year: "2011" },
+      { src: "/1er_congres/photo-4.jpeg", ordinal: "1ᵉʳ Congrès", year: "2011" },
+      { src: "/1er_congres/photo-5.jpeg", ordinal: "1ᵉʳ Congrès", year: "2011" },
+      { src: "/1er_congres/photo-6.jpeg", ordinal: "1ᵉʳ Congrès", year: "2011" },
+      { src: "/1er_congres/photo-7.jpeg", ordinal: "1ᵉʳ Congrès", year: "2011" },
+      // 3e Congrès — 2015
+      { src: "/3econgres/photo-1.jpg", ordinal: "3ᵉ Congrès", year: "2015" },
+      // 4e Congrès — 2017
+      { src: "/4econgres/photo-1.jpg", ordinal: "4ᵉ Congrès", year: "2017" },
+      // 5e Congrès — 2019
+      { src: "/5econgres/photo-1.jpeg", ordinal: "5ᵉ Congrès", year: "2019" },
+      { src: "/5econgres/photo-2.jpeg", ordinal: "5ᵉ Congrès", year: "2019" },
+      // 6e Congrès — 2021
+      { src: "/6econgres/photo-1.jpeg", ordinal: "6ᵉ Congrès", year: "2021" },
+      { src: "/6econgres/photo-2.jpeg", ordinal: "6ᵉ Congrès", year: "2021" },
+      { src: "/6econgres/photo-3.jpeg", ordinal: "6ᵉ Congrès", year: "2021" },
+      // 7e Congrès — 2023
+      { src: "/7econgres/photo-1.jpeg", ordinal: "7ᵉ Congrès", year: "2023" },
+      { src: "/7econgres/photo-2.jpeg", ordinal: "7ᵉ Congrès", year: "2023" },
+      { src: "/7econgres/photo-3.jpeg", ordinal: "7ᵉ Congrès", year: "2023" },
+      { src: "/7econgres/photo-4.jpeg", ordinal: "7ᵉ Congrès", year: "2023" },
+      { src: "/7econgres/photo-5.jpeg", ordinal: "7ᵉ Congrès", year: "2023" },
     ],
   },
   documents: {
@@ -79,53 +153,59 @@ const MEDIA_LIBRARY = {
         desc: "Premier numéro de la newsletter trimestrielle officielle de la SOBUP — Avril 2026.",
         type: "PDF",
         size: "6,7 Mo",
-        pages: "17 pages",
+        gtt: "SOBUP",
         date: "Avril 2026",
+        file: "/newsletter-n1-avril-2026.pdf",
         featured: true,
       },
       {
-        title: "Statuts & Règlement intérieur — SOBUP 2026",
-        desc: "Textes révisés lors de l'Assemblée Générale Élective du 17 février 2026.",
+        title: "Guide technique de lutte contre la tuberculose (10ème édition, 2025)",
+        desc: "Référentiel national de prise en charge de la tuberculose, élaboré par le GT Tuberculose et le PNT.",
         type: "PDF",
-        size: "1,2 Mo",
-        pages: "22 pages",
-        date: "Février 2026",
-        featured: false,
-      },
-      {
-        title: "Programme scientifique — 9ème Congrès SOBUP",
-        desc: "Programme complet, résumés des communications et biographies des intervenants.",
-        type: "PDF",
-        size: "3,8 Mo",
-        pages: "64 pages",
-        date: "Décembre 2025",
-        featured: false,
-      },
-      {
-        title: "Rapport d'activités SOBUP 2023–2025",
-        desc: "Bilan du mandat sortant : formations, congrès, publications et partenariats.",
-        type: "PDF",
-        size: "2,1 Mo",
-        pages: "38 pages",
-        date: "Février 2026",
-        featured: false,
-      },
-      {
-        title: "Guide national — Prise en charge de la tuberculose",
-        desc: "Recommandations nationales élaborées par le GT Tuberculose de la SOBUP.",
-        type: "PDF",
-        size: "4,2 Mo",
-        pages: "48 pages",
+        size: "5,4 Mo",
+        gtt: "GT Tuberculose",
         date: "2025",
+        file: "/docs/gtt/tuberculose/guide-technique-tb-2025.pdf",
         featured: false,
       },
       {
-        title: "Formulaire d'adhésion SOBUP",
-        desc: "Rejoindre la Société Burkinabè de Pneumologie — cotisation annuelle 30 000 F.",
+        title: "Guide de prise en charge de la Tuberculose Pharmacorésistante (TB-MR/RR, 2026)",
+        desc: "Recommandations pour la prise en charge des tuberculoses multi-résistantes et résistantes à la rifampicine.",
         type: "PDF",
-        size: "0,3 Mo",
-        pages: "2 pages",
+        size: "3,3 Mo",
+        gtt: "GT Tuberculose",
         date: "2026",
+        file: "/docs/gtt/tuberculose/guide-tb-resistante-2026.pdf",
+        featured: false,
+      },
+      {
+        title: "Guide de prise en charge de la tuberculose chez l'enfant (2025)",
+        desc: "Recommandations pédiatriques nationales — diagnostic, traitement et suivi de la TB de l'enfant.",
+        type: "PDF",
+        size: "2,6 Mo",
+        gtt: "GT Tuberculose",
+        date: "2025",
+        file: "/docs/gtt/tuberculose/guide-tb-enfant-2025.pdf",
+        featured: false,
+      },
+      {
+        title: "Guide TB/VIH (6ème édition, 2024)",
+        desc: "Prise en charge intégrée de la co-infection tuberculose / VIH au Burkina Faso.",
+        type: "PDF",
+        size: "2,2 Mo",
+        gtt: "GT Tuberculose",
+        date: "2024",
+        file: "/docs/gtt/tuberculose/guide-tb-vih-2024.pdf",
+        featured: false,
+      },
+      {
+        title: "Plan Stratégique National de lutte contre la tuberculose (PSN-TB 2024-2026)",
+        desc: "Document de référence de la politique nationale de lutte contre la tuberculose pour la période 2024-2026.",
+        type: "PDF",
+        size: "3,7 Mo",
+        gtt: "GT Tuberculose",
+        date: "2024",
+        file: "/docs/gtt/tuberculose/psn-tb-2024-2026.pdf",
         featured: false,
       },
     ],
@@ -140,8 +220,31 @@ type TabKey = keyof typeof MEDIA_LIBRARY;
 export default function MediathequePage() {
   const [activeTab, setActiveTab] = useState<TabKey>("videos");
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [photoYear, setPhotoYear] = useState<string>("Toutes");
   const category = MEDIA_LIBRARY[activeTab];
   const ac = ACCENT[category.accent];
+
+  // Années disponibles + photos filtrées
+  const photoYears = Array.from(new Set(MEDIA_LIBRARY.photos.items.map((p) => p.year))).sort();
+  const filteredPhotos =
+    photoYear === "Toutes"
+      ? MEDIA_LIBRARY.photos.items
+      : MEDIA_LIBRARY.photos.items.filter((p) => p.year === photoYear);
+
+  // Groupement par congrès dans l'ordre d'apparition
+  const photoGroups = filteredPhotos.reduce<{ ordinal: string; year: string; photos: { src: string; originalIndex: number }[] }[]>(
+    (acc, p) => {
+      const originalIndex = MEDIA_LIBRARY.photos.items.indexOf(p);
+      const last = acc[acc.length - 1];
+      if (last && last.ordinal === p.ordinal && last.year === p.year) {
+        last.photos.push({ src: p.src, originalIndex });
+      } else {
+        acc.push({ ordinal: p.ordinal, year: p.year, photos: [{ src: p.src, originalIndex }] });
+      }
+      return acc;
+    },
+    []
+  );
 
   // Fermer la lightbox avec Échap + navigation flèches
   useEffect(() => {
@@ -179,16 +282,58 @@ export default function MediathequePage() {
             Médiathèque
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-4">
-            Explorez l&apos;univers{" "}
-            <span style={{
-              backgroundImage: "linear-gradient(135deg, #31B9AE 0%, #065E52 100%)",
+            Plongez au cœur de l&apos;univers{" "}
+            <span className="mediatheque-shimmer" style={{
+              backgroundImage: "linear-gradient(110deg, #31B9AE 0%, #065E52 30%, #f43f5e 50%, #3b82f6 70%, #31B9AE 100%)",
+              backgroundSize: "300% 100%",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}>
               SOBUP
             </span>{" "}
-            en images.
+            en{" "}
+            <span className="mediatheque-rotator">
+              <span className="mediatheque-word" style={{ color: ACCENT.rose.hex }}>vidéos</span>
+              <span className="mediatheque-word" style={{ color: ACCENT.blue.hex }}>photos</span>
+              <span className="mediatheque-word" style={{ color: ACCENT.gold.hex }}>documents</span>
+            </span>
+            .
           </h1>
+          <style>{`
+            @keyframes mediatheque-shimmer {
+              0%   { background-position: 0% 50%; }
+              100% { background-position: 300% 50%; }
+            }
+            .mediatheque-shimmer {
+              animation: mediatheque-shimmer 6s linear infinite;
+            }
+            .mediatheque-rotator {
+              position: relative;
+              display: inline-grid;
+              vertical-align: bottom;
+              overflow: hidden;
+            }
+            .mediatheque-rotator .mediatheque-word {
+              grid-row: 1;
+              grid-column: 1;
+              white-space: nowrap;
+              opacity: 0;
+              transform: translateY(110%);
+              animation: mediatheque-rotate 7.5s infinite;
+              font-weight: 900;
+              background-clip: text;
+            }
+            .mediatheque-rotator .mediatheque-word:nth-child(1) { animation-delay: 0s; }
+            .mediatheque-rotator .mediatheque-word:nth-child(2) { animation-delay: 2.5s; }
+            .mediatheque-rotator .mediatheque-word:nth-child(3) { animation-delay: 5s; }
+            @keyframes mediatheque-rotate {
+              0%   { opacity: 0; transform: translateY(110%); }
+              5%   { opacity: 1; transform: translateY(0); }
+              30%  { opacity: 1; transform: translateY(0); }
+              35%  { opacity: 0; transform: translateY(-110%); }
+              100% { opacity: 0; transform: translateY(-110%); }
+            }
+          `}</style>
           <p className="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             Vidéos institutionnelles, reportages photos et documents officiels —
             toutes les ressources pour mieux connaître la Société Burkinabè de Pneumologie.
@@ -302,31 +447,80 @@ export default function MediathequePage() {
 
         {/* ── PHOTOS ── */}
         {activeTab === "photos" && (
-          <div className="animate-fade-in grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" key="photos">
-            {MEDIA_LIBRARY.photos.items.map((p, i) => (
-              <button
-                key={i}
-                onClick={() => setLightbox(i)}
-                className="relative rounded-2xl overflow-hidden group shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-                style={{ aspectRatio: "4/5" }}
-                aria-label={`Agrandir la photo ${i + 1}`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={p.src}
-                  alt={`Photo ${i + 1}`}
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                  style={{ background: "rgba(59,130,246,0.45)" }}>
-                  <span className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-black text-white shadow-xl"
-                    style={{ background: ACCENT.blue.hex }}>
-                    <Eye className="w-4 h-4" /> Agrandir
-                  </span>
-                </div>
-              </button>
-            ))}
+          <div className="animate-fade-in" key="photos">
+            {/* Filtre par année */}
+            <div className="flex flex-wrap items-center gap-2 mb-8">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-400 mr-2">Année</span>
+              {["Toutes", ...photoYears].map((y) => {
+                const active = photoYear === y;
+                return (
+                  <button
+                    key={y}
+                    onClick={() => setPhotoYear(y)}
+                    className="px-4 py-1.5 rounded-full text-sm font-bold border-2 transition-all hover:-translate-y-0.5"
+                    style={active
+                      ? { background: ACCENT.blue.hex, color: "white", borderColor: ACCENT.blue.hex }
+                      : { color: "#64748b", borderColor: "#e2e8f0", background: "white" }}
+                  >
+                    {y}
+                  </button>
+                );
+              })}
+              <span className="ml-auto text-xs font-bold text-gray-400">
+                {filteredPhotos.length} photo{filteredPhotos.length > 1 ? "s" : ""}
+              </span>
+            </div>
+
+            {/* Albums par congrès */}
+            <div className="space-y-10">
+              {photoGroups.map((g) => (
+                <section key={`${g.ordinal}-${g.year}`}>
+                  <div className="flex items-baseline gap-3 mb-4 pb-2 border-b-2" style={{ borderColor: ACCENT.blue.hexLight }}>
+                    <h3 className="font-black text-xl text-gray-900">{g.ordinal}</h3>
+                    <span className="text-sm font-bold px-3 py-0.5 rounded-full"
+                      style={{ background: ACCENT.blue.hexLight, color: ACCENT.blue.hex }}>
+                      {g.year}
+                    </span>
+                    <span className="text-xs font-bold text-gray-400 ml-auto">
+                      {g.photos.length} photo{g.photos.length > 1 ? "s" : ""}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {g.photos.map((p) => (
+                      <button
+                        key={p.originalIndex}
+                        onClick={() => setLightbox(p.originalIndex)}
+                        className="relative rounded-2xl overflow-hidden group shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                        style={{ aspectRatio: "4/5" }}
+                        aria-label={`Agrandir — ${g.ordinal} ${g.year}`}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={p.src}
+                          alt={`${g.ordinal} ${g.year}`}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                          style={{ background: "rgba(59,130,246,0.45)" }}>
+                          <span className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-black text-white shadow-xl"
+                            style={{ background: ACCENT.blue.hex }}>
+                            <Eye className="w-4 h-4" /> Agrandir
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ))}
+
+              {photoGroups.length === 0 && (
+                <p className="text-center text-gray-500 italic py-16">
+                  Aucune photo pour cette année.
+                </p>
+              )}
+            </div>
           </div>
         )}
 
@@ -415,20 +609,22 @@ export default function MediathequePage() {
                   <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{d.desc}</p>
                 </div>
                 {/* Métadonnées */}
-                <div className="px-6 pb-4 flex items-center gap-3 text-xs text-gray-400">
-                  <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> {d.pages}</span>
+                <div className="px-6 pb-4 flex items-center gap-3 text-xs text-gray-400 flex-wrap">
+                  <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> {d.gtt}</span>
                   <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {d.date}</span>
                 </div>
                 {/* Actions */}
                 <div className="mt-auto px-6 pb-6 flex gap-2">
-                  <button className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-black text-white transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                  <a href={d.file} download
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-black text-white transition-all hover:-translate-y-0.5 hover:shadow-lg"
                     style={{ background: ACCENT.gold.hex }}>
                     <Download className="w-3.5 h-3.5" /> Télécharger
-                  </button>
-                  <button className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-black border-2 transition-all hover:-translate-y-0.5"
+                  </a>
+                  <a href={d.file} target="_blank" rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-black border-2 transition-all hover:-translate-y-0.5"
                     style={{ borderColor: ACCENT.gold.hex, color: ACCENT.gold.hex }}>
                     <Eye className="w-3.5 h-3.5" /> Aperçu
-                  </button>
+                  </a>
                 </div>
               </div>
             ))}
