@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { authenticate, MEMBERS } from "@/data/members";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 export default function EspaceMembrePage() {
   return (
@@ -63,6 +64,7 @@ function EspaceMembreContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
   const [openTip, setOpenTip] = useState<number | null>(null);
 
@@ -70,23 +72,11 @@ function EspaceMembreContent() {
     "w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:border-transparent transition-all";
   const ringStyle = { "--tw-ring-color": "#31B9AE" } as React.CSSProperties;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-
-    const member = authenticate(email, password);
-    if (!member) {
-      setError("Identifiants invalides. Vérifiez votre email et mot de passe.");
-      return;
-    }
-
+  function persistAndRedirect(session: Record<string, unknown>) {
     if (typeof window !== "undefined") {
-      const { password: _pwd, ...safe } = member;
-      void _pwd;
-      localStorage.setItem("sobup_user", JSON.stringify(safe));
+      localStorage.setItem("sobup_user", JSON.stringify(session));
       window.dispatchEvent(new Event("sobup_user_changed"));
     }
-
     let destination = "/espace-membre/dashboard";
     if (nextUrl) {
       destination = nextUrl;
@@ -98,6 +88,65 @@ function EspaceMembreContent() {
       }
     }
     router.push(destination);
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      // 1) Tentative via Supabase (vrais comptes créés par le bureau)
+      const supabase = createSupabaseBrowserClient();
+      const { data: authData, error: authErr } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password,
+      });
+
+      if (!authErr && authData.user) {
+        const userId = authData.user.id;
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", userId)
+          .single();
+
+        const prenom = profile?.prenom ?? authData.user.user_metadata?.prenom ?? "";
+        const nom = profile?.nom ?? authData.user.user_metadata?.nom ?? "";
+        const fullName = `${prenom} ${nom}`.trim() || authData.user.email!;
+        const initials = `${prenom[0] ?? ""}${nom[0] ?? ""}`.toUpperCase() || "?";
+
+        persistAndRedirect({
+          email: authData.user.email!,
+          name: `Dr ${fullName}`,
+          avatar: initials,
+          role: profile?.is_bureau ? "Membre du Bureau" : "Membre actif",
+          specialite: profile?.specialite ?? undefined,
+          etablissement: profile?.etablissement ?? undefined,
+          ville: profile?.ville ?? undefined,
+          joinedAt: profile?.cotisation_year ? String(profile.cotisation_year) : new Date().getFullYear().toString(),
+          isBureau: !!profile?.is_bureau,
+          gtt: Array.isArray(profile?.gtt_memberships) ? profile.gtt_memberships.map((g: { name?: string } | string) => typeof g === "string" ? g : g.name).filter(Boolean) : [],
+        });
+        return;
+      }
+
+      // 2) Fallback : comptes démo hardcodés
+      const member = authenticate(email, password);
+      if (member) {
+        const { password: _pwd, ...safe } = member;
+        void _pwd;
+        persistAndRedirect(safe);
+        return;
+      }
+
+      setError("Identifiants invalides. Vérifiez votre email et mot de passe.");
+    } catch (err) {
+      console.error("[espace-membre] login", err);
+      setError("Connexion impossible. Réessayez dans un instant.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fillDemo = (memberEmail: string) => {
@@ -288,10 +337,11 @@ function EspaceMembreContent() {
 
             <button
               type="submit"
-              className="w-full py-3.5 rounded-xl font-black text-white text-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+              disabled={loading}
+              className="w-full py-3.5 rounded-xl font-black text-white text-sm transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:hover:translate-y-0"
               style={{ background: "#31B9AE" }}
             >
-              Se connecter
+              {loading ? "Connexion en cours…" : "Se connecter"}
             </button>
           </form>
         </div>

@@ -30,6 +30,8 @@ export default function AdhesionPage() {
   const [form, setForm]           = useState<FormData>(empty);
   const [errors, setErrors]       = useState<Partial<FormData>>({});
   const [payMethod, setPayMethod] = useState<"om"|"wave">("om");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string>("");
 
   const set = (k: keyof FormData) =>
     (e: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) =>
@@ -157,14 +159,40 @@ export default function AdhesionPage() {
               {field("Ville", "ville", { placeholder: "Ouagadougou" })}
             </div>
 
+            {submitError && (
+              <p className="mt-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2.5">{submitError}</p>
+            )}
+
             <div className="mt-8 flex items-center justify-between">
               <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">Annuler</Link>
               <button
-                onClick={() => { if (validate()) setStep(1); }}
-                className="px-6 py-2.5 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90"
+                disabled={submitting}
+                onClick={async () => {
+                  if (!validate()) return;
+                  setSubmitting(true);
+                  setSubmitError("");
+                  try {
+                    const res = await fetch("/api/adhesion", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ ...form, payment_method: payMethod }),
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (!res.ok) {
+                      setSubmitError(data.error ?? "Une erreur est survenue.");
+                      return;
+                    }
+                    setStep(1);
+                  } catch {
+                    setSubmitError("Connexion impossible. Vérifiez votre réseau.");
+                  } finally {
+                    setSubmitting(false);
+                  }
+                }}
+                className="px-6 py-2.5 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-60"
                 style={{ background: "#31B9AE" }}
               >
-                Continuer
+                {submitting ? "Envoi…" : "Continuer"}
               </button>
             </div>
           </div>

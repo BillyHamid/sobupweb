@@ -99,6 +99,14 @@ export default function HeroCarousel() {
   const next = useCallback(() => goTo((current + 1) % slides.length), [current, goTo]);
   const prev = useCallback(() => goTo((current - 1 + slides.length) % slides.length), [current, goTo]);
 
+  // Précharge toutes les images du carousel au montage — évite le lag entre 2 slides
+  useEffect(() => {
+    slides.forEach((s) => {
+      const img = new window.Image();
+      img.src = s.image;
+    });
+  }, []);
+
   useEffect(() => {
     const id = setInterval(() => next(), 5000);
     return () => clearInterval(id);

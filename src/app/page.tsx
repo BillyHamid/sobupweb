@@ -2,10 +2,39 @@ import Link from "next/link";
 import Image from "next/image";
 import HeroCarousel from "@/components/HeroCarousel";
 import Newsletter from "@/components/Newsletter";
+import { createPublicClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
+
+const MONTHS_SHORT = ["Jan", "Fév", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Déc"];
+
+function parseDisplayDate(displayDate: string, isoDate: string) {
+  // Tente d'extraire jour + mois + année depuis "19 – 21 Novembre 2026" ou "31 Juillet 2026"
+  const dayMatch = displayDate.match(/^(\d+(?:\s*[-–]\s*\d+)?)/);
+  const yearMatch = displayDate.match(/(\d{4})/);
+  if (dayMatch && yearMatch) {
+    const monthIdx = new Date(isoDate).getMonth();
+    return {
+      date: dayMatch[1].replace(/\s/g, ""),
+      month: MONTHS_SHORT[monthIdx],
+      year: yearMatch[1],
+    };
+  }
+  const d = new Date(isoDate);
+  return { date: String(d.getDate()), month: MONTHS_SHORT[d.getMonth()], year: String(d.getFullYear()) };
+}
+
+function badgeClassFor(label: string, type: string): string {
+  if (label === "Inscriptions ouvertes") return "bg-accent text-white";
+  if (type === "Congrès") return "bg-accent text-white";
+  if (type === "Journée") return "bg-secondary text-white";
+  if (type === "EPU") return "bg-green-600 text-white";
+  return "bg-blue-600 text-white";
+}
 
 /* ─── Mock data ─── */
 
-const upcomingEvents = [
+const _legacyUpcomingEvents = [
   {
     date: "24",
     month: "Juil",
@@ -94,7 +123,35 @@ const latestNews = [
 
 /* ─── Page ─── */
 
-export default function Home() {
+export default async function Home() {
+  void _legacyUpcomingEvents;
+  const supabase = createPublicClient();
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const { data: dbEvents } = await supabase
+    .from("events")
+    .select("id, slug, type, event_date, display_date, time_range, location, title, gtt, image_url, badge_label, has_page")
+    .eq("published", true)
+    .gte("event_date", todayIso)
+    .order("event_date", { ascending: true })
+    .limit(4);
+
+  const upcomingEvents = (dbEvents ?? []).map((ev) => {
+    const parts = parseDisplayDate(ev.display_date, ev.event_date);
+    return {
+      date: parts.date,
+      month: parts.month,
+      year: parts.year,
+      title: ev.title,
+      location: ev.location,
+      time: ev.time_range,
+      type: ev.type,
+      badge: badgeClassFor(ev.badge_label, ev.type),
+      href: ev.has_page ? `/evenements/${ev.slug}` : "/evenements",
+      image: ev.image_url,
+      gtt: ev.gtt,
+    };
+  });
+
   return (
     <>
       {/* ══════════════════════════════════════
