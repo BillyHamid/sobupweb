@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { getBccList } from "@/lib/mail";
 
 type Body = {
   prenom?: string;
@@ -193,6 +194,7 @@ export async function POST(req: Request) {
     const secResp = await resend.emails.send({
       from: FROM,
       to: SECRETARIAT,
+      bcc: getBccList(),
       replyTo: String(email),
       subject: `Inscription Journée Régionale — ${safe.prenom} ${safe.nom}`,
       html: secretariatHtml,
@@ -208,6 +210,7 @@ export async function POST(req: Request) {
     const confResp = await resend.emails.send({
       from: FROM,
       to: String(email),
+      bcc: getBccList(),
       subject: "Confirmation — 1ère Journée Scientifique Régionale SOBUP",
       html: confirmationHtml,
       attachments,

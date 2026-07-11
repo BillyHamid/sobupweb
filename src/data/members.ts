@@ -21,7 +21,7 @@ export interface SobupMember {
 export const MEMBERS: SobupMember[] = [
   // ───────── BUREAU EXÉCUTIF ─────────
   {
-    email: "abdoul.ouedraogo@sobup.bf",
+    email: "abdoul.ouedraogo@sobup.online",
     password: "sobup2026",
     name: "Dr Abdoul Risgou OUEDRAOGO",
     avatar: "AO",
@@ -34,7 +34,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "maiga.soumaila@sobup.bf",
+    email: "maiga.soumaila@sobup.online",
     password: "sobup2026",
     name: "Dr Soumaila MAIGA",
     avatar: "SM",
@@ -47,7 +47,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "damoue.sandrine@sobup.bf",
+    email: "damoue.sandrine@sobup.online",
     password: "sobup2026",
     name: "Dr Sandrine Nadège DAMOUE",
     avatar: "SD",
@@ -60,7 +60,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "siambo.eleonore@sobup.bf",
+    email: "siambo.eleonore@sobup.online",
     password: "sobup2026",
     name: "Dr Éléonore SIAMBO / SENI",
     avatar: "ES",
@@ -73,7 +73,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "sourabie.adama@sobup.bf",
+    email: "sourabie.adama@sobup.online",
     password: "sobup2026",
     name: "Dr Adama SOURABIE",
     avatar: "AS",
@@ -86,7 +86,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "bougma.ghislain@sobup.bf",
+    email: "bougma.ghislain@sobup.online",
     password: "sobup2026",
     name: "Dr Ghislain BOUGMA",
     avatar: "GB",
@@ -99,7 +99,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "tiendrebeogo.arnaud@sobup.bf",
+    email: "tiendrebeogo.arnaud@sobup.online",
     password: "sobup2026",
     name: "Dr Arnaud TIENDREBEOGO",
     avatar: "AT",
@@ -112,7 +112,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "nikiema.tanguy@sobup.bf",
+    email: "nikiema.tanguy@sobup.online",
     password: "sobup2026",
     name: "Dr Tanguy NIKIEMA",
     avatar: "TN",
@@ -125,7 +125,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "koumbem.boureima@sobup.bf",
+    email: "koumbem.boureima@sobup.online",
     password: "sobup2026",
     name: "Dr Boureima KOUMBEM",
     avatar: "BK",
@@ -138,7 +138,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "coulibaly.aly@sobup.bf",
+    email: "coulibaly.aly@sobup.online",
     password: "sobup2026",
     name: "Dr Aly COULIBALY",
     avatar: "AC",
@@ -151,7 +151,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "kunakey.edem@sobup.bf",
+    email: "kunakey.edem@sobup.online",
     password: "sobup2026",
     name: "Dr Edem KUNAKEY",
     avatar: "EK",
@@ -164,7 +164,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "soubeiga.dimitri@sobup.bf",
+    email: "soubeiga.dimitri@sobup.online",
     password: "sobup2026",
     name: "Dr Dimitri SOUBEIGA",
     avatar: "DS",
@@ -177,7 +177,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "batiebo.nouria@sobup.bf",
+    email: "batiebo.nouria@sobup.online",
     password: "sobup2026",
     name: "Dr Nouria BATIEBO / YAO",
     avatar: "NB",
@@ -192,7 +192,7 @@ export const MEMBERS: SobupMember[] = [
 
   // ───────── AUTRES MEMBRES (exemples) ─────────
   {
-    email: "ouedraogo.martial@sobup.bf",
+    email: "ouedraogo.martial@sobup.online",
     password: "sobup2026",
     name: "Pr Martial OUÉDRAOGO",
     avatar: "MO",
@@ -205,7 +205,7 @@ export const MEMBERS: SobupMember[] = [
     gtt: [],
   },
   {
-    email: "boncoungou.kadiatou@sobup.bf",
+    email: "boncoungou.kadiatou@sobup.online",
     password: "sobup2026",
     name: "Pr Kadiatou BONCOUNGOU",
     avatar: "KB",

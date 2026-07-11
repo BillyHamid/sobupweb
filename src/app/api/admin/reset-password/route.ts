@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminAuthenticated } from "@/lib/supabase/adminAuth";
+import { getBccList } from "@/lib/mail";
 
 const FROM = process.env.RESEND_FROM ?? "SOBUP <onboarding@resend.dev>";
 const SECRETARIAT = process.env.SOBUP_SECRETARIAT_EMAIL ?? "ouattarabillyhamid@gmail.com";
@@ -92,6 +93,7 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from: FROM,
         to: request.email,
+        bcc: getBccList(),
         subject: "🔑 Réinitialisation de votre mot de passe SOBUP",
         html,
       });

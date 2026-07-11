@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminAuthenticated } from "@/lib/supabase/adminAuth";
+import { getBccList } from "@/lib/mail";
 
 const FROM = process.env.RESEND_FROM ?? "SOBUP <onboarding@resend.dev>";
 const SECRETARIAT = process.env.SOBUP_SECRETARIAT_EMAIL ?? "ouattarabillyhamid@gmail.com";
@@ -42,6 +43,7 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from: FROM,
         to: request.email,
+        bcc: getBccList(),
         subject: "À propos de votre demande d'adhésion SOBUP",
         html: `<div style="font-family:system-ui;max-width:560px;margin:24px auto;padding:24px;border:1px solid #e2e8f0;border-radius:12px">
           <h2 style="color:#0f172a;font-weight:800;margin:0 0 12px">Demande d'adhésion à clarifier</h2>

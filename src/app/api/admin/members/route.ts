@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminAuthenticated } from "@/lib/supabase/adminAuth";
+import { getBccList } from "@/lib/mail";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -145,6 +146,7 @@ export async function POST(req: Request) {
     try {
       await resend.emails.send({
         from: FROM, to: String(email),
+        bcc: getBccList(),
         subject: "🎉 Bienvenue dans la SOBUP — vos identifiants",
         html, attachments,
       });

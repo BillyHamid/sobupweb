@@ -292,7 +292,7 @@ function EspaceMembreContent() {
               </label>
               <input
                 type="email"
-                placeholder="prenom.nom@sobup.bf"
+                placeholder="prenom.nom@sobup.online"
                 className={inputCls}
                 style={ringStyle}
                 value={email}

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getBccList } from "@/lib/mail";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -170,6 +171,7 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from: FROM,
         to: SECRETARIAT,
+        bcc: getBccList(),
         replyTo: String(email),
         subject: `🔔 Nouvelle adhésion — ${safe.prenom} ${safe.nom}`,
         html: adminHtml,
@@ -178,6 +180,7 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from: FROM,
         to: String(email),
+        bcc: getBccList(),
         subject: "Demande d'adhésion bien reçue — SOBUP",
         html: userHtml,
         attachments,
