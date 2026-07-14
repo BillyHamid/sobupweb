@@ -1,0 +1,1163 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, follow" />
+<meta name="description" content="Guide d'administration de la plateforme SOBUP — manuel de référence pour le Bureau exécutif." />
+<link rel="icon" href="/icon.png" type="image/png" />
+<title>Guide d'administration — Plateforme SOBUP</title>
+<style>
+  :root {
+    --ink: #0F1A1D;
+    --ink-strong: #050D0F;
+    --muted: #5A6B72;
+    --faint: #94A3A9;
+    --surface: #FFFFFF;
+    --ground: #F6F9F9;
+    --border: #E2ECED;
+    --border-strong: #C4D3D6;
+    --accent: #31B9AE;
+    --accent-strong: #065E52;
+    --accent-deep: #0B3D38;
+    --accent-soft: #E8F9F7;
+    --warning: #E67E22;
+    --warning-ink: #7A3F0C;
+    --warning-soft: #FFF4E6;
+    --critical: #DC2626;
+    --critical-soft: #FEF2F2;
+    --info: #2563EB;
+    --info-soft: #EFF6FF;
+    --shadow: 0 1px 2px rgba(15,26,29,0.04), 0 4px 12px rgba(15,26,29,0.03);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #E6EEF0;
+      --ink-strong: #FFFFFF;
+      --muted: #A0AFB4;
+      --faint: #6B7A80;
+      --surface: #142023;
+      --ground: #0B1416;
+      --border: #22323A;
+      --border-strong: #34474F;
+      --accent: #4FD4C6;
+      --accent-strong: #7EEAE4;
+      --accent-deep: #1A5952;
+      --accent-soft: #0F262A;
+      --warning: #F5A85B;
+      --warning-ink: #F5C989;
+      --warning-soft: #2A1B08;
+      --critical: #F87171;
+      --critical-soft: #2C1414;
+      --info: #60A5FA;
+      --info-soft: #0F1E36;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="light"] {
+    --ink: #0F1A1D; --ink-strong: #050D0F; --muted: #5A6B72; --faint: #94A3A9;
+    --surface: #FFFFFF; --ground: #F6F9F9; --border: #E2ECED; --border-strong: #C4D3D6;
+    --accent: #31B9AE; --accent-strong: #065E52; --accent-deep: #0B3D38; --accent-soft: #E8F9F7;
+    --warning: #E67E22; --warning-ink: #7A3F0C; --warning-soft: #FFF4E6;
+    --critical: #DC2626; --critical-soft: #FEF2F2;
+    --info: #2563EB; --info-soft: #EFF6FF;
+    --shadow: 0 1px 2px rgba(15,26,29,0.04), 0 4px 12px rgba(15,26,29,0.03);
+  }
+  :root[data-theme="dark"] {
+    --ink: #E6EEF0; --ink-strong: #FFFFFF; --muted: #A0AFB4; --faint: #6B7A80;
+    --surface: #142023; --ground: #0B1416; --border: #22323A; --border-strong: #34474F;
+    --accent: #4FD4C6; --accent-strong: #7EEAE4; --accent-deep: #1A5952; --accent-soft: #0F262A;
+    --warning: #F5A85B; --warning-ink: #F5C989; --warning-soft: #2A1B08;
+    --critical: #F87171; --critical-soft: #2C1414;
+    --info: #60A5FA; --info-soft: #0F1E36;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+
+  /* ── Layout ── */
+  .app {
+    display: grid;
+    grid-template-columns: 288px minmax(0, 1fr);
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  aside {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 32px 24px;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    background: var(--ground);
+  }
+  main {
+    padding: 44px 56px;
+    max-width: 780px;
+  }
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+    main { padding: 32px 24px; }
+  }
+
+  /* ── Sidebar ── */
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .brand-mark {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent) 100%);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: white; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-weight: 700; font-size: 15px; letter-spacing: -0.02em;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2);
+  }
+  .brand-name {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-size: 20px; font-weight: 700; letter-spacing: -0.015em;
+    color: var(--ink-strong);
+  }
+  .brand-sub {
+    font-size: 12px; color: var(--muted); margin-bottom: 28px;
+  }
+  .toc-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--faint); margin: 24px 0 12px;
+  }
+  nav ol {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  nav a {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 10px;
+    align-items: baseline;
+    padding: 7px 8px;
+    text-decoration: none;
+    color: var(--muted);
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: background .15s, color .15s;
+  }
+  nav a:hover { color: var(--ink); background: var(--surface); }
+  nav a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    color: var(--ink);
+  }
+  nav .num {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--faint);
+    letter-spacing: 0.02em;
+  }
+  .meta {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--faint);
+    line-height: 1.7;
+  }
+  .meta strong { color: var(--muted); font-weight: 600; }
+
+  /* ── Main content ── */
+  .doc-header { margin-bottom: 48px; }
+  .doc-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent-strong);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-size: 44px; line-height: 1.1; letter-spacing: -0.025em;
+    font-weight: 700; color: var(--ink-strong);
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  .doc-lede {
+    font-size: 18px; line-height: 1.55; color: var(--muted);
+    max-width: 60ch;
+    margin: 0;
+  }
+
+  section {
+    margin-top: 68px;
+    scroll-margin-top: 20px;
+  }
+  section:first-of-type { margin-top: 0; }
+
+  .sec-num {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px; font-variant-numeric: tabular-nums;
+    color: var(--faint);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-size: 30px; line-height: 1.15; letter-spacing: -0.015em;
+    font-weight: 700; color: var(--ink-strong);
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .sec-intro {
+    font-size: 16px; color: var(--muted);
+    max-width: 60ch;
+    margin: 0 0 32px;
+  }
+  h3 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-size: 20px; line-height: 1.3; font-weight: 700;
+    color: var(--ink-strong);
+    margin: 36px 0 12px;
+    letter-spacing: -0.01em;
+  }
+  h4 {
+    font-size: 13px; font-weight: 700;
+    color: var(--accent-strong);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin: 28px 0 8px;
+  }
+  p { margin: 0 0 14px; max-width: 65ch; }
+  a { color: var(--accent-strong); text-decoration-color: var(--accent); text-underline-offset: 3px; }
+  a:hover { color: var(--accent); }
+  strong { color: var(--ink-strong); font-weight: 600; }
+  code {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: .88em;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--ink-strong);
+  }
+  kbd {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: .82em; font-weight: 600;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-bottom-width: 2px;
+    padding: 2px 8px;
+    border-radius: 5px;
+    color: var(--ink-strong);
+    box-shadow: inset 0 -1px 0 var(--border);
+  }
+
+  /* Steps */
+  ol.steps {
+    list-style: none;
+    counter-reset: step;
+    padding: 0; margin: 20px 0;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  ol.steps > li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 14px;
+    padding: 14px 16px 14px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  ol.steps > li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    width: 30px; height: 24px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 5px;
+    margin-top: 2px;
+  }
+  ol.steps > li > *:first-child { margin-top: 0; }
+  ol.steps > li > *:last-child { margin-bottom: 0; }
+  ol.steps p:first-child { font-weight: 500; color: var(--ink-strong); }
+  ol.steps p:not(:first-child) { font-size: 14.5px; color: var(--muted); }
+
+  ul { padding-left: 20px; margin: 12px 0; }
+  ul li { margin-bottom: 6px; }
+  ul li::marker { color: var(--accent); }
+
+  /* Callouts */
+  .callout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border-left: 3px solid;
+  }
+  .callout-icon {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-weight: 700; font-size: 15px;
+    width: 26px; height: 26px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    margin-top: 2px;
+  }
+  .callout > div > *:first-child { margin-top: 0; }
+  .callout > div > *:last-child { margin-bottom: 0; }
+  .callout p, .callout li { font-size: 14.5px; }
+  .callout-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout.info { background: var(--info-soft); border-color: var(--info); }
+  .callout.info .callout-icon { background: var(--info); color: white; }
+  .callout.info .callout-title { color: var(--info); }
+  .callout.tip { background: var(--accent-soft); border-color: var(--accent); }
+  .callout.tip .callout-icon { background: var(--accent-strong); color: white; }
+  .callout.tip .callout-title { color: var(--accent-strong); }
+  .callout.warn { background: var(--warning-soft); border-color: var(--warning); }
+  .callout.warn .callout-icon { background: var(--warning); color: white; }
+  .callout.warn .callout-title { color: var(--warning-ink); }
+  .callout.danger { background: var(--critical-soft); border-color: var(--critical); }
+  .callout.danger .callout-icon { background: var(--critical); color: white; }
+  .callout.danger .callout-title { color: var(--critical); }
+
+  /* Definition rows */
+  .kv {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 8px 24px;
+    margin: 20px 0;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .kv dt {
+    font-size: 12.5px; font-weight: 600;
+    color: var(--accent-strong);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .kv dd {
+    margin: 0;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  @media (max-width: 640px) {
+    .kv { grid-template-columns: 1fr; gap: 4px; }
+    .kv dd { margin-bottom: 16px; }
+  }
+
+  /* Tables */
+  .table-wrap {
+    margin: 20px 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+  }
+  th, td {
+    padding: 11px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: var(--ground);
+    font-weight: 600;
+    color: var(--ink-strong);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  tr:last-child td { border-bottom: 0; }
+  td code { font-size: .88em; }
+
+  /* Pills for menu items */
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    font-weight: 600;
+    font-size: .88em;
+    white-space: nowrap;
+  }
+  .pill-danger { background: var(--critical-soft); color: var(--critical); }
+  .pill-warn { background: var(--warning-soft); color: var(--warning-ink); }
+  .pill-mono {
+    font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    letter-spacing: 0.02em;
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: black; font-size: 11pt; }
+    .app { display: block; }
+    aside { display: none; }
+    main { max-width: 100%; padding: 0; }
+    h1 { font-size: 26pt; }
+    h2 { font-size: 18pt; page-break-before: always; margin-top: 0; }
+    section:first-of-type h2 { page-break-before: auto; }
+    a { color: black; text-decoration: underline; }
+    .callout { break-inside: avoid; }
+    ol.steps > li { break-inside: avoid; }
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* Focus visible for skip link */
+  .skip-link {
+    position: absolute; top: -40px; left: 8px;
+    background: var(--accent-strong); color: white;
+    padding: 8px 14px; border-radius: 6px;
+    text-decoration: none; font-size: 13px; font-weight: 600;
+  }
+  .skip-link:focus { top: 8px; z-index: 100; }
+</style>
+
+<a href="#top" class="skip-link">Aller au contenu</a>
+
+<div class="app">
+  <aside aria-label="Sommaire">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span class="brand-name">SOBUP</span>
+    </div>
+    <div class="brand-sub">Guide du back-office</div>
+
+    <div class="toc-label">Sommaire</div>
+    <nav aria-label="Sections">
+      <ol>
+        <li><a href="#intro"><span class="num">01</span>Ce que fait la plateforme</a></li>
+        <li><a href="#connexion"><span class="num">02</span>Se connecter au back-office</a></li>
+        <li><a href="#adhesions"><span class="num">03</span>Traiter les adhésions</a></li>
+        <li><a href="#actualites"><span class="num">04</span>Publier une actualité</a></li>
+        <li><a href="#evenements"><span class="num">05</span>Gérer les événements</a></li>
+        <li><a href="#membres"><span class="num">06</span>Administrer les membres</a></li>
+        <li><a href="#mediatheque"><span class="num">07</span>Nourrir la médiathèque</a></li>
+        <li><a href="#emails"><span class="num">08</span>Les emails envoyés</a></li>
+        <li><a href="#regles"><span class="num">09</span>Bonnes pratiques</a></li>
+        <li><a href="#depannage"><span class="num">10</span>Dépannage</a></li>
+      </ol>
+    </nav>
+
+    <div class="meta">
+      Guide destiné aux membres du Bureau exécutif SOBUP disposant d'un accès administrateur.<br><br>
+      <strong>Adresse du back-office</strong><br>
+      <code style="font-size:11px">sobup.online/admin</code><br><br>
+      <strong>Contact technique</strong><br>
+      Bureau exécutif SOBUP<br>
+      <span style="color:var(--muted)">ouattarabillyhamid@gmail.com</span>
+    </div>
+  </aside>
+
+  <main id="top">
+    <header class="doc-header">
+      <div class="doc-eyebrow">Manuel d'utilisation</div>
+      <h1>Guide d'administration de la plateforme SOBUP</h1>
+      <p class="doc-lede">
+        Comment gérer les adhésions, publier des actualités, organiser des événements
+        et administrer les membres de la Société Burkinabè de Pneumologie depuis
+        l'espace administrateur.
+      </p>
+    </header>
+
+    <section id="intro">
+      <div class="sec-num">01</div>
+      <h2>Ce que fait la plateforme</h2>
+      <p class="sec-intro">
+        La plateforme SOBUP est le site institutionnel public de la Société Burkinabè
+        de Pneumologie, complété d'un back-office privé pour le Bureau. Elle centralise
+        tout le contenu que voient les visiteurs.
+      </p>
+
+      <p>
+        Trois publics interagissent avec la plateforme :
+      </p>
+
+      <dl class="kv">
+        <dt>Le grand public</dt>
+        <dd>
+          Consulte le site : présentation de la SOBUP, agenda des événements,
+          articles d'actualité, recommandations médicales, annuaire des pneumologues,
+          médiathèque. Aucun compte requis.
+        </dd>
+        <dt>Les pneumologues</dt>
+        <dd>
+          Soumettent une demande d'adhésion. Une fois validée par le Bureau, ils
+          reçoivent un mot de passe et accèdent à leur espace personnel
+          (profil, cotisation, GTT).
+        </dd>
+        <dt>Le Bureau SOBUP</dt>
+        <dd>
+          Se connecte au back-office pour valider les adhésions, publier des
+          actualités et événements, gérer les membres et alimenter la médiathèque.
+          <strong>C'est votre rôle.</strong>
+        </dd>
+      </dl>
+
+      <div class="callout tip">
+        <span class="callout-icon" aria-hidden="true">i</span>
+        <div>
+          <div class="callout-title">À retenir</div>
+          <p>
+            Tout ce que vous modifiez dans le back-office apparaît immédiatement
+            sur le site public. Aucun rechargement, aucune manipulation technique
+            nécessaire.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="connexion">
+      <div class="sec-num">02</div>
+      <h2>Se connecter au back-office</h2>
+      <p class="sec-intro">
+        Une seule adresse à retenir, un seul mot de passe partagé entre les
+        membres du Bureau qui ont un accès administrateur.
+      </p>
+
+      <ol class="steps">
+        <li>
+          <div>
+            <p>Ouvrez le navigateur (Chrome, Firefox, Safari) sur ordinateur ou téléphone.</p>
+            <p>Un connexion Internet stable est nécessaire, comme pour toute plateforme web.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p>Saisissez l'adresse <code>sobup.online/admin</code> dans la barre du navigateur.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p>Une fenêtre demande votre mot de passe administrateur.</p>
+            <p>Ce mot de passe est confidentiel et unique pour tout le Bureau. Il vous a été communiqué séparément par le Président ou le Secrétaire général.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p>Cliquez sur <span class="pill">Se connecter</span>.</p>
+            <p>Une fois connecté, votre session reste active <strong>7 jours</strong>. Vous n'aurez pas à ressaisir le mot de passe à chaque visite.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="callout warn">
+        <span class="callout-icon" aria-hidden="true">!</span>
+        <div>
+          <div class="callout-title">Sécurité du mot de passe</div>
+          <p>
+            Ne partagez le mot de passe qu'avec les personnes du Bureau qui doivent
+            vraiment y accéder. Ne l'envoyez pas dans un groupe WhatsApp ouvert.
+            Préférez un envoi individuel.
+          </p>
+          <p>
+            Si un membre du Bureau quitte ses fonctions ou perd son téléphone,
+            demandez à changer le mot de passe et informez les autres administrateurs.
+          </p>
+        </div>
+      </div>
+
+      <h3>Ce que vous voyez après la connexion</h3>
+      <p>
+        Une barre latérale à gauche liste les modules que vous pouvez administrer :
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Module</th><th>Ce que vous y faites</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Adhésions</strong></td><td>Valider ou refuser les demandes d'adhésion, récupérer un mot de passe.</td></tr>
+            <tr><td><strong>Actualités</strong></td><td>Créer, modifier et supprimer les articles du blog SOBUP.</td></tr>
+            <tr><td><strong>Événements</strong></td><td>Ajouter un EPU, une formation, un congrès. Modifier l'agenda public.</td></tr>
+            <tr><td><strong>Membres</strong></td><td>Voir tous les comptes membres, ajouter manuellement, marquer une cotisation payée, réinitialiser un mot de passe.</td></tr>
+            <tr><td><strong>Médiathèque</strong></td><td>Uploader des photos par congrès, ajouter des vidéos, publier des documents PDF.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="adhesions">
+      <div class="sec-num">03</div>
+      <h2>Traiter les adhésions</h2>
+      <p class="sec-intro">
+        C'est le workflow le plus fréquent. Un pneumologue remplit le formulaire
+        public, paie par Orange Money ou Wave, envoie la preuve sur WhatsApp,
+        vous validez sa demande depuis le back-office.
+      </p>
+
+      <h3>Le cycle complet, du côté de l'adhérent</h3>
+      <ol class="steps">
+        <li><div><p>Le pneumologue va sur <code>sobup.online/adhesion</code> et remplit ses informations : nom, email, téléphone, spécialité, établissement, ville.</p></div></li>
+        <li><div><p>Il choisit Orange Money ou Wave et voit un écran avec les instructions de paiement (30 000 XOF).</p></div></li>
+        <li><div><p>Il envoie sa capture d'écran de paiement au numéro WhatsApp affiché (celui du secrétariat SOBUP).</p></div></li>
+        <li><div>
+          <p>Le Bureau reçoit deux emails :</p>
+          <ul>
+            <li>L'un envoyé à l'adresse principale du secrétariat.</li>
+            <li>L'autre en copie cachée à un second administrateur du Bureau, pour redondance.</li>
+          </ul>
+          <p>L'adhérent reçoit un email de confirmation lui disant que sa demande est en cours de traitement.</p>
+        </div></li>
+      </ol>
+
+      <h3>Votre travail dans le back-office</h3>
+
+      <ol class="steps">
+        <li><div>
+          <p>Ouvrez <code>sobup.online/admin</code> et cliquez sur <span class="pill">Adhésions</span> dans la barre latérale.</p>
+          <p>Un tableau liste les demandes classées en trois onglets : <em>En attente</em>, <em>Validées</em>, <em>Refusées</em>.</p>
+        </div></li>
+        <li><div>
+          <p>Ouvrez WhatsApp et vérifiez que la capture de paiement de l'adhérent est bien reçue et lisible (montant, référence, date).</p>
+        </div></li>
+        <li><div>
+          <p>De retour dans le back-office, sur la ligne de l'adhérent concerné, cliquez sur <span class="pill">✓ Valider l'adhésion</span>.</p>
+          <p>Une confirmation vous demande si vous êtes sûr. Cliquez OK.</p>
+        </div></li>
+        <li><div>
+          <p>En moins d'une seconde, la plateforme :</p>
+          <ul>
+            <li>Crée un compte pour cet adhérent</li>
+            <li>Génère un mot de passe temporaire aléatoire</li>
+            <li>Envoie un email à l'adhérent avec ses identifiants de connexion</li>
+            <li>Marque la demande comme validée</li>
+          </ul>
+        </div></li>
+        <li><div>
+          <p>L'adhérent peut désormais se connecter sur <code>sobup.online/espace-membre</code> avec son email et le mot de passe reçu.</p>
+        </div></li>
+      </ol>
+
+      <h3>Refuser une demande</h3>
+      <p>
+        Si la preuve de paiement est illisible, insuffisante ou frauduleuse,
+        cliquez sur <span class="pill pill-danger">✗ Refuser</span>.
+        Une fenêtre s'ouvre pour saisir le motif du refus.
+      </p>
+      <p>
+        Formulez le motif de façon claire et polie — l'adhérent recevra un email
+        avec ce texte. Exemples :
+      </p>
+      <ul>
+        <li><em>« Capture de paiement illisible. Merci de renvoyer une photo plus nette. »</em></li>
+        <li><em>« Montant reçu insuffisant. La cotisation annuelle est de 30 000 XOF. »</em></li>
+        <li><em>« Impossible de vérifier la transaction. Merci de nous transmettre l'ID de transaction Orange Money. »</em></li>
+      </ul>
+
+      <h3>Retrouver un mot de passe perdu</h3>
+      <p>
+        Un adhérent vous appelle : il a perdu son mot de passe. Deux options.
+      </p>
+
+      <div class="kv">
+        <dt>Option 1 — Récupérer</dt>
+        <dd>
+          Onglet <span class="pill">Validées</span>. Trouvez sa fiche. Le mot de passe
+          temporaire envoyé lors de la validation est affiché dans un encadré ambre.
+          Communiquez-le à l'adhérent (par WhatsApp direct, pas dans un groupe).
+        </dd>
+        <dt>Option 2 — Réinitialiser (plus sûr)</dt>
+        <dd>
+          Cliquez sur <span class="pill">Réinitialiser le mot de passe</span> sur sa fiche.
+          Un nouveau mot de passe est généré, l'ancien devient inutilisable, et l'adhérent reçoit
+          automatiquement un email avec les nouveaux identifiants.
+        </dd>
+      </dl>
+
+      <div class="callout tip">
+        <span class="callout-icon" aria-hidden="true">i</span>
+        <div>
+          <div class="callout-title">Recommandation</div>
+          <p>
+            Privilégiez systématiquement l'<strong>Option 2 (Réinitialiser)</strong>.
+            Elle est plus sûre — le mot de passe temporaire ancien peut être compromis
+            (envoi WhatsApp intercepté, capture d'écran…). La réinitialisation
+            garantit qu'un nouveau code est envoyé exclusivement dans la boîte
+            de l'adhérent.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="actualites">
+      <div class="sec-num">04</div>
+      <h2>Publier une actualité</h2>
+      <p class="sec-intro">
+        Le blog SOBUP est la vitrine éditoriale de la Société. Toute information
+        institutionnelle destinée au grand public ou aux membres passe ici :
+        événements passés, communiqués, tribunes, recommandations, notes du Président.
+      </p>
+
+      <h3>Créer un nouvel article</h3>
+      <ol class="steps">
+        <li><div><p>Barre latérale → <span class="pill">Actualités</span>.</p></div></li>
+        <li><div><p>Cliquez sur <span class="pill">+ Nouvel article</span> en haut à droite.</p></div></li>
+        <li><div>
+          <p>Une fenêtre d'édition s'ouvre. Remplissez :</p>
+          <ul>
+            <li><strong>Titre</strong> — court et informatif</li>
+            <li><strong>Catégorie</strong> — Actualités, Congrès, Recommandations, Recherche, Formation, Santé publique ou GTT</li>
+            <li><strong>Date affichée</strong> — libre, exemple « 24 Avril 2026 » ou « Décembre 2025 »</li>
+            <li><strong>GTT</strong> (optionnel) — si l'article concerne un Groupe de Travail Thématique</li>
+            <li><strong>Résumé</strong> — 1 à 2 phrases qui apparaîtront sur la carte du blog</li>
+            <li><strong>Image de couverture</strong> — cliquez sur <span class="pill">Téléverser une image</span>, choisissez un JPG ou PNG (5 Mo max)</li>
+            <li><strong>Contenu</strong> — le texte complet de l'article. Sautez deux lignes pour créer un paragraphe</li>
+          </ul>
+        </div></li>
+        <li><div>
+          <p>Deux cases à cocher en bas :</p>
+          <ul>
+            <li><strong>Publié</strong> — coché par défaut. Si décoché, l'article reste en brouillon, invisible du public.</li>
+            <li><strong>À la une</strong> — met l'article en avant en tête de la liste du blog.</li>
+          </ul>
+        </div></li>
+        <li><div>
+          <p>Cliquez <span class="pill">Enregistrer</span>. L'article apparaît immédiatement sur <code>sobup.online/blog</code> (si publié).</p>
+        </div></li>
+      </ol>
+
+      <h3>Modifier ou supprimer un article</h3>
+      <p>
+        Sur la carte d'un article existant, deux boutons :
+        <span class="pill">✎ Modifier</span> ouvre la même fenêtre d'édition,
+        <span class="pill pill-danger">🗑 Supprimer</span> demande confirmation puis
+        efface définitivement l'article et son image associée.
+      </p>
+
+      <div class="callout warn">
+        <span class="callout-icon" aria-hidden="true">!</span>
+        <div>
+          <div class="callout-title">Attention avant de supprimer</div>
+          <p>
+            La suppression est irréversible. Si vous voulez juste retirer temporairement
+            un article de la vue publique, décochez la case « Publié » à la place :
+            l'article reste dans le back-office comme brouillon.
+          </p>
+        </div>
+      </div>
+
+      <h3>Bonnes pratiques éditoriales</h3>
+      <ul>
+        <li>Un titre clair vaut mieux qu'un titre astucieux.</li>
+        <li>Une image ronde, centrée, en lien avec le sujet, aide énormément à la lisibilité de la liste.</li>
+        <li>Sautez une ligne entre chaque idée dans le contenu — les paragraphes courts se lisent mieux à l'écran.</li>
+        <li>Utilisez « À la une » avec parcimonie : maximum 2 à 3 articles simultanément.</li>
+      </ul>
+    </section>
+
+    <section id="evenements">
+      <div class="sec-num">05</div>
+      <h2>Gérer les événements</h2>
+      <p class="sec-intro">
+        L'agenda SOBUP est visible sur la page d'accueil et sur la page Événements.
+        Les événements les plus importants (Congrès, Journée Régionale) ont leur
+        propre page dédiée. Les autres s'affichent dans une fenêtre popup.
+      </p>
+
+      <h3>Ajouter un événement</h3>
+      <ol class="steps">
+        <li><div><p>Barre latérale → <span class="pill">Événements</span>.</p></div></li>
+        <li><div><p>Cliquez sur <span class="pill">+ Nouvel événement</span>.</p></div></li>
+        <li><div>
+          <p>Renseignez les champs :</p>
+          <ul>
+            <li><strong>Type</strong> — Congrès, Journée, EPU, Formation, Webinaire, Atelier ou Conférence</li>
+            <li><strong>Titre</strong> — le nom complet de l'événement</li>
+            <li><strong>Date (pour tri)</strong> — la date exacte au format calendrier. Sert au tri automatique dans l'agenda.</li>
+            <li><strong>Date affichée</strong> — libre, exemple « 19 – 21 Novembre 2026 » pour un événement sur plusieurs jours</li>
+            <li><strong>Horaire</strong> (optionnel) — exemple « 15h30 – 17h30 »</li>
+            <li><strong>Lieu</strong> — nom complet de la salle et de la ville</li>
+            <li><strong>GTT organisateur</strong> (optionnel) — le ou les Groupes de Travail responsables</li>
+            <li><strong>Résumé</strong> — 1 à 2 phrases pour la carte publique</li>
+            <li><strong>Description complète</strong> (optionnelle) — programme, intervenants, public visé. S'affiche dans le popup au clic.</li>
+            <li><strong>Image de couverture</strong> — recommandé 1200×600 pixels</li>
+          </ul>
+        </div></li>
+        <li><div>
+          <p>Choisissez un <strong>badge de statut</strong> parmi 5 presets colorés :</p>
+          <ul>
+            <li><span class="pill">À venir</span> — événement futur non ouvert aux inscriptions</li>
+            <li><span class="pill">Inscriptions ouvertes</span> — encourager les inscriptions</li>
+            <li><span class="pill pill-danger">Complet</span> — plus de places</li>
+            <li><span class="pill pill-warn">Reporté</span> — date décalée</li>
+            <li><span class="pill">Terminé</span> — pour les événements passés que vous voulez garder visibles</li>
+          </ul>
+        </div></li>
+        <li><div>
+          <p>Trois cases à cocher :</p>
+          <ul>
+            <li><strong>Publié</strong> — visible sur le site public</li>
+            <li><strong>À la une</strong> — met en avant sur la page d'accueil</li>
+            <li><strong>Page dédiée</strong> — <em>à réserver</em> aux gros événements (Congrès, Journée Régionale) qui ont leur propre page développée. Pour les EPU et Formations classiques, laissez décoché : le clic ouvrira un popup.</li>
+          </ul>
+        </div></li>
+        <li><div><p>Cliquez <span class="pill">Enregistrer</span>.</p></div></li>
+      </ol>
+
+      <h3>Cycle de vie d'un événement</h3>
+      <p>
+        À mesure que l'événement approche puis se déroule, mettez à jour le badge de statut :
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Phase</th><th>Badge</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>Annonce</td><td><span class="pill">À venir</span></td><td>Créer l'événement</td></tr>
+            <tr><td>Ouverture inscriptions</td><td><span class="pill">Inscriptions ouvertes</span></td><td>Changer le badge</td></tr>
+            <tr><td>Salle pleine</td><td><span class="pill pill-danger">Complet</span></td><td>Signaler pour éviter les déceptions</td></tr>
+            <tr><td>Décalage</td><td><span class="pill pill-warn">Reporté</span></td><td>Mettre à jour la date également</td></tr>
+            <tr><td>Après</td><td><span class="pill">Terminé</span></td><td>Garder pour l'archive publique</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="membres">
+      <div class="sec-num">06</div>
+      <h2>Administrer les membres</h2>
+      <p class="sec-intro">
+        La liste centrale des adhérents SOBUP avec leur cotisation, spécialité,
+        établissement et notes internes. Utile pour préparer un congrès,
+        vérifier les cotisations à jour, ajouter manuellement un membre historique.
+      </p>
+
+      <h3>Rechercher un membre</h3>
+      <p>
+        Barre latérale → <span class="pill">Membres</span>. Un champ de recherche en haut
+        filtre en direct sur le nom, l'email, la spécialité, la ville ou la fonction au Bureau.
+        Le compteur en haut de page affiche les statistiques : nombre total, cotisations à jour,
+        membres du Bureau.
+      </p>
+
+      <h3>Ajouter manuellement un membre</h3>
+      <p>
+        Cas d'usage : un membre historique de la SOBUP qui n'a pas rempli le formulaire
+        public d'adhésion mais que vous voulez ajouter directement à la base.
+      </p>
+      <ol class="steps">
+        <li><div><p>Cliquez sur <span class="pill">+ Ajouter un membre</span>.</p></div></li>
+        <li><div>
+          <p>Renseignez au minimum : Prénom, Nom, Email, Téléphone, Spécialité, Établissement, Ville.</p>
+          <p>Facultatifs mais utiles : Fonction au Bureau (si concerné), Année d'entrée SOBUP, Notes internes.</p>
+        </div></li>
+        <li><div>
+          <p>Cochez « Membre du Bureau » si applicable — la fiche apparaîtra avec un liseré orange
+          dans la liste et un badge Bureau sur son profil public.</p>
+        </div></li>
+        <li><div>
+          <p>Cliquez <span class="pill">Créer et envoyer les identifiants</span>.</p>
+          <p>La plateforme crée le compte, génère un mot de passe temporaire, et envoie
+          automatiquement un email de bienvenue à l'adresse fournie.</p>
+        </div></li>
+      </ol>
+
+      <h3>Marquer une cotisation payée</h3>
+      <p>
+        À chaque cotisation annuelle réglée, vous mettez à jour le statut du membre en un clic :
+      </p>
+      <ol class="steps">
+        <li><div><p>Trouvez le membre concerné dans la liste.</p></div></li>
+        <li><div><p>Cliquez sur <span class="pill">Marquer cotisation 2026 payée</span> (l'année en cours est affichée dynamiquement).</p></div></li>
+        <li><div>
+          <p>Un badge vert <span class="pill">✓ Cotisation 2026</span> apparaît. Le membre voit également ce statut dans son propre espace personnel.</p>
+        </div></li>
+      </ol>
+      <p>
+        Si vous vous êtes trompé, cliquez sur <span class="pill">Annuler cotisation 2026</span> pour revenir en arrière.
+      </p>
+
+      <h3>Modifier ou supprimer un membre</h3>
+      <p>
+        Le bouton <span class="pill">✎ Modifier</span> ouvre une fenêtre pour changer tous les champs sauf l'email
+        (fixé à la création).
+      </p>
+      <p>
+        Le bouton <span class="pill pill-danger">🗑 Supprimer</span> efface définitivement le compte et le profil.
+        Utilisez-le uniquement pour des cas exceptionnels (compte créé par erreur, membre décédé, doublon).
+      </p>
+
+      <div class="callout warn">
+        <span class="callout-icon" aria-hidden="true">!</span>
+        <div>
+          <div class="callout-title">Notes internes — champ confidentiel</div>
+          <p>
+            Le champ « Notes » que vous renseignez lors de la modification n'est visible
+            que par les administrateurs du Bureau. Il ne s'affiche jamais sur le site public
+            ni dans l'espace personnel du membre. Vous pouvez y noter des remarques utiles :
+            « présent au 8e Congrès », « à recontacter pour EPU environnement », etc.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="mediatheque">
+      <div class="sec-num">07</div>
+      <h2>Nourrir la médiathèque</h2>
+      <p class="sec-intro">
+        Trois catégories de médias dans un même écran : photos regroupées par
+        congrès et année, vidéos avec titre et GTT organisateur, documents PDF.
+        Tout ce que vous uploadez apparaît sur <code>sobup.online/mediatheque</code>.
+      </p>
+
+      <h3>Uploader des photos</h3>
+      <ol class="steps">
+        <li><div><p>Barre latérale → <span class="pill">Médiathèque</span>. Onglet <span class="pill">Photos</span>.</p></div></li>
+        <li><div>
+          <p>Cliquez sur <span class="pill">+ Ajouter des photos</span>.</p>
+          <p>Avantage : vous pouvez sélectionner <strong>plusieurs photos d'un coup</strong> pour aller vite.</p>
+        </div></li>
+        <li><div>
+          <p>Les photos s'ajoutent dans un album « Sans album » par défaut. Cliquez sur <span class="pill">✎ Modifier</span> sur chaque photo pour renseigner l'album (par exemple « 9ᵉ Congrès » et l'année « 2027 »).</p>
+        </div></li>
+        <li><div>
+          <p>Sur la page publique, les photos apparaissent groupées par album et année, avec un filtre pour naviguer.</p>
+        </div></li>
+      </ol>
+
+      <h3>Uploader une vidéo</h3>
+      <ol class="steps">
+        <li><div><p>Onglet <span class="pill">Vidéos</span> → <span class="pill">+ Ajouter une vidéo</span>.</p></div></li>
+        <li><div>
+          <p>Choisissez un fichier MP4. La limite technique est de <strong>50 Mo par vidéo</strong>.</p>
+          <p>Si votre vidéo dépasse cette taille, compressez-la avant upload (contactez l'équipe technique si besoin).</p>
+        </div></li>
+        <li><div>
+          <p>Une fois uploadée, cliquez sur <span class="pill">✎ Modifier</span> pour renseigner le titre et le GTT organisateur.</p>
+        </div></li>
+        <li><div>
+          <p>La vidéo apparaît sur la page publique avec un lecteur intégré.</p>
+        </div></li>
+      </ol>
+
+      <h3>Uploader un document</h3>
+      <p>
+        Onglet <span class="pill">Documents</span> → <span class="pill">+ Ajouter un document</span>.
+        Formats acceptés : PDF uniquement. Renseignez titre, description, GTT et date d'affichage.
+        Idéal pour les guides médicaux, rapports d'activité, recommandations.
+      </p>
+
+      <div class="callout tip">
+        <span class="callout-icon" aria-hidden="true">i</span>
+        <div>
+          <div class="callout-title">Importer d'un coup les 46 médias existants</div>
+          <p>
+            À votre première ouverture de la médiathèque, si elle est vide, un bouton
+            <span class="pill">📥 Importer les médias existants</span> apparaît. Cliquez :
+            il ajoute en un instant les 31 photos, 9 vidéos et 6 documents déjà présents
+            sur le site. À faire une seule fois lors de la mise en route.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="emails">
+      <div class="sec-num">08</div>
+      <h2>Les emails envoyés par la plateforme</h2>
+      <p class="sec-intro">
+        Chaque action importante déclenche un email automatique. Voici la liste
+        exhaustive pour que vous sachiez ce qui part et à qui.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Événement déclencheur</th><th>Destinataire principal</th><th>Copie cachée</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Un pneumologue soumet une demande d'adhésion</td>
+              <td>Secrétariat (<code>alycoul1985@yahoo.com</code>)<br>+ Adhérent (email saisi)</td>
+              <td>Deux administrateurs du Bureau</td>
+            </tr>
+            <tr>
+              <td>Vous validez une adhésion</td>
+              <td>L'adhérent (email + mot de passe temporaire)</td>
+              <td>Deux administrateurs</td>
+            </tr>
+            <tr>
+              <td>Vous refusez une adhésion</td>
+              <td>L'adhérent (motif du refus)</td>
+              <td>Deux administrateurs</td>
+            </tr>
+            <tr>
+              <td>Vous créez manuellement un membre</td>
+              <td>Le nouveau membre (identifiants)</td>
+              <td>Deux administrateurs</td>
+            </tr>
+            <tr>
+              <td>Vous réinitialisez le mot de passe d'un membre</td>
+              <td>Le membre (nouveau mot de passe)</td>
+              <td>Deux administrateurs</td>
+            </tr>
+            <tr>
+              <td>Quelqu'un s'inscrit à la Journée Régionale</td>
+              <td>Secrétariat + Inscrit</td>
+              <td>Deux administrateurs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Les emails sont envoyés depuis l'adresse <code>inscriptions@sobup.online</code>
+        avec le logo SOBUP en en-tête. Les destinataires en copie cachée ne
+        sont pas visibles pour l'adhérent — ils reçoivent le mail à titre de
+        suivi interne.
+      </p>
+
+      <div class="callout info">
+        <span class="callout-icon" aria-hidden="true">i</span>
+        <div>
+          <div class="callout-title">Si un email n'arrive pas</div>
+          <p>
+            Vérifiez d'abord le dossier <strong>Spam</strong> ou <strong>Courriers indésirables</strong>
+            de la boîte destinataire. Les premiers emails d'un nouveau domaine
+            sont parfois filtrés le temps que Gmail ou Yahoo apprennent la réputation.
+            Marquez « Non spam » systématiquement — après une dizaine de mails,
+            tout arrive en boîte principale.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="regles">
+      <div class="sec-num">09</div>
+      <h2>Bonnes pratiques</h2>
+      <p class="sec-intro">
+        Quelques règles simples pour préserver la qualité de la plateforme sur
+        la durée et éviter les erreurs les plus fréquentes.
+      </p>
+
+      <h3>Écrire pour le public</h3>
+      <ul>
+        <li>Un titre d'article ou d'événement doit être compréhensible <em>hors contexte</em>. « Formation continue » est vague, « EPU sur la BPCO en soins primaires » est précis.</li>
+        <li>Utilisez des dates complètes (« 24 Avril 2026 » plutôt que « 24/4 »).</li>
+        <li>Relisez avant de publier. Une faute d'orthographe reste sur Internet indéfiniment.</li>
+      </ul>
+
+      <h3>Choisir les images</h3>
+      <ul>
+        <li>Préférez le format paysage (plus large que haut) pour les couvertures.</li>
+        <li>Une résolution de 1200 × 600 pixels est idéale.</li>
+        <li>Compressez avant upload si l'image dépasse 2 Mo — un site plus léger charge plus vite.</li>
+        <li>Vérifiez que vous avez le droit d'utiliser la photo (personnes visibles, logo de partenaire, etc.).</li>
+      </ul>
+
+      <h3>Rythme de publication</h3>
+      <ul>
+        <li>Un blog qui ne bouge jamais est pire qu'un blog absent. Visez un article par mois au minimum.</li>
+        <li>Anticipez : programmez les événements dès qu'ils sont fixés, même si tous les détails ne sont pas encore connus. Vous pouvez modifier plus tard.</li>
+        <li>Consultez la médiathèque une fois par trimestre pour ajouter les nouveaux congrès et rétrospectives.</li>
+      </ul>
+
+      <h3>Sécurité</h3>
+      <ul>
+        <li>Changez le mot de passe administrateur au moins une fois par an, ou immédiatement si un membre du Bureau quitte ses fonctions.</li>
+        <li>Ne partagez pas le mot de passe par email public ou message SMS non chiffré. Préférez un canal direct.</li>
+        <li>Quand vous récupérez un mot de passe temporaire dans le back-office, ne le photographiez pas — dictez-le au téléphone ou envoyez-le en message éphémère.</li>
+      </ul>
+    </section>
+
+    <section id="depannage">
+      <div class="sec-num">10</div>
+      <h2>Dépannage</h2>
+      <p class="sec-intro">
+        Solutions aux problèmes les plus fréquents. Si votre cas n'est pas listé
+        ici, contactez l'équipe technique (coordonnées en bas du sommaire).
+      </p>
+
+      <h3>Je n'arrive pas à me connecter au back-office</h3>
+      <ul>
+        <li>Vérifiez que vous saisissez bien <code>sobup.online/admin</code> (avec le /admin final).</li>
+        <li>Vérifiez le mot de passe — attention aux majuscules et caractères spéciaux.</li>
+        <li>Essayez avec un autre navigateur (Chrome, Firefox, Edge, Safari).</li>
+        <li>Videz le cache de votre navigateur (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> sur Windows, <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> sur Mac).</li>
+        <li>Si vous avez oublié le mot de passe, contactez le Président ou le Secrétaire général qui le connaît.</li>
+      </ul>
+
+      <h3>Un adhérent me dit qu'il n'a pas reçu son email d'identifiants</h3>
+      <ul>
+        <li>Demandez-lui de vérifier son dossier Spam / Courriers indésirables.</li>
+        <li>Vérifiez dans le back-office l'onglet <span class="pill">Validées</span> qu'il y figure bien. Sinon, sa demande n'a pas été validée.</li>
+        <li>Si oui, cliquez sur <span class="pill">Réinitialiser le mot de passe</span> sur sa fiche — un nouvel email partira.</li>
+        <li>Vérifiez avec lui qu'il vous a bien communiqué la bonne adresse email au moment de son adhésion.</li>
+      </ul>
+
+      <h3>J'ai uploadé une photo mais elle n'apparaît pas sur le site</h3>
+      <ul>
+        <li>Vérifiez qu'elle est bien listée dans <span class="pill">Médiathèque</span> → onglet <span class="pill">Photos</span>.</li>
+        <li>Si oui, cliquez sur <span class="pill">✎ Modifier</span> et vérifiez que la case « Publié » est cochée.</li>
+        <li>Rechargez la page publique avec <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> (rafraîchissement forcé, ignore le cache).</li>
+      </ul>
+
+      <h3>J'ai créé un article mais je ne le trouve pas sur la page blog</h3>
+      <ul>
+        <li>Il est peut-être en brouillon. Retournez dans <span class="pill">Actualités</span>, cliquez <span class="pill">✎ Modifier</span>, cochez « Publié », enregistrez.</li>
+        <li>La page publique s'appuie sur les articles publiés uniquement. Un article non publié reste visible du seul back-office.</li>
+      </ul>
+
+      <h3>Je vois un message d'erreur en rouge dans le back-office</h3>
+      <ul>
+        <li>Notez le message exact (faites une capture d'écran si possible).</li>
+        <li>Rafraîchissez la page (<kbd>F5</kbd>) et réessayez l'action.</li>
+        <li>Si l'erreur persiste, transmettez la capture à l'équipe technique.</li>
+      </ul>
+
+      <h3>Le site public est inaccessible</h3>
+      <ul>
+        <li>Vérifiez d'abord votre propre connexion Internet.</li>
+        <li>Essayez d'ouvrir le site depuis un autre appareil (téléphone en 4G par exemple).</li>
+        <li>Si le site est vraiment indisponible pour tout le monde, contactez immédiatement l'équipe technique.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <footer style="margin-top: 40px; font-size: 13px; color: var(--muted); line-height: 1.7;">
+      <p>
+        Ce guide décrit la version actuelle de la plateforme SOBUP.
+        L'équipe technique publie régulièrement des améliorations : vous les
+        découvrirez naturellement dans l'interface. En cas de changement majeur,
+        une version mise à jour du guide vous sera envoyée.
+      </p>
+      <p style="margin-top: 20px;">
+        <strong>Bonne administration.</strong>
+      </p>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
