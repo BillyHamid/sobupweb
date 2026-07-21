@@ -1,4 +1,5 @@
 import Link from "next/link";
+import VisitCounter from "@/components/VisitCounter";
 
 const footerLinks = {
   "La SOBUP": [
@@ -63,9 +64,12 @@ export default function Footer() {
               </p>
             </div>
           </div>
-          <p className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} SOBUP. Tous droits réservés.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
+            <VisitCounter />
+            <p className="text-xs text-gray-500">
+              &copy; {new Date().getFullYear()} SOBUP. Tous droits réservés.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
