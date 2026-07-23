@@ -237,15 +237,15 @@ export default async function Home() {
                 className="group bg-background rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 card-shadow">
                 {/* Image or color banner */}
                 {ev.image ? (
-                  <div className="relative h-64 sm:h-72 overflow-hidden">
+                  <div className="relative h-64 sm:h-72 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
                     <Image
                       src={ev.image}
                       alt={ev.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-contain group-hover:scale-[1.03] transition-transform duration-500"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"/>
+                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"/>
                     {ev.type && (
                       <span className={`absolute top-3 left-3 ${ev.badge} text-xs font-bold px-3 py-1 rounded-full shadow`}>
                         {ev.type}

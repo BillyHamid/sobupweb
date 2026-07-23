@@ -68,10 +68,10 @@ export default function EventsListClient({ events }: { events: PublicEvent[] }) 
           ) : events.map((ev) => {
             const inner = (
               <>
-                <div className="md:w-64 h-48 md:h-auto shrink-0 relative overflow-hidden bg-gray-100">
+                <div className="md:w-64 h-60 md:h-auto shrink-0 relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
                   {ev.image_url && (
                     /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={ev.image_url} alt={ev.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={ev.image_url} alt={ev.title} className="max-w-full max-h-full object-contain group-hover:scale-[1.03] transition-transform duration-500" />
                   )}
                   <div className="absolute top-3 left-3">
                     <span className="text-xs font-bold text-white px-2.5 py-1 rounded-full"
@@ -124,10 +124,10 @@ export default function EventsListClient({ events }: { events: PublicEvent[] }) 
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm animate-evmodal-fade">
           <div onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-2xl max-h-[92vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-evmodal-up">
-            <div className="relative h-56 sm:h-64 w-full overflow-hidden shrink-0 bg-gray-100">
+            <div className="relative h-72 sm:h-96 w-full overflow-hidden shrink-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
               {openEvent.image_url && (
                 /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={openEvent.image_url} alt={openEvent.title} className="w-full h-full object-cover" />
+                <img src={openEvent.image_url} alt={openEvent.title} className="max-w-full max-h-full object-contain" />
               )}
               <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 60%)" }} />
               <span className="absolute top-4 left-4 text-xs font-black uppercase tracking-wider text-white px-3 py-1 rounded-full"
