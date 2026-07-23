@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        // Supabase Storage — buckets publics (blog-images, event-images, media)
+        protocol: "https",
+        hostname: "lkmsypxtulogllaedsne.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
   },
 };
