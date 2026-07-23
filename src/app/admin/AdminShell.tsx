@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Inbox, Newspaper, Calendar, Users, Image as ImageIcon, FileText, BookOpen, Settings, LogOut, RefreshCw } from "lucide-react";
+import { LayoutDashboard, Inbox, Newspaper, Calendar, Users, Image as ImageIcon, FileText, BookOpen, Settings, LogOut, RefreshCw } from "lucide-react";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
@@ -14,6 +14,7 @@ type NavItem = {
 };
 
 const NAV: NavItem[] = [
+  { href: "/admin/dashboard", label: "Tableau de bord", icon: LayoutDashboard, enabled: true },
   { href: "/admin/adhesions", label: "Adhésions", icon: Inbox, enabled: true },
   { href: "/admin/blog", label: "Actualités", icon: Newspaper, enabled: true },
   { href: "/admin/events", label: "Événements", icon: Calendar, enabled: true },
