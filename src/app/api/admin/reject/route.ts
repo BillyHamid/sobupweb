@@ -50,7 +50,7 @@ export async function POST(req: Request) {
           <p style="color:#475569;line-height:1.6">Bonjour ${request.prenom},</p>
           <p style="color:#475569;line-height:1.6">Nous n'avons pas pu valider votre demande d'adhésion pour la raison suivante :</p>
           <p style="margin:16px 0;padding:14px;background:#fef2f2;border-left:3px solid #dc2626;border-radius:6px;color:#7f1d1d;font-style:italic">${rejectionReason}</p>
-          <p style="color:#475569;line-height:1.6">N'hésitez pas à nous contacter pour clarifier la situation : <a href="mailto:${SECRETARIAT}" style="color:#31B9AE">${SECRETARIAT}</a> ou WhatsApp +226 62 47 58 01.</p>
+          <p style="color:#475569;line-height:1.6">N'hésitez pas à nous contacter pour clarifier la situation : <a href="mailto:${SECRETARIAT}" style="color:#31B9AE">${SECRETARIAT}</a> ou WhatsApp +226 76 58 01 03.</p>
           <p style="color:#94a3b8;font-size:12px;margin-top:18px">— Bureau SOBUP</p>
         </div>`,
       });

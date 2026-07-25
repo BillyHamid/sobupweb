@@ -156,7 +156,7 @@ export async function POST(req: Request) {
         <div style="padding:0 32px 28px">
           <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 12px">Bonjour <strong>${safe.prenom}</strong>,</p>
           <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 12px">Nous avons bien reçu votre demande d'adhésion à la Société Burkinabè de Pneumologie.</p>
-          <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 12px">📌 <strong>Prochaine étape</strong> : envoyez la preuve de votre paiement (cotisation 30 000 XOF) au secrétariat sur WhatsApp <strong>+226 62 47 58 01</strong> si ce n'est pas déjà fait.</p>
+          <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 12px">📌 <strong>Prochaine étape</strong> : envoyez la preuve de votre paiement (cotisation 30 000 XOF) au secrétariat sur WhatsApp <strong>+226 76 58 01 03</strong> si ce n'est pas déjà fait.</p>
           <div style="margin:20px 0;padding:14px;background:#fff7ed;border-left:3px solid #e67e22;border-radius:6px">
             <p style="margin:0;font-size:13px;color:#92400e;line-height:1.6">Vos identifiants de connexion vous seront envoyés par email sous <strong>48h ouvrables</strong> après vérification de la preuve de paiement.</p>
           </div>

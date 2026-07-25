@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const OM_NUMBER   = "54 32 32 68";
 const WAVE_NUMBER = "54 32 32 68";
-const WA_NUMBER   = "22662475801";
+const WA_NUMBER   = "22676580103";
 const AMOUNT      = "30 000";
 
 const specialites = [
@@ -320,7 +320,7 @@ export default function AdhesionPage() {
                 </svg>
                 Envoyer la preuve par WhatsApp
               </a>
-              <p className="text-center text-xs text-gray-400 mt-2">+226 62 47 58 01</p>
+              <p className="text-center text-xs text-gray-400 mt-2">+226 76 58 01 03</p>
             </div>
 
             <div className="flex gap-3">
