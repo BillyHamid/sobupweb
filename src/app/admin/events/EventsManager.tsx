@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   Plus, Pencil, Trash2, Image as ImageIcon, Star, Eye, EyeOff,
   X, Save, AlertTriangle, Upload, Loader2, Calendar, MapPin, Users,
+  Paperclip, FileText, Download,
 } from "lucide-react";
 
 type Event = {
@@ -23,12 +24,25 @@ type Event = {
   badge_label: string;
   badge_color: string;
   badge_bg: string;
+  attachment_url: string | null;
+  attachment_name: string | null;
+  attachment_size: number | null;
   has_page: boolean;
   published: boolean;
   featured: boolean;
 };
 
-const TYPES = ["Congrès", "Journée", "EPU", "Formation", "Webinaire", "Atelier", "Conférence"];
+const TYPES = [
+  "Congrès", "Journée", "EPU", "Formation", "Webinaire", "Atelier", "Conférence",
+  "Appel à candidatures",
+];
+
+function formatSize(bytes: number | null): string {
+  if (!bytes) return "";
+  if (bytes < 1024) return `${bytes} o`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} Ko`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} Mo`;
+}
 
 const BADGE_PRESETS = [
   { label: "À venir", color: "#64748b", bg: "#f1f5f9" },
@@ -53,6 +67,9 @@ type EditState = {
   badge_label: string;
   badge_color: string;
   badge_bg: string;
+  attachment_url: string;
+  attachment_name: string;
+  attachment_size: number | null;
   has_page: boolean;
   published: boolean;
   featured: boolean;
@@ -62,6 +79,7 @@ const EMPTY: EditState = {
   type: "Atelier", title: "", excerpt: "", description: "",
   event_date: "", display_date: "", time_range: "", location: "", gtt: "",
   image_url: "", badge_label: "À venir", badge_color: "#64748b", badge_bg: "#f1f5f9",
+  attachment_url: "", attachment_name: "", attachment_size: null,
   has_page: false, published: true, featured: false,
 };
 
@@ -72,6 +90,7 @@ export default function EventsManager({ initialEvents, loadError }: { initialEve
   const [editing, setEditing] = useState<EditState | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
   const [toast, setToast] = useState<{ type: "ok" | "err"; msg: string } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
@@ -89,8 +108,31 @@ export default function EventsManager({ initialEvents, loadError }: { initialEve
       time_range: e.time_range ?? "", location: e.location, gtt: e.gtt ?? "",
       image_url: e.image_url ?? "",
       badge_label: e.badge_label, badge_color: e.badge_color, badge_bg: e.badge_bg,
+      attachment_url: e.attachment_url ?? "",
+      attachment_name: e.attachment_name ?? "",
+      attachment_size: e.attachment_size ?? null,
       has_page: e.has_page, published: e.published, featured: e.featured,
     });
+  }
+
+  async function handleAttachmentUpload(ev: React.ChangeEvent<HTMLInputElement>) {
+    const file = ev.target.files?.[0];
+    if (!file || !editing) return;
+    setUploadingFile(true);
+    try {
+      const fd = new FormData(); fd.append("file", file);
+      const res = await fetch("/api/admin/events/upload-file", { method: "POST", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { flash("err", data.error ?? "Upload échoué"); return; }
+      setEditing((s) => s ? {
+        ...s,
+        attachment_url: data.url,
+        attachment_name: data.name,
+        attachment_size: data.size,
+      } : s);
+      flash("ok", "✓ Fichier joint");
+    } catch { flash("err", "Connexion impossible."); }
+    finally { setUploadingFile(false); ev.target.value = ""; }
   }
 
   async function handleImageUpload(ev: React.ChangeEvent<HTMLInputElement>) {
@@ -127,6 +169,9 @@ export default function EventsManager({ initialEvents, loadError }: { initialEve
           time_range: editing.time_range || null,
           gtt: editing.gtt || null,
           image_url: editing.image_url || null,
+          attachment_url: editing.attachment_url || null,
+          attachment_name: editing.attachment_name || null,
+          attachment_size: editing.attachment_size ?? null,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -239,6 +284,15 @@ export default function EventsManager({ initialEvents, loadError }: { initialEve
                     <span className="inline-flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-gray-400" /> {ev.display_date}</span>
                     <span className="inline-flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-gray-400" /> {ev.location}</span>
                     {ev.gtt && <span className="inline-flex items-center gap-1.5" style={{ color: "#31B9AE" }}><Users className="w-3.5 h-3.5" /> {ev.gtt}</span>}
+                    {ev.attachment_url && (
+                      <span className="inline-flex items-center gap-1.5 font-semibold" style={{ color: "#d97706" }}
+                        title={ev.attachment_name ?? "Document joint"}>
+                        <Paperclip className="w-3.5 h-3.5" />
+                        {ev.attachment_name
+                          ? (ev.attachment_name.length > 28 ? ev.attachment_name.slice(0, 28) + "…" : ev.attachment_name)
+                          : "Document joint"}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-auto flex gap-2">
                     <button onClick={() => openEdit(ev)}
@@ -311,6 +365,49 @@ export default function EventsManager({ initialEvents, loadError }: { initialEve
                 <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={4}
                   placeholder="Détails sur le programme, les intervenants, le public visé…"
                   className="w-full px-3.5 py-3 rounded-lg border-2 border-gray-100 text-sm text-gray-900 placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-[#31B9AE] focus:outline-none focus:ring-4 focus:ring-[#31B9AE]/10 transition-all resize-y" />
+              </div>
+
+              {/* ── Fichier joint ── */}
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1.5">
+                  Document joint (optionnel)
+                </label>
+                {editing.attachment_url ? (
+                  <div className="rounded-xl p-3.5 border-2 mb-2 flex items-center gap-3"
+                    style={{ background: "#fffbeb", borderColor: "#fde68a" }}>
+                    <span className="w-10 h-11 rounded-lg flex items-center justify-center shrink-0"
+                      style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
+                      <FileText className="w-5 h-5 text-white" />
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold text-gray-900 truncate">{editing.attachment_name || "Document"}</p>
+                      <p className="text-[11px] text-amber-700">{formatSize(editing.attachment_size)}</p>
+                    </div>
+                    <a href={editing.attachment_url} target="_blank" rel="noopener noreferrer"
+                      className="p-2 rounded-lg bg-white border border-amber-200 text-amber-700 hover:bg-amber-50 transition-colors shrink-0"
+                      title="Ouvrir le document">
+                      <Download className="w-4 h-4" />
+                    </a>
+                    <button type="button"
+                      onClick={() => setEditing({ ...editing, attachment_url: "", attachment_name: "", attachment_size: null })}
+                      className="p-2 rounded-lg bg-white border border-red-200 text-red-600 hover:bg-red-50 transition-colors shrink-0"
+                      title="Retirer le document">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : null}
+                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-600 cursor-pointer hover:bg-gray-50 transition-colors">
+                  {uploadingFile ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
+                  {uploadingFile ? "Téléversement…" : (editing.attachment_url ? "Remplacer le document" : "Joindre un document")}
+                  <input type="file"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png"
+                    onChange={handleAttachmentUpload} disabled={uploadingFile} className="hidden" />
+                </label>
+                <p className="text-[11px] text-gray-400 mt-1.5 leading-relaxed">
+                  PDF, Word, Excel, PowerPoint, JPG ou PNG — 20 Mo max.
+                  Le visiteur pourra le télécharger depuis la fiche de l&apos;événement
+                  (programme, plaquette, formulaire d&apos;inscription…).
+                </p>
               </div>
 
               <div>

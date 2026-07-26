@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import PageHero from "@/components/PageHero";
 import Link from "next/link";
-import { X, Calendar, MapPin, Users } from "lucide-react";
+import { X, Calendar, MapPin, Users, Download, FileText, Paperclip } from "lucide-react";
 
 export type PublicEvent = {
   id: string;
@@ -20,12 +20,23 @@ export type PublicEvent = {
   badge_color: string;
   gtt: string | null;
   image_url: string | null;
+  attachment_url: string | null;
+  attachment_name: string | null;
+  attachment_size: number | null;
   has_page: boolean;
 };
+
+function formatSize(bytes: number | null): string {
+  if (!bytes) return "";
+  if (bytes < 1024) return `${bytes} o`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} Ko`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} Mo`;
+}
 
 const typeColors: Record<string, string> = {
   "Congrès": "#7c3aed", "Journée": "#0891b2", "Webinaire": "#31B9AE",
   "Atelier": "#d97706", "Conférence": "#dc2626", "EPU": "#16a34a", "Formation": "#2563eb",
+  "Appel à candidatures": "#e67e22",
 };
 
 export default function EventsListClient({ events }: { events: PublicEvent[] }) {
@@ -103,6 +114,11 @@ export default function EventsListClient({ events }: { events: PublicEvent[] }) 
                         <Users className="w-4 h-4" />{ev.gtt}
                       </span>
                     )}
+                    {ev.attachment_url && (
+                      <span className="flex items-center gap-1.5 font-semibold" style={{ color: "#d97706" }}>
+                        <Paperclip className="w-4 h-4" />Document disponible
+                      </span>
+                    )}
                   </div>
                 </div>
               </>
@@ -175,6 +191,40 @@ export default function EventsListClient({ events }: { events: PublicEvent[] }) 
               {openEvent.description && (
                 <p className="text-sm text-gray-700 leading-relaxed mb-6 whitespace-pre-line">{openEvent.description}</p>
               )}
+
+              {/* ── Document joint téléchargeable ── */}
+              {openEvent.attachment_url && (
+                <a
+                  href={openEvent.attachment_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="group/dl flex items-center gap-4 rounded-xl p-4 border-2 mb-6 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  style={{ background: "#fffbeb", borderColor: "#fde68a" }}
+                >
+                  <span className="w-11 h-12 rounded-lg flex items-center justify-center shrink-0 shadow-sm"
+                    style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
+                    <FileText className="w-5 h-5 text-white" />
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-black uppercase tracking-widest mb-0.5" style={{ color: "#92400e" }}>
+                      Document à télécharger
+                    </p>
+                    <p className="text-sm font-bold text-gray-900 truncate">
+                      {openEvent.attachment_name ?? "Document de l'événement"}
+                    </p>
+                    {openEvent.attachment_size && (
+                      <p className="text-[11px] text-amber-700 mt-0.5">{formatSize(openEvent.attachment_size)}</p>
+                    )}
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-black text-white shrink-0 transition-transform group-hover/dl:scale-105"
+                    style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
+                    <Download className="w-3.5 h-3.5" />
+                    Télécharger
+                  </span>
+                </a>
+              )}
+
               <div className="flex flex-wrap gap-3 pt-2 border-t border-gray-100">
                 <button onClick={() => setOpenEvent(null)}
                   className="px-5 py-2.5 rounded-xl font-bold text-sm border-2 transition-all hover:-translate-y-0.5"

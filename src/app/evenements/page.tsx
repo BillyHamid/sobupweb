@@ -7,7 +7,7 @@ export default async function EvenementsPage() {
   const supabase = createPublicClient();
   const { data } = await supabase
     .from("events")
-    .select("id, slug, type, display_date, time_range, location, title, excerpt, description, badge_label, badge_bg, badge_color, gtt, image_url, has_page")
+    .select("id, slug, type, display_date, time_range, location, title, excerpt, description, badge_label, badge_bg, badge_color, gtt, image_url, attachment_url, attachment_name, attachment_size, has_page")
     .eq("published", true)
     .order("event_date", { ascending: true });
 

@@ -25,6 +25,7 @@ function parseDisplayDate(displayDate: string, isoDate: string) {
 }
 
 function badgeClassFor(label: string, type: string): string {
+  if (type === "Appel à candidatures") return "bg-accent text-white";
   if (label === "Inscriptions ouvertes") return "bg-accent text-white";
   if (type === "Congrès") return "bg-accent text-white";
   if (type === "Journée") return "bg-secondary text-white";
@@ -129,7 +130,7 @@ export default async function Home() {
   const todayIso = new Date().toISOString().slice(0, 10);
   const { data: dbEvents } = await supabase
     .from("events")
-    .select("id, slug, type, event_date, display_date, time_range, location, title, gtt, image_url, badge_label, has_page")
+    .select("id, slug, type, event_date, display_date, time_range, location, title, gtt, image_url, badge_label, has_page, attachment_url, attachment_name")
     .eq("published", true)
     .gte("event_date", todayIso)
     .order("event_date", { ascending: true })
@@ -149,6 +150,7 @@ export default async function Home() {
       href: ev.has_page ? `/evenements/${ev.slug}` : "/evenements",
       image: ev.image_url,
       gtt: ev.gtt,
+      hasAttachment: !!ev.attachment_url,
     };
   });
 
@@ -251,6 +253,19 @@ export default async function Home() {
                         {ev.type}
                       </span>
                     )}
+                    {ev.hasAttachment && (
+                      <span
+                        className="absolute top-3 right-3 inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-1 rounded-full shadow-sm"
+                        style={{ background: "#fffbeb", color: "#92400e", border: "1px solid #fde68a" }}
+                        title="Un document est joint à cet événement"
+                      >
+                        <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round"
+                            d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+                        </svg>
+                        Document
+                      </span>
+                    )}
                     <div className="absolute bottom-3 left-4 flex items-baseline gap-1.5 text-white">
                       <span className="text-3xl font-black leading-none">{ev.date}</span>
                       <span className="text-sm font-medium opacity-90">{ev.month} {ev.year}</span>
@@ -262,9 +277,20 @@ export default async function Home() {
                       <p className="text-4xl font-bold text-white leading-none">{ev.date}</p>
                       <p className="text-blue-200 text-sm font-medium">{ev.month} {ev.year}</p>
                     </div>
-                    <span className={`${ev.badge} text-xs font-bold px-3 py-1 rounded-full ml-auto`}>
-                      {ev.type}
-                    </span>
+                    <div className="ml-auto flex items-center gap-1.5">
+                      {ev.hasAttachment && (
+                        <span className="inline-flex items-center text-xs font-bold px-2 py-1 rounded-full"
+                          style={{ background: "#fffbeb", color: "#92400e" }} title="Document joint">
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                              d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+                          </svg>
+                        </span>
+                      )}
+                      <span className={`${ev.badge} text-xs font-bold px-3 py-1 rounded-full`}>
+                        {ev.type}
+                      </span>
+                    </div>
                   </div>
                 )}
                 <div className="p-5">
@@ -293,6 +319,16 @@ export default async function Home() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       {(ev as { gtt: string }).gtt}
+                    </p>
+                  )}
+                  {ev.hasAttachment && (
+                    <p className="flex items-center gap-1.5 text-xs font-bold mt-3 pt-3 border-t border-gray-100"
+                      style={{ color: "#d97706" }}>
+                      <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round"
+                          d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+                      </svg>
+                      Document à télécharger
                     </p>
                   )}
                 </div>
