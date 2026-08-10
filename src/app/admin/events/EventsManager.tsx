@@ -1,5 +1,7 @@
 "use client";
 
+import { uploadDirect } from "@/lib/uploadDirect";
+
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -120,18 +122,17 @@ export default function EventsManager({ initialEvents, loadError }: { initialEve
     if (!file || !editing) return;
     setUploadingFile(true);
     try {
-      const fd = new FormData(); fd.append("file", file);
-      const res = await fetch("/api/admin/events/upload-file", { method: "POST", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) { flash("err", data.error ?? "Upload échoué"); return; }
+      const data = await uploadDirect(file, { bucket: "event-files" });
       setEditing((s) => s ? {
         ...s,
         attachment_url: data.url,
-        attachment_name: data.name,
+        attachment_name: file.name,
         attachment_size: data.size,
       } : s);
-      flash("ok", "✓ Fichier joint");
-    } catch { flash("err", "Connexion impossible."); }
+      flash("ok", `✓ Fichier joint · ${data.humanSize}`);
+    } catch (err) {
+      flash("err", err instanceof Error ? err.message : "Upload échoué.");
+    }
     finally { setUploadingFile(false); ev.target.value = ""; }
   }
 
@@ -140,13 +141,12 @@ export default function EventsManager({ initialEvents, loadError }: { initialEve
     if (!file || !editing) return;
     setUploading(true);
     try {
-      const fd = new FormData(); fd.append("file", file);
-      const res = await fetch("/api/admin/events/upload", { method: "POST", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) { flash("err", data.error ?? "Upload échoué"); return; }
+      const data = await uploadDirect(file, { bucket: "event-images" });
       setEditing((s) => s ? { ...s, image_url: data.url } : s);
       flash("ok", "✓ Image uploadée");
-    } catch { flash("err", "Connexion impossible."); }
+    } catch (err) {
+      flash("err", err instanceof Error ? err.message : "Upload échoué.");
+    }
     finally { setUploading(false); ev.target.value = ""; }
   }
 

@@ -8,7 +8,7 @@ const TYPES = [
   { value: "poster", label: "Poster", icon: "📊" },
 ];
 
-const MAX_FILE = 5 * 1024 * 1024;
+const MAX_FILE = 4 * 1024 * 1024; // aligné sur la limite réelle de Vercel
 const ALLOWED_EXT = ["pdf", "doc", "docx"];
 
 const inputCls =
@@ -54,7 +54,7 @@ export default function AbstractForm({
       return;
     }
     if (f.size > MAX_FILE) {
-      setError("Le fichier dépasse 5 Mo.");
+      setError("Le fichier dépasse 4 Mo.");
       return;
     }
     setFile(f);
@@ -308,7 +308,7 @@ export default function AbstractForm({
               <p className="text-sm font-semibold text-gray-600">
                 Glisser-déposer un fichier ou cliquer pour sélectionner
               </p>
-              <p className="text-xs text-gray-400 mt-1">PDF, DOC, DOCX — max. 5 Mo</p>
+              <p className="text-xs text-gray-400 mt-1">PDF, DOC, DOCX — max. 4 Mo</p>
             </button>
           )}
         </div>

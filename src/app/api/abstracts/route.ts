@@ -9,7 +9,9 @@ const SECRETARIAT = process.env.SOBUP_SECRETARIAT_EMAIL ?? "ouattarabillyhamid@g
 const FROM = process.env.RESEND_FROM ?? "SOBUP <onboarding@resend.dev>";
 const LOGO_CID = "sobup-logo";
 const BUCKET = "abstracts";
-const MAX_FILE = 5 * 1024 * 1024; // 5 Mo
+// 4 Mo : Vercel plafonne le corps des requêtes serverless à ~4,5 Mo et
+// répond 413 avant d'exécuter cette route. Annoncer 5 Mo serait mensonger.
+const MAX_FILE = 4 * 1024 * 1024;
 const ALLOWED_EXT = ["pdf", "doc", "docx"];
 
 let logoCache: string | null = null;
@@ -106,7 +108,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Format accepté : PDF, DOC ou DOCX." }, { status: 422 });
     }
     if (file.size > MAX_FILE) {
-      return NextResponse.json({ error: "Le fichier dépasse 5 Mo." }, { status: 422 });
+      return NextResponse.json({ error: "Le fichier dépasse 4 Mo." }, { status: 422 });
     }
     try {
       const supabase = createAdminClient();

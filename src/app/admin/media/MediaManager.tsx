@@ -1,4 +1,5 @@
 "use client";
+import { uploadDirect } from "@/lib/uploadDirect";
 
 import { useState, useTransition, useMemo } from "react";
 import { useRouter } from "next/navigation";
@@ -103,28 +104,30 @@ export default function MediaManager({ initialItems, loadError }: { initialItems
     if (!files?.length) return;
     setUploading(true);
     let success = 0, failed = 0;
+    let lastError = "";
     for (const file of Array.from(files)) {
-      const fd = new FormData();
-      fd.append("file", file); fd.append("kind", tab);
       try {
-        const res = await fetch("/api/admin/media/upload", { method: "POST", body: fd });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) { console.warn(data.error); failed++; continue; }
-        // Créer l'entrée media_items
+        // Envoi direct vers Supabase : les vidéos dépassent largement la
+        // limite de 4,5 Mo imposée par Vercel aux fonctions serverless.
+        const data = await uploadDirect(file, { bucket: "media", folder: tab });
         await fetch("/api/admin/media", {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             kind: tab,
             title: tab !== "photo" ? file.name.replace(/\.[^.]+$/, "") : null,
             file_url: data.url, file_path: data.path,
-            file_size_bytes: data.size, file_type: data.type,
+            file_size_bytes: data.size, file_type: file.type,
           }),
         });
         success++;
-      } catch { failed++; }
+      } catch (err) {
+        lastError = err instanceof Error ? err.message : "erreur inconnue";
+        console.warn("[media/upload]", file.name, lastError);
+        failed++;
+      }
     }
     if (success) flash("ok", `✓ ${success} fichier${success > 1 ? "s" : ""} uploadé${success > 1 ? "s" : ""}${failed ? ` · ${failed} échoué${failed > 1 ? "s" : ""}` : ""}`);
-    else if (failed) flash("err", `${failed} upload${failed > 1 ? "s" : ""} échoué${failed > 1 ? "s" : ""}`);
+    else if (failed) flash("err", `${failed} upload${failed > 1 ? "s" : ""} échoué${failed > 1 ? "s" : ""} — ${lastError}`);
     setUploading(false);
     e.target.value = "";
     startTransition(() => router.refresh());

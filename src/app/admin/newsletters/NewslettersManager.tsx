@@ -7,6 +7,7 @@ import {
   FileText, Eye, EyeOff, Newspaper, ExternalLink, ArrowUp, ArrowDown,
 } from "lucide-react";
 import AdminModal, { AdminField, AdminTextarea } from "../AdminModal";
+import { uploadDirect } from "@/lib/uploadDirect";
 
 export type Highlight = { icon: string; label: string; desc: string };
 
@@ -90,21 +91,20 @@ export default function NewslettersManager({
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>, kind: "pdf" | "cover") {
     const file = e.target.files?.[0];
     if (!file || !editing) return;
-    kind === "pdf" ? setUploadingPdf(true) : setUploadingCover(true);
+    if (kind === "pdf") setUploadingPdf(true); else setUploadingCover(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("kind", kind);
-      const res = await fetch("/api/admin/newsletters/upload", { method: "POST", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) { flash("err", data.error ?? "Upload échoué"); return; }
+      // Envoi direct navigateur → Supabase : contourne la limite de 4,5 Mo
+      // que Vercel impose au corps des requêtes serverless.
+      const data = await uploadDirect(file, { bucket: "newsletters", folder: kind });
       setEditing((s) => s ? (kind === "pdf"
         ? { ...s, pdf_url: data.url, pdf_size: data.humanSize }
         : { ...s, cover_url: data.url }) : s);
-      flash("ok", kind === "pdf" ? "✓ PDF téléversé" : "✓ Couverture téléversée");
-    } catch { flash("err", "Connexion impossible."); }
+      flash("ok", kind === "pdf" ? `✓ PDF téléversé · ${data.humanSize}` : "✓ Couverture téléversée");
+    } catch (err) {
+      flash("err", err instanceof Error ? err.message : "Upload échoué.");
+    }
     finally {
-      kind === "pdf" ? setUploadingPdf(false) : setUploadingCover(false);
+      if (kind === "pdf") setUploadingPdf(false); else setUploadingCover(false);
       e.target.value = "";
     }
   }
