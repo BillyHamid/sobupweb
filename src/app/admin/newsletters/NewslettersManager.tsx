@@ -3,9 +3,10 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Plus, Pencil, Trash2, X, Save, Loader2, Upload, AlertTriangle,
-  FileText, Eye, EyeOff, Newspaper, ExternalLink,
+  Plus, Pencil, Trash2, Save, Loader2, Upload, AlertTriangle,
+  FileText, Eye, EyeOff, Newspaper, ExternalLink, ArrowUp, ArrowDown,
 } from "lucide-react";
+import AdminModal, { AdminField, AdminTextarea } from "../AdminModal";
 
 export type Highlight = { icon: string; label: string; desc: string };
 
@@ -174,9 +175,19 @@ export default function NewslettersManager({
     setEditing({ ...editing, highlights: next });
   }
 
+  /** Déplace une rubrique d'un cran vers le haut (-1) ou vers le bas (+1). */
+  function moveHighlight(i: number, delta: -1 | 1) {
+    if (!editing) return;
+    const target = i + delta;
+    if (target < 0 || target >= editing.highlights.length) return;
+    const next = [...editing.highlights];
+    [next[i], next[target]] = [next[target], next[i]];
+    setEditing({ ...editing, highlights: next });
+  }
+
   return (
     <div>
-      <div className="px-8 py-6 border-b border-gray-100 bg-white sticky top-0 z-30 flex items-center justify-between">
+      <div className="px-4 sm:px-8 py-5 sm:py-6 border-b border-gray-100 bg-white sticky top-0 z-30 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-black text-gray-900">Newsletters</h1>
           <p className="text-sm text-gray-500 mt-0.5">
@@ -190,7 +201,7 @@ export default function NewslettersManager({
         </button>
       </div>
 
-      <div className="px-8 py-6">
+      <div className="px-4 sm:px-8 py-5 sm:py-6">
         {loadError && (
           <div className="mb-5 p-4 rounded-xl border flex items-start gap-2" style={{ background: "#fef2f2", borderColor: "#fecaca" }}>
             <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
@@ -265,138 +276,12 @@ export default function NewslettersManager({
 
       {/* Modal édition */}
       {editing && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-          onClick={(e) => { if (e.target === e.currentTarget) setEditing(null); }}>
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
-              <h3 className="font-black text-gray-900 text-lg">
-                {editing.id ? `Modifier la Newsletter N°${editing.numero}` : "Nouveau numéro"}
-              </h3>
-              <button onClick={() => setEditing(null)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="px-6 py-5 overflow-y-auto flex-1 space-y-4">
-              <div className="grid sm:grid-cols-3 gap-3">
-                <Field label="Numéro *" value={editing.numero} type="number"
-                  onChange={(v) => setEditing({ ...editing, numero: v })} placeholder="2" />
-                <Field label="Titre *" value={editing.title}
-                  onChange={(v) => setEditing({ ...editing, title: v })} placeholder="Newsletter SOBUP" />
-                <Field label="Période *" value={editing.period}
-                  onChange={(v) => setEditing({ ...editing, period: v })} placeholder="Juillet 2026" />
-              </div>
-
-              <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1.5">Description</label>
-                <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3}
-                  placeholder="Phrase d'accroche affichée sur la page Journal…"
-                  className="w-full px-3.5 py-2.5 rounded-lg border-2 border-gray-100 text-sm text-gray-900 placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-[#31B9AE] focus:outline-none focus:ring-4 focus:ring-[#31B9AE]/10 transition-all resize-y" />
-              </div>
-
-              {/* PDF */}
-              <div className="rounded-xl border-2 p-4" style={{ background: "#fffbeb", borderColor: "#fde68a" }}>
-                <label className="block text-xs font-black uppercase tracking-wider mb-2" style={{ color: "#92400e" }}>
-                  Fichier PDF du numéro *
-                </label>
-                {editing.pdf_url ? (
-                  <div className="flex items-center gap-3 mb-2">
-                    <FileText className="w-5 h-5 shrink-0" style={{ color: "#d97706" }} />
-                    <a href={editing.pdf_url} target="_blank" rel="noopener noreferrer"
-                      className="flex-1 min-w-0 text-sm font-bold text-gray-900 truncate hover:underline">
-                      PDF téléversé {editing.pdf_size && `· ${editing.pdf_size}`}
-                    </a>
-                    <button onClick={() => setEditing({ ...editing, pdf_url: "", pdf_size: "" })}
-                      className="px-2.5 py-1 rounded-lg bg-white text-xs font-bold text-red-600 border border-red-200">
-                      Retirer
-                    </button>
-                  </div>
-                ) : null}
-                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border-2 bg-white cursor-pointer hover:bg-amber-50 transition-colors"
-                  style={{ borderColor: "#fde68a", color: "#92400e" }}>
-                  {uploadingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                  {uploadingPdf ? "Upload…" : editing.pdf_url ? "Remplacer le PDF" : "Téléverser le PDF"}
-                  <input type="file" accept="application/pdf" onChange={(e) => handleUpload(e, "pdf")}
-                    disabled={uploadingPdf} className="hidden" />
-                </label>
-                <p className="text-[11px] mt-1.5" style={{ color: "#92400e" }}>PDF uniquement · 30 Mo max</p>
-              </div>
-
-              {/* Couverture */}
-              <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1.5">Image de couverture</label>
-                {editing.cover_url && (
-                  <div className="relative rounded-xl overflow-hidden border-2 border-gray-100 mb-2 bg-gray-50 flex items-center justify-center" style={{ height: 180 }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={editing.cover_url} alt="Aperçu couverture" className="max-w-full max-h-full object-contain" />
-                    <button onClick={() => setEditing({ ...editing, cover_url: "" })}
-                      className="absolute top-2 right-2 px-2.5 py-1 rounded-lg bg-white/95 text-xs font-bold text-red-600 shadow-sm">
-                      Retirer
-                    </button>
-                  </div>
-                )}
-                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-600 cursor-pointer hover:bg-gray-50">
-                  {uploadingCover ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                  {uploadingCover ? "Upload…" : editing.cover_url ? "Remplacer" : "Téléverser la couverture"}
-                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => handleUpload(e, "cover")}
-                    disabled={uploadingCover} className="hidden" />
-                </label>
-                <p className="text-[11px] text-gray-400 mt-1">JPG/PNG/WEBP · format portrait recommandé</p>
-              </div>
-
-              {/* Sommaire */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-black uppercase tracking-wider text-gray-500">Sommaire (4 rubriques max)</label>
-                  {editing.highlights.length < 4 && (
-                    <button
-                      onClick={() => setEditing({ ...editing, highlights: [...editing.highlights, { icon: "📰", label: "", desc: "" }] })}
-                      className="text-xs font-bold inline-flex items-center gap-1" style={{ color: "#31B9AE" }}>
-                      <Plus className="w-3 h-3" /> Ajouter
-                    </button>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  {editing.highlights.map((h, i) => (
-                    <div key={i} className="flex gap-2 items-start">
-                      <select value={h.icon} onChange={(e) => updateHighlight(i, "icon", e.target.value)}
-                        className="w-16 shrink-0 px-2 py-2 rounded-lg border-2 border-gray-100 bg-gray-50 text-lg text-center focus:bg-white focus:border-[#31B9AE] focus:outline-none">
-                        {ICON_SUGGESTIONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
-                      </select>
-                      <div className="flex-1 grid sm:grid-cols-2 gap-2">
-                        <input value={h.label} onChange={(e) => updateHighlight(i, "label", e.target.value)}
-                          placeholder="Titre de rubrique"
-                          className="px-3 py-2 rounded-lg border-2 border-gray-100 text-sm text-gray-900 placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-[#31B9AE] focus:outline-none" />
-                        <input value={h.desc} onChange={(e) => updateHighlight(i, "desc", e.target.value)}
-                          placeholder="Sous-titre"
-                          className="px-3 py-2 rounded-lg border-2 border-gray-100 text-sm text-gray-900 placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-[#31B9AE] focus:outline-none" />
-                      </div>
-                      {editing.highlights.length > 1 && (
-                        <button onClick={() => setEditing({ ...editing, highlights: editing.highlights.filter((_, j) => j !== i) })}
-                          className="p-2 rounded-lg text-red-500 hover:bg-red-50 shrink-0" title="Retirer">
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-3 items-end">
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1.5">Date de publication</label>
-                  <input type="date" value={editing.published_at} onChange={(e) => setEditing({ ...editing, published_at: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-lg border-2 border-gray-100 text-sm text-gray-900 bg-gray-50 focus:bg-white focus:border-[#31B9AE] focus:outline-none focus:ring-4 focus:ring-[#31B9AE]/10 transition-all" />
-                </div>
-                <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer pb-2.5">
-                  <input type="checkbox" checked={editing.published} onChange={(e) => setEditing({ ...editing, published: e.target.checked })}
-                    className="w-4 h-4 rounded accent-[#31B9AE]" />
-                  <Eye className="w-4 h-4 text-gray-400" /> Publié sur le site
-                </label>
-              </div>
-            </div>
-
-            <div className="px-6 py-4 border-t border-gray-100 flex gap-3 shrink-0">
+        <AdminModal
+          title={editing.id ? `Modifier la Newsletter N°${editing.numero}` : "Nouveau numéro"}
+          subtitle="Le numéro le plus récent apparaît en vedette sur la page Journal"
+          onClose={() => setEditing(null)}
+          footer={
+            <>
               <button onClick={() => setEditing(null)}
                 className="px-5 py-2.5 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-500 hover:bg-gray-50">
                 Annuler
@@ -407,14 +292,184 @@ export default function NewslettersManager({
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                 {saving ? "Enregistrement…" : "Enregistrer"}
               </button>
-            </div>
-          </div>
-        </div>
+            </>
+          }
+        >
+          <>
+            {/* ─── 1. Identification ─── */}
+            <FormSection step={1} title="Identification du numéro">
+              <AdminField label="Titre *" value={editing.title}
+                onChange={(v) => setEditing({ ...editing, title: v })}
+                placeholder="Newsletter SOBUP"
+                hint="Titre principal affiché en gros sur la page Journal" />
+              <div className="grid sm:grid-cols-2 gap-3">
+                <AdminField label="Numéro *" value={editing.numero} type="number"
+                  onChange={(v) => setEditing({ ...editing, numero: v })} placeholder="2"
+                  hint="Le plus élevé passe en vedette" />
+                <AdminField label="Période *" value={editing.period}
+                  onChange={(v) => setEditing({ ...editing, period: v })} placeholder="Juillet 2026"
+                  hint="Affiché sous le titre" />
+              </div>
+              <AdminTextarea label="Description" value={editing.description} rows={3}
+                onChange={(v) => setEditing({ ...editing, description: v })}
+                placeholder="Phrase d'accroche : de quoi parle ce numéro ?" />
+            </FormSection>
+
+            {/* ─── 2. Sommaire ─── */}
+            <FormSection step={2} title="Sommaire du numéro"
+              caption={`${editing.highlights.length} rubrique${editing.highlights.length > 1 ? "s" : ""} · ajoutez-en autant que nécessaire`}>
+              <div className="space-y-2.5">
+                {editing.highlights.map((h, i) => (
+                  <div key={i}
+                    className="rounded-xl border-2 border-gray-100 bg-gray-50/60 p-3 transition-colors focus-within:border-[#31B9AE]/40 focus-within:bg-white">
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <span className="w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-black tabular-nums shrink-0"
+                        style={{ background: "#E8F9F7", color: "#065E52" }}>
+                        {i + 1}
+                      </span>
+                      <span className="text-[11px] font-black uppercase tracking-wider text-gray-400">
+                        Rubrique {i + 1}
+                      </span>
+                      <div className="ml-auto flex items-center gap-0.5">
+                        <button type="button" onClick={() => moveHighlight(i, -1)} disabled={i === 0}
+                          className="p-1.5 rounded-md text-gray-400 hover:bg-white hover:text-gray-700 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                          title="Monter" aria-label={`Monter la rubrique ${i + 1}`}>
+                          <ArrowUp className="w-3.5 h-3.5" />
+                        </button>
+                        <button type="button" onClick={() => moveHighlight(i, 1)} disabled={i === editing.highlights.length - 1}
+                          className="p-1.5 rounded-md text-gray-400 hover:bg-white hover:text-gray-700 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                          title="Descendre" aria-label={`Descendre la rubrique ${i + 1}`}>
+                          <ArrowDown className="w-3.5 h-3.5" />
+                        </button>
+                        {editing.highlights.length > 1 && (
+                          <button type="button"
+                            onClick={() => setEditing({ ...editing, highlights: editing.highlights.filter((_, j) => j !== i) })}
+                            className="p-1.5 rounded-md text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors ml-0.5"
+                            title="Supprimer cette rubrique" aria-label={`Supprimer la rubrique ${i + 1}`}>
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <div className="shrink-0">
+                        <input value={h.icon} onChange={(e) => updateHighlight(i, "icon", e.target.value)}
+                          maxLength={4} aria-label={`Icône de la rubrique ${i + 1}`}
+                          className="w-14 px-2 py-2 rounded-lg border-2 border-gray-100 bg-white text-xl text-center focus:border-[#31B9AE] focus:outline-none" />
+                      </div>
+                      <div className="flex-1 min-w-0 space-y-2">
+                        <input value={h.label} onChange={(e) => updateHighlight(i, "label", e.target.value)}
+                          placeholder="Titre de la rubrique — ex. Vie de la société"
+                          className="w-full px-3 py-2 rounded-lg border-2 border-gray-100 text-sm font-semibold text-gray-900 placeholder:text-gray-400 placeholder:font-normal bg-white focus:border-[#31B9AE] focus:outline-none" />
+                        <input value={h.desc} onChange={(e) => updateHighlight(i, "desc", e.target.value)}
+                          placeholder="Précision — ex. L'Assemblée Générale Élective"
+                          className="w-full px-3 py-2 rounded-lg border-2 border-gray-100 text-sm text-gray-600 placeholder:text-gray-400 bg-white focus:border-[#31B9AE] focus:outline-none" />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1 mt-2 pl-16">
+                      {ICON_SUGGESTIONS.map((ic) => (
+                        <button key={ic} type="button" onClick={() => updateHighlight(i, "icon", ic)}
+                          className={`w-7 h-7 rounded-md text-base leading-none transition-all ${
+                            h.icon === ic ? "ring-2 ring-[#31B9AE] bg-white" : "hover:bg-white opacity-60 hover:opacity-100"
+                          }`}
+                          title={`Choisir ${ic}`} aria-label={`Icône ${ic}`}>
+                          {ic}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button type="button"
+                onClick={() => setEditing({ ...editing, highlights: [...editing.highlights, { icon: "📰", label: "", desc: "" }] })}
+                className="w-full mt-2.5 py-2.5 rounded-xl border-2 border-dashed text-sm font-bold transition-colors hover:bg-[#E8F9F7]/50 inline-flex items-center justify-center gap-2"
+                style={{ borderColor: "#31B9AE60", color: "#065E52" }}>
+                <Plus className="w-4 h-4" /> Ajouter une rubrique
+              </button>
+            </FormSection>
+
+            {/* ─── 3. Fichiers ─── */}
+            <FormSection step={3} title="Fichiers du numéro">
+              <div className="rounded-xl border-2 p-4" style={{ background: "#fffbeb", borderColor: "#fde68a" }}>
+                <label className="block text-xs font-black uppercase tracking-wider mb-2" style={{ color: "#92400e" }}>
+                  Fichier PDF *
+                </label>
+                {editing.pdf_url && (
+                  <div className="flex items-center gap-3 mb-2.5 p-2.5 rounded-lg bg-white border border-amber-200">
+                    <FileText className="w-5 h-5 shrink-0" style={{ color: "#d97706" }} />
+                    <a href={editing.pdf_url} target="_blank" rel="noopener noreferrer"
+                      className="flex-1 min-w-0 text-sm font-bold text-gray-900 truncate hover:underline">
+                      PDF téléversé{editing.pdf_size && ` · ${editing.pdf_size}`}
+                    </a>
+                    <button type="button" onClick={() => setEditing({ ...editing, pdf_url: "", pdf_size: "" })}
+                      className="px-2.5 py-1 rounded-lg text-xs font-bold text-red-600 border border-red-200 hover:bg-red-50 shrink-0">
+                      Retirer
+                    </button>
+                  </div>
+                )}
+                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border-2 bg-white cursor-pointer hover:bg-amber-50 transition-colors"
+                  style={{ borderColor: "#fde68a", color: "#92400e" }}>
+                  {uploadingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                  {uploadingPdf ? "Upload…" : editing.pdf_url ? "Remplacer le PDF" : "Téléverser le PDF"}
+                  <input type="file" accept="application/pdf" onChange={(e) => handleUpload(e, "pdf")}
+                    disabled={uploadingPdf} className="hidden" />
+                </label>
+                <p className="text-[11px] mt-1.5" style={{ color: "#92400e" }}>PDF uniquement · 30 Mo max</p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1.5">
+                  Image de couverture
+                </label>
+                {editing.cover_url && (
+                  <div className="relative rounded-xl overflow-hidden border-2 border-gray-100 mb-2 bg-gray-50 flex items-center justify-center" style={{ height: 180 }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={editing.cover_url} alt="Aperçu couverture" className="max-w-full max-h-full object-contain" />
+                    <button type="button" onClick={() => setEditing({ ...editing, cover_url: "" })}
+                      className="absolute top-2 right-2 px-2.5 py-1 rounded-lg bg-white/95 text-xs font-bold text-red-600 shadow-sm hover:bg-white">
+                      Retirer
+                    </button>
+                  </div>
+                )}
+                <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-600 cursor-pointer hover:bg-gray-50 transition-colors">
+                  {uploadingCover ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                  {uploadingCover ? "Upload…" : editing.cover_url ? "Remplacer" : "Téléverser la couverture"}
+                  <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => handleUpload(e, "cover")}
+                    disabled={uploadingCover} className="hidden" />
+                </label>
+                <p className="text-[11px] text-gray-400 mt-1">JPG/PNG/WEBP · format portrait recommandé</p>
+              </div>
+            </FormSection>
+
+            {/* ─── 4. Publication ─── */}
+            <FormSection step={4} title="Publication" last>
+              <div className="grid sm:grid-cols-2 gap-3 items-end">
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1.5">
+                    Date de parution
+                  </label>
+                  <input type="date" value={editing.published_at}
+                    onChange={(e) => setEditing({ ...editing, published_at: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-lg border-2 border-gray-100 text-sm text-gray-900 bg-gray-50 focus:bg-white focus:border-[#31B9AE] focus:outline-none focus:ring-4 focus:ring-[#31B9AE]/10 transition-all" />
+                </div>
+                <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer pb-2.5">
+                  <input type="checkbox" checked={editing.published}
+                    onChange={(e) => setEditing({ ...editing, published: e.target.checked })}
+                    className="w-4 h-4 rounded accent-[#31B9AE]" />
+                  <Eye className="w-4 h-4 text-gray-400" /> Visible sur le site
+                </label>
+              </div>
+            </FormSection>
+          </>
+        </AdminModal>
       )}
 
       {/* Confirmation suppression */}
       {confirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
           onClick={(e) => { if (e.target === e.currentTarget) setConfirmDelete(null); }}>
           <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
             <h3 className="font-black text-gray-900 text-lg mb-2">Supprimer la Newsletter N°{confirmDelete.numero} ?</h3>
@@ -442,14 +497,26 @@ export default function NewslettersManager({
   );
 }
 
-function Field({ label, value, onChange, placeholder, type = "text" }: {
-  label: string; value: string; onChange: (v: string) => void; placeholder?: string; type?: string;
+/** Section numérotée du formulaire, avec séparateur. */
+function FormSection({
+  step, title, caption, children, last,
+}: {
+  step: number; title: string; caption?: string; children: React.ReactNode; last?: boolean;
 }) {
   return (
-    <div>
-      <label className="block text-xs font-black uppercase tracking-wider text-gray-500 mb-1.5">{label}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
-        className="w-full px-3.5 py-2.5 rounded-lg border-2 border-gray-100 text-sm text-gray-900 placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-[#31B9AE] focus:outline-none focus:ring-4 focus:ring-[#31B9AE]/10 transition-all" />
-    </div>
+    <section className={last ? "" : "pb-5 mb-1 border-b border-gray-100"}>
+      <div className="flex items-baseline gap-2.5 mb-3">
+        <span className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black tabular-nums shrink-0"
+          style={{ background: "linear-gradient(135deg, #31B9AE 0%, #065E52 100%)", color: "white" }}>
+          {step}
+        </span>
+        <div className="min-w-0">
+          <h4 className="text-sm font-black text-gray-900 leading-tight">{title}</h4>
+          {caption && <p className="text-[11px] text-gray-400 mt-0.5">{caption}</p>}
+        </div>
+      </div>
+      <div className="space-y-3 sm:pl-9">{children}</div>
+    </section>
   );
 }
+

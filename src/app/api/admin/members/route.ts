@@ -1,27 +1,9 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminAuthenticated } from "@/lib/supabase/adminAuth";
-import { getBccList } from "@/lib/mail";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
-const FROM = process.env.RESEND_FROM ?? "SOBUP <onboarding@resend.dev>";
-const SECRETARIAT = process.env.SOBUP_SECRETARIAT_EMAIL ?? "ouattarabillyhamid@gmail.com";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const LOGO_CID = "sobup-logo";
-
-let logoCache: string | null = null;
-async function getLogoBase64() {
-  if (logoCache) return logoCache;
-  try {
-    const file = await readFile(path.join(process.cwd(), "public", "logo.png"));
-    logoCache = file.toString("base64");
-    return logoCache;
-  } catch {
-    return null;
-  }
-}
+import {
+  sendMail, escapeHtml, emailHeader, emailFooter, SECRETARIAT, SITE_URL,
+} from "@/lib/mail";
 
 function generatePassword(length = 12): string {
   const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -114,21 +96,12 @@ export async function POST(req: Request) {
   }
 
   // Email de bienvenue avec identifiants
-  const apiKey = process.env.RESEND_API_KEY;
-  if (apiKey) {
-    const resend = new Resend(apiKey);
-    const logo = await getLogoBase64();
-    const attachments = logo ? [{ filename: "logo.png", content: logo, contentId: LOGO_CID }] : undefined;
-
-    const html = `
-      <div style="font-family:system-ui;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
-        <div style="background:linear-gradient(135deg,#0B3D38 0%,#065E52 55%,#31B9AE 100%);padding:24px;text-align:center">
-          <img src="cid:${LOGO_CID}" alt="SOBUP" width="64" height="64" style="background:#fff;padding:6px;border-radius:50%"/>
-          <p style="margin:10px 0 0;color:#fff;font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase">Société Burkinabè de Pneumologie</p>
-        </div>
+  const html = `
+      <div style="font-family:system-ui,-apple-system,sans-serif;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
+        ${emailHeader()}
         <div style="padding:32px">
           <h2 style="margin:0 0 12px;color:#0f172a;font-weight:800;font-size:22px">Bienvenue dans la SOBUP 🎉</h2>
-          <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 14px">Bonjour <strong>${prenom}</strong>,</p>
+          <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 14px">Bonjour <strong>${escapeHtml(String(prenom))}</strong>,</p>
           <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 18px">Le Bureau SOBUP vient de vous créer un compte sur la plateforme. Voici vos identifiants :</p>
           <div style="margin:20px 0;padding:18px;background:#E8F9F7;border:1px solid #31B9AE40;border-radius:12px">
             <p style="margin:0 0 6px;font-size:11px;font-weight:800;color:#065E52;text-transform:uppercase;letter-spacing:.1em">Email</p>
@@ -141,17 +114,29 @@ export async function POST(req: Request) {
           </div>
           <p style="color:#94a3b8;font-size:12px;line-height:1.6;margin:18px 0 0">🔒 Pour votre sécurité, changez ce mot de passe lors de votre première connexion. Contact : <a href="mailto:${SECRETARIAT}" style="color:#31B9AE">${SECRETARIAT}</a></p>
         </div>
+        ${emailFooter()}
       </div>`;
 
-    try {
-      await resend.emails.send({
-        from: FROM, to: String(email),
-        bcc: getBccList(),
-        subject: "🎉 Bienvenue dans la SOBUP — vos identifiants",
-        html, attachments,
-      });
-    } catch (err) { console.warn("[members] Resend error", err); }
-  }
+  const mail = await sendMail(
+    {
+      to: String(email),
+      replyTo: SECRETARIAT,
+      subject: "🎉 Bienvenue dans la SOBUP — vos identifiants",
+      html,
+    },
+    "members/bienvenue"
+  );
 
-  return NextResponse.json({ member: { ...profile, email } }, { status: 201 });
+  return NextResponse.json(
+    {
+      member: { ...profile, email },
+      emailSent: mail.sent,
+      // Sans email, le Bureau doit pouvoir transmettre le mot de passe lui-même.
+      password: mail.sent ? undefined : password,
+      warning: mail.sent
+        ? undefined
+        : `Membre créé, mais l'email d'identifiants n'a pas pu être envoyé (${mail.error}). Mot de passe à communiquer : ${password}`,
+    },
+    { status: 201 }
+  );
 }

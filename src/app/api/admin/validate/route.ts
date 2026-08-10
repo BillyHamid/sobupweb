@@ -1,27 +1,7 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminAuthenticated } from "@/lib/supabase/adminAuth";
-import { getBccList } from "@/lib/mail";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
-const FROM = process.env.RESEND_FROM ?? "SOBUP <onboarding@resend.dev>";
-const SECRETARIAT = process.env.SOBUP_SECRETARIAT_EMAIL ?? "ouattarabillyhamid@gmail.com";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const LOGO_CID = "sobup-logo";
-
-let logoCache: string | null = null;
-async function getLogoBase64() {
-  if (logoCache) return logoCache;
-  try {
-    const file = await readFile(path.join(process.cwd(), "public", "logo.png"));
-    logoCache = file.toString("base64");
-    return logoCache;
-  } catch {
-    return null;
-  }
-}
+import { sendMail, emailHeader, emailFooter, SECRETARIAT, SITE_URL } from "@/lib/mail";
 
 function generatePassword(length = 12): string {
   const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -64,69 +44,137 @@ export async function POST(req: Request) {
       nom: request.nom,
     },
   });
+
+  let userId: string;
+  /** true = le compte préexistait, on l'a repris (on ne devra pas le supprimer). */
+  let adopted = false;
+
   if (userErr) {
-    // Si l'utilisateur existe déjà, on récupère son ID pour ne pas bloquer
-    if (userErr.message?.includes("already")) {
-      return NextResponse.json(
-        { error: "Un compte existe déjà avec cet email. Vérifiez en base." },
-        { status: 409 }
+    if (/already|exists|registered|duplicate/i.test(userErr.message ?? "")) {
+      /**
+       * Un compte existe déjà pour cet email. C'est le cas typique d'une
+       * validation précédente interrompue : le compte avait été créé, puis
+       * l'étape suivante a échoué avant l'envoi des identifiants. On reprend
+       * ce compte et on lui attribue un nouveau mot de passe, au lieu de
+       * bloquer le Bureau avec une erreur 409.
+       */
+      const { data: list, error: listErr } = await supabase.auth.admin.listUsers({
+        page: 1,
+        perPage: 1000,
+      });
+      const existing = list?.users.find(
+        (u) => u.email?.toLowerCase() === String(request.email).toLowerCase()
       );
+      if (listErr || !existing) {
+        console.error("[admin/validate] compte existant introuvable", listErr);
+        return NextResponse.json(
+          { error: "Un compte existe déjà avec cet email mais reste introuvable. Vérifiez dans Supabase." },
+          { status: 409 }
+        );
+      }
+      const { error: pwdErr } = await supabase.auth.admin.updateUserById(existing.id, {
+        password,
+        email_confirm: true,
+      });
+      if (pwdErr) {
+        console.error("[admin/validate] reprise du compte", pwdErr);
+        return NextResponse.json(
+          { error: `Compte existant non réutilisable : ${pwdErr.message}` },
+          { status: 500 }
+        );
+      }
+      userId = existing.id;
+      adopted = true;
+      console.log("[admin/validate] compte existant repris pour", request.email);
+    } else {
+      console.error("[admin/validate] createUser", userErr);
+      return NextResponse.json({ error: `Erreur création du compte : ${userErr.message}` }, { status: 500 });
     }
-    console.error("[admin/validate] createUser", userErr);
-    return NextResponse.json({ error: "Erreur création du compte." }, { status: 500 });
+  } else {
+    userId = userData.user.id;
   }
-  const userId = userData.user.id;
 
-  // 3) Créer le profil
+  /**
+   * Si la suite échoue sur un compte qu'on vient de créer, on le supprime :
+   * sans ça toute nouvelle tentative repartirait sur un état incohérent.
+   * Un compte repris (`adopted`) préexistait au Bureau — on n'y touche pas.
+   */
+  async function rollbackUser() {
+    if (adopted) return;
+    const { error } = await supabase.auth.admin.deleteUser(userId);
+    if (error) {
+      console.error("[admin/validate] rollback impossible — compte orphelin", userId, error);
+    }
+  }
+
+  // 3) Créer ou mettre à jour le profil.
+  //    `upsert` plutôt qu'`insert` : sur un compte repris, le profil existe
+  //    déjà et un insert échouerait sur la contrainte d'unicité.
   const currentYear = new Date().getFullYear();
-  const { error: profileErr } = await supabase.from("profiles").insert({
-    user_id: userId,
-    prenom: request.prenom,
-    nom: request.nom,
-    telephone: request.telephone,
-    specialite: request.specialite,
-    etablissement: request.etablissement,
-    ville: request.ville,
-    cotisation_year: currentYear,
-    cotisation_paid_at: new Date().toISOString().slice(0, 10),
-  });
+  const { error: profileErr } = await supabase.from("profiles").upsert(
+    {
+      user_id: userId,
+      prenom: request.prenom,
+      nom: request.nom,
+      telephone: request.telephone,
+      specialite: request.specialite,
+      etablissement: request.etablissement,
+      ville: request.ville,
+      cotisation_year: currentYear,
+      cotisation_paid_at: new Date().toISOString().slice(0, 10),
+    },
+    { onConflict: "user_id" }
+  );
   if (profileErr) {
-    console.warn("[admin/validate] profile insert", profileErr);
-  }
-
-  // 4) Marquer la demande comme validée et stocker le mot de passe (pour récupération admin)
-  const { error: updateErr } = await supabase
-    .from("adhesion_requests")
-    .update({
-      status: "approved",
-      validated_at: new Date().toISOString(),
-      validated_by: "bureau",
-      generated_password: password,
-    })
-    .eq("id", id);
-  if (updateErr) {
-    console.error("[admin/validate] update adhesion_requests", updateErr);
+    console.error("[admin/validate] profile insert", profileErr);
+    await rollbackUser();
     return NextResponse.json(
-      { error: `Compte créé mais demande non mise à jour : ${updateErr.message}. Vérifiez que la colonne 'generated_password' existe (voir le SQL de migration).` },
+      { error: `Profil non créé : ${profileErr.message}` },
       { status: 500 }
     );
   }
 
-  // 5) Email avec les identifiants
-  const apiKey = process.env.RESEND_API_KEY;
-  if (apiKey) {
-    const resend = new Resend(apiKey);
-    const logoBase64 = await getLogoBase64();
-    const attachments = logoBase64
-      ? [{ filename: "logo.png", content: logoBase64, contentId: LOGO_CID }]
-      : undefined;
+  // 4) Marquer la demande comme validée.
+  //    `generated_password` sert à la récupération par l'admin, mais la colonne
+  //    peut manquer selon l'état des migrations : dans ce cas on valide quand
+  //    même et on continue jusqu'à l'envoi des identifiants, qui est l'essentiel.
+  const baseUpdate = {
+    status: "approved",
+    validated_at: new Date().toISOString(),
+    validated_by: "bureau",
+  };
 
-    const html = `
-      <div style="font-family:system-ui;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
-        <div style="background:linear-gradient(135deg,#0B3D38 0%,#065E52 55%,#31B9AE 100%);padding:24px;text-align:center">
-          <img src="cid:${LOGO_CID}" alt="SOBUP" width="64" height="64" style="background:#fff;padding:6px;border-radius:50%"/>
-          <p style="margin:10px 0 0;color:#fff;font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase">Société Burkinabè de Pneumologie</p>
-        </div>
+  let passwordStored = true;
+  let { error: updateErr } = await supabase
+    .from("adhesion_requests")
+    .update({ ...baseUpdate, generated_password: password })
+    .eq("id", id);
+
+  if (updateErr && /generated_password/.test(updateErr.message)) {
+    console.warn(
+      "[admin/validate] colonne generated_password absente — validation sans mémorisation du mot de passe. Lancez la migration SQL."
+    );
+    passwordStored = false;
+    ({ error: updateErr } = await supabase
+      .from("adhesion_requests")
+      .update(baseUpdate)
+      .eq("id", id));
+  }
+
+  if (updateErr) {
+    console.error("[admin/validate] update adhesion_requests", updateErr);
+    await rollbackUser();
+    return NextResponse.json(
+      { error: `Demande non mise à jour : ${updateErr.message}` },
+      { status: 500 }
+    );
+  }
+
+  // 5) Email avec les identifiants — c'est l'étape qui compte pour le membre,
+  //    donc son échec doit être remonté explicitement au Bureau.
+  const html = `
+      <div style="font-family:system-ui,-apple-system,sans-serif;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
+        ${emailHeader()}
         <div style="padding:32px;text-align:center">
           <div style="display:inline-block;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#31B9AE 0%,#065E52 100%);line-height:56px;margin-bottom:14px">
             <span style="color:#fff;font-size:28px;font-weight:900">✓</span>
@@ -148,24 +196,43 @@ export async function POST(req: Request) {
           </div>
           <p style="color:#94a3b8;font-size:12px;line-height:1.6;margin:18px 0 0">🔒 Pour votre sécurité, changez ce mot de passe lors de votre première connexion. Pour toute question, contactez <a href="mailto:${SECRETARIAT}" style="color:#31B9AE">${SECRETARIAT}</a>.</p>
         </div>
-        <div style="padding:14px 24px;border-top:1px solid #e2e8f0;text-align:center;background:#f8fafc;border-radius:0 0 16px 16px">
-          <p style="margin:0;font-size:11px;color:#94a3b8">SOBUP — Société Burkinabè de Pneumologie</p>
-        </div>
+        ${emailFooter()}
       </div>`;
 
-    try {
-      await resend.emails.send({
-        from: FROM,
-        to: request.email,
-        bcc: getBccList(),
-        subject: "✓ Bienvenue dans la SOBUP — vos identifiants de connexion",
-        html,
-        attachments,
-      });
-    } catch (err) {
-      console.warn("[admin/validate] Resend error", err);
-    }
+  const mail = await sendMail(
+    {
+      to: request.email,
+      replyTo: SECRETARIAT,
+      subject: "✓ Bienvenue dans la SOBUP — vos identifiants de connexion",
+      html,
+    },
+    "validate/identifiants"
+  );
+
+  const warnings: string[] = [];
+  if (adopted) {
+    warnings.push(
+      "Un compte existait déjà pour cet email (validation précédente interrompue) : il a été repris et un nouveau mot de passe a été généré."
+    );
+  }
+  if (!mail.sent) {
+    warnings.push(
+      `Le compte est créé mais l'email d'identifiants n'a pas pu être envoyé (${mail.error}). ` +
+        `Communiquez le mot de passe au membre : ${password}`
+    );
+  }
+  if (!passwordStored) {
+    warnings.push(
+      "Le mot de passe n'a pas pu être mémorisé pour la récupération admin — lancez la migration SQL (colonne generated_password)."
+    );
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({
+    ok: true,
+    emailSent: mail.sent,
+    adopted,
+    // Filet de sécurité : sans email, le Bureau doit pouvoir lire le mot de passe.
+    password: mail.sent ? undefined : password,
+    warning: warnings.length ? warnings.join(" ") : undefined,
+  });
 }

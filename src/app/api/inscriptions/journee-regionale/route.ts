@@ -3,6 +3,10 @@ import { Resend } from "resend";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { getBccList } from "@/lib/mail";
+import { createAdminClient } from "@/lib/supabase/admin";
+
+const EVENT_SLUG = "journee-regionale";
+const EVENT_TITLE = "1ère Journée Scientifique Régionale";
 
 type Body = {
   prenom?: string;
@@ -76,15 +80,49 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Motivation : 20 caractères minimum." }, { status: 422 });
   }
 
+  // ─── Enregistrement en base (source de vérité pour le back-office) ───
+  try {
+    const supabase = createAdminClient();
+    const { error: dbError } = await supabase.from("event_registrations").insert({
+      event_slug: EVENT_SLUG,
+      event_title: EVENT_TITLE,
+      prenom: String(prenom).trim(),
+      nom: String(nom).trim(),
+      email: String(email).trim().toLowerCase(),
+      telephone: String(telephone).trim(),
+      fonction: fonction ? String(fonction).trim() : null,
+      specialite: specialite ? String(specialite).trim() : null,
+      est_ehu: estEHU === "oui" ? "Oui" : "Non",
+      grade: grade ? String(grade).trim() : null,
+      lieu_exercice: lieuExercice ? String(lieuExercice).trim() : null,
+      motivation: String(motivation).trim(),
+    });
+    if (dbError) {
+      console.error("[inscriptions] Supabase insert error", dbError);
+      return NextResponse.json(
+        { error: "Impossible d'enregistrer votre inscription. Réessayez dans quelques minutes." },
+        { status: 500 }
+      );
+    }
+  } catch (err) {
+    console.error("[inscriptions] Supabase unavailable", err);
+    return NextResponse.json(
+      { error: "Service temporairement indisponible. Réessayez dans quelques minutes." },
+      { status: 503 }
+    );
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.warn("[inscriptions] RESEND_API_KEY manquant — pas d'envoi de mail. Payload :", body);
+    // L'inscription est déjà enregistrée en base : on renvoie un succès avec avertissement.
+    console.warn("[inscriptions] RESEND_API_KEY manquant — inscription enregistrée sans email de confirmation.");
     return NextResponse.json(
       {
-        error:
-          "Service d'inscription temporairement indisponible. Merci de réessayer plus tard ou de nous contacter par email.",
+        ok: true,
+        warning:
+          "Inscription enregistrée. L'email de confirmation n'a pas pu être envoyé, mais le secrétariat a bien reçu votre demande.",
       },
-      { status: 503 }
+      { status: 201 }
     );
   }
 

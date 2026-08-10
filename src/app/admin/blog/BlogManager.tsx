@@ -133,7 +133,7 @@ export default function BlogManager({ initialPosts, loadError }: { initialPosts:
 
   return (
     <div>
-      <div className="px-8 py-6 border-b border-gray-100 bg-white sticky top-0 z-30 flex items-center justify-between">
+      <div className="px-4 sm:px-8 py-5 sm:py-6 border-b border-gray-100 bg-white sticky top-0 z-30 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-black text-gray-900">Actualités</h1>
           <p className="text-sm text-gray-500 mt-0.5">{posts.length} article{posts.length > 1 ? "s" : ""} · gestion du blog public</p>
@@ -146,7 +146,7 @@ export default function BlogManager({ initialPosts, loadError }: { initialPosts:
         </button>
       </div>
 
-      <div className="px-8 py-6">
+      <div className="px-4 sm:px-8 py-5 sm:py-6">
         {loadError && (
           <div className="mb-5 p-4 rounded-xl border flex items-start gap-2" style={{ background: "#fef2f2", borderColor: "#fecaca" }}>
             <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
@@ -235,10 +235,10 @@ export default function BlogManager({ initialPosts, loadError }: { initialPosts:
 
       {/* Modal édition */}
       {editing && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        <div className="fixed inset-0 z-40 flex items-stretch sm:items-center justify-center sm:p-4 bg-black/60 backdrop-blur-sm"
           onClick={(e) => { if (e.target === e.currentTarget) setEditing(null); }}>
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
+          <div className="bg-white w-full max-w-2xl flex flex-col shadow-2xl sm:rounded-2xl sm:max-h-[min(94vh,900px)]">
+            <div className="px-5 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
               <h3 className="font-black text-gray-900 text-lg">
                 {editing.id ? "Modifier l'article" : "Nouvel article"}
               </h3>
@@ -246,7 +246,7 @@ export default function BlogManager({ initialPosts, loadError }: { initialPosts:
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="px-6 py-5 overflow-y-auto flex-1 space-y-4">
+            <div className="px-5 sm:px-6 py-5 overflow-y-auto flex-1 min-h-0 space-y-4">
               <Field label="Titre *" value={editing.title} onChange={(v) => setEditing({ ...editing, title: v })} placeholder="Ex : Tournée de convivialité du Bureau" />
               <div className="grid sm:grid-cols-2 gap-3">
                 <SelectField label="Catégorie" value={editing.category} options={CATEGORIES}
@@ -301,7 +301,7 @@ export default function BlogManager({ initialPosts, loadError }: { initialPosts:
                 </label>
               </div>
             </div>
-            <div className="px-6 py-4 border-t border-gray-100 flex gap-3 shrink-0">
+            <div className="px-5 sm:px-6 py-4 border-t border-gray-100 flex flex-wrap gap-3 items-center shrink-0 bg-white">
               <button onClick={() => setEditing(null)}
                 className="px-5 py-2.5 rounded-lg text-sm font-bold border-2 border-gray-200 text-gray-500 hover:bg-gray-50">
                 Annuler
@@ -319,7 +319,7 @@ export default function BlogManager({ initialPosts, loadError }: { initialPosts:
 
       {/* Confirmation suppression */}
       {confirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
           onClick={(e) => { if (e.target === e.currentTarget) setConfirmDelete(null); }}>
           <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
             <h3 className="font-black text-gray-900 text-lg mb-2">Supprimer l&apos;article ?</h3>

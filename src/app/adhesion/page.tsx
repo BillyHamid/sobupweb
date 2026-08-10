@@ -32,6 +32,8 @@ export default function AdhesionPage() {
   const [payMethod, setPayMethod] = useState<"om"|"wave">("om");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string>("");
+  // Demande enregistrée mais email de confirmation non parti : on le dit.
+  const [submitWarning, setSubmitWarning] = useState<string>("");
 
   const set = (k: keyof FormData) =>
     (e: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) =>
@@ -182,6 +184,7 @@ export default function AdhesionPage() {
                       setSubmitError(data.error ?? "Une erreur est survenue.");
                       return;
                     }
+                    setSubmitWarning(data.warning ?? "");
                     setStep(1);
                   } catch {
                     setSubmitError("Connexion impossible. Vérifiez votre réseau.");
@@ -201,6 +204,16 @@ export default function AdhesionPage() {
         {/* ── ÉTAPE 2 ── */}
         {step === 1 && (
           <div className="space-y-4">
+
+            {submitWarning && (
+              <div className="rounded-xl border-2 p-4 flex items-start gap-3"
+                style={{ background: "#fffbeb", borderColor: "#fde68a" }}>
+                <span className="text-lg shrink-0">⚠️</span>
+                <p className="text-sm leading-relaxed" style={{ color: "#78350f" }}>
+                  {submitWarning}
+                </p>
+              </div>
+            )}
 
             {/* Montant */}
             <div className="bg-white rounded-xl border border-gray-200 p-6">

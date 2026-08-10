@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   Eye, Inbox, Users, Newspaper, Calendar, Image as ImageIcon,
   TrendingUp, ArrowUpRight, ExternalLink, Video, FileText,
+  ClipboardList, FileSignature,
 } from "lucide-react";
 
 type Stats = {
@@ -23,6 +24,10 @@ type Stats = {
   weekPosts: number;
   weekEvents: number;
   weekApprovals: number;
+  totalRegistrations: number;
+  weekRegistrations: number;
+  totalAbstracts: number;
+  pendingAbstracts: number;
 };
 
 function fmt(n: number): string {
@@ -35,13 +40,13 @@ export default function DashboardView({ stats }: { stats: Stats }) {
   return (
     <div>
       {/* En-tête */}
-      <div className="px-8 py-6 border-b border-gray-100 bg-white sticky top-0 z-30">
+      <div className="px-4 sm:px-8 py-5 sm:py-6 border-b border-gray-100 bg-white sticky top-0 z-30">
         <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: "#31B9AE" }}>Bureau SOBUP</p>
         <h1 className="text-xl font-black text-gray-900">Tableau de bord</h1>
         <p className="text-sm text-gray-500 mt-0.5">Vue d&apos;ensemble de l&apos;activité de la plateforme</p>
       </div>
 
-      <div className="px-8 py-6">
+      <div className="px-4 sm:px-8 py-5 sm:py-6">
         {/* ─── Metric cards principales ─── */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <MetricCard
@@ -83,6 +88,28 @@ export default function DashboardView({ stats }: { stats: Stats }) {
             icon={Calendar}
             accent="#0891b2"
             href="/admin/events"
+          />
+          <MetricCard
+            label="Inscriptions aux événements"
+            value={fmt(stats.totalRegistrations)}
+            sub={stats.weekRegistrations > 0
+              ? `dont ${fmt(stats.weekRegistrations)} cette semaine`
+              : "aucune nouvelle cette semaine"}
+            icon={ClipboardList}
+            accent="#16a34a"
+            href="/admin/registrations"
+            highlight={stats.weekRegistrations > 0}
+          />
+          <MetricCard
+            label="Abstracts soumis"
+            value={fmt(stats.totalAbstracts)}
+            sub={stats.pendingAbstracts > 0
+              ? `${fmt(stats.pendingAbstracts)} en attente d'évaluation`
+              : "tous évalués"}
+            icon={FileSignature}
+            accent="#9333ea"
+            href="/admin/abstracts"
+            highlight={stats.pendingAbstracts > 0}
           />
           <MetricCard
             label="Médiathèque"

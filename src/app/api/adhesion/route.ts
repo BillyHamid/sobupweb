@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getBccList } from "@/lib/mail";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
+import {
+  sendMail, escapeHtml, emailHeader, emailFooter, SECRETARIAT,
+} from "@/lib/mail";
 
 type Body = {
   prenom?: string;
@@ -17,34 +16,10 @@ type Body = {
   honeypot?: string;
 };
 
-const SECRETARIAT = process.env.SOBUP_SECRETARIAT_EMAIL ?? "ouattarabillyhamid@gmail.com";
-const FROM = process.env.RESEND_FROM ?? "SOBUP <onboarding@resend.dev>";
 const ADMIN_URL =
   process.env.NEXT_PUBLIC_SITE_URL
     ? `${process.env.NEXT_PUBLIC_SITE_URL}/admin`
     : "http://localhost:3000/admin";
-const LOGO_CID = "sobup-logo";
-
-let logoCache: string | null = null;
-async function getLogoBase64() {
-  if (logoCache) return logoCache;
-  try {
-    const file = await readFile(path.join(process.cwd(), "public", "logo.png"));
-    logoCache = file.toString("base64");
-    return logoCache;
-  } catch {
-    return null;
-  }
-}
-
-function escapeHtml(s: string) {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
 
 export async function POST(req: Request) {
   let body: Body;
@@ -99,29 +74,22 @@ export async function POST(req: Request) {
     );
   }
 
-  // 2) Emails (Resend) — non bloquant si pas de clé
-  const apiKey = process.env.RESEND_API_KEY;
-  if (apiKey) {
-    const resend = new Resend(apiKey);
-    const safe = {
-      prenom: escapeHtml(String(prenom)),
-      nom: escapeHtml(String(nom)),
-      email: escapeHtml(String(email)),
-      telephone: escapeHtml(String(telephone)),
-      specialite: specialite ? escapeHtml(String(specialite)) : "—",
-      etablissement: etablissement ? escapeHtml(String(etablissement)) : "—",
-      ville: ville ? escapeHtml(String(ville)) : "—",
-      payment_method: payment_method ? escapeHtml(String(payment_method)) : "—",
-    };
+  // 2) Emails — la demande est déjà enregistrée, un échec d'envoi
+  //    ne doit pas faire croire à l'utilisateur que rien n'a été reçu.
+  const safe = {
+    prenom: escapeHtml(String(prenom)),
+    nom: escapeHtml(String(nom)),
+    email: escapeHtml(String(email)),
+    telephone: escapeHtml(String(telephone)),
+    specialite: specialite ? escapeHtml(String(specialite)) : "—",
+    etablissement: etablissement ? escapeHtml(String(etablissement)) : "—",
+    ville: ville ? escapeHtml(String(ville)) : "—",
+    payment_method: payment_method ? escapeHtml(String(payment_method)) : "—",
+  };
 
-    const logoBase64 = await getLogoBase64();
-    const attachments = logoBase64
-      ? [{ filename: "logo.png", content: logoBase64, contentId: LOGO_CID }]
-      : undefined;
+  const header = emailHeader();
 
-    const header = `<div style="background:linear-gradient(135deg,#0B3D38 0%,#065E52 55%,#31B9AE 100%);padding:24px;text-align:center;border-radius:16px 16px 0 0"><img src="cid:${LOGO_CID}" alt="SOBUP" width="64" height="64" style="background:#fff;padding:6px;border-radius:50%"/><p style="margin:10px 0 0;color:#fff;font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase">Société Burkinabè de Pneumologie</p></div>`;
-
-    const adminHtml = `
+  const adminHtml = `
       <div style="font-family:system-ui;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
         ${header}
         <div style="padding:24px">
@@ -143,8 +111,8 @@ export async function POST(req: Request) {
         </div>
       </div>`;
 
-    const userHtml = `
-      <div style="font-family:system-ui;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
+  const userHtml = `
+      <div style="font-family:system-ui,-apple-system,sans-serif;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
         ${header}
         <div style="padding:32px;text-align:center">
           <div style="display:inline-block;width:52px;height:52px;border-radius:50%;background:#fff7ed;line-height:52px;margin-bottom:14px">
@@ -162,33 +130,36 @@ export async function POST(req: Request) {
           </div>
           <p style="color:#94a3b8;font-size:12px;line-height:1.6;margin:18px 0 0">Pour toute question, vous pouvez répondre à ce mail ou contacter <a href="mailto:${SECRETARIAT}" style="color:#31B9AE">${SECRETARIAT}</a>.</p>
         </div>
-        <div style="padding:14px 24px;border-top:1px solid #e2e8f0;text-align:center;background:#f8fafc;border-radius:0 0 16px 16px">
-          <p style="margin:0;font-size:11px;color:#94a3b8">SOBUP — Société Burkinabè de Pneumologie · Ouagadougou, Burkina Faso</p>
-        </div>
+        ${emailFooter()}
       </div>`;
 
-    try {
-      await resend.emails.send({
-        from: FROM,
+  const [secResult, userResult] = await Promise.all([
+    sendMail(
+      {
         to: SECRETARIAT,
-        bcc: getBccList(),
         replyTo: String(email),
         subject: `🔔 Nouvelle adhésion — ${safe.prenom} ${safe.nom}`,
         html: adminHtml,
-        attachments,
-      });
-      await resend.emails.send({
-        from: FROM,
+      },
+      "adhesion/secretariat"
+    ),
+    sendMail(
+      {
         to: String(email),
-        bcc: getBccList(),
         subject: "Demande d'adhésion bien reçue — SOBUP",
         html: userHtml,
-        attachments,
-      });
-    } catch (err) {
-      console.warn("[adhesion] Resend error (non-bloquant)", err);
-    }
-  }
+      },
+      "adhesion/demandeur"
+    ),
+  ]);
 
-  return NextResponse.json({ ok: true, id: requestId }, { status: 201 });
+  // La demande est enregistrée : on renvoie un succès, mais on dit la vérité
+  // sur l'email pour que le formulaire puisse afficher un avertissement.
+  const warning = !userResult.sent
+    ? "Votre demande est bien enregistrée, mais l'email de confirmation n'a pas pu vous être envoyé. Le secrétariat a été prévenu."
+    : !secResult.sent
+      ? "Votre demande est bien enregistrée. La notification interne n'a pas pu être envoyée, contactez le secrétariat si vous n'avez pas de retour sous 48h."
+      : undefined;
+
+  return NextResponse.json({ ok: true, id: requestId, warning }, { status: 201 });
 }

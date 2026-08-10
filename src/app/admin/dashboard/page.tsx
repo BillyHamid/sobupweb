@@ -26,6 +26,10 @@ async function fetchStats() {
     weekPosts,
     weekEvents,
     weekApprovals,
+    totalRegistrations,
+    weekRegistrations,
+    totalAbstracts,
+    pendingAbstracts,
   ] = await Promise.all([
     supabase.from("site_stats").select("total_views").eq("id", 1).maybeSingle(),
     supabase.from("adhesion_requests").select("*", { count: "exact", head: true }).eq("status", "pending"),
@@ -43,6 +47,10 @@ async function fetchStats() {
     supabase.from("blog_posts").select("*", { count: "exact", head: true }).gte("created_at", weekAgo),
     supabase.from("events").select("*", { count: "exact", head: true }).gte("created_at", weekAgo),
     supabase.from("adhesion_requests").select("*", { count: "exact", head: true }).eq("status", "approved").gte("validated_at", weekAgo),
+    supabase.from("event_registrations").select("*", { count: "exact", head: true }),
+    supabase.from("event_registrations").select("*", { count: "exact", head: true }).gte("created_at", weekAgo),
+    supabase.from("abstracts").select("*", { count: "exact", head: true }),
+    supabase.from("abstracts").select("*", { count: "exact", head: true }).in("status", ["soumis", "en_evaluation"]),
   ]);
 
   return {
@@ -62,6 +70,10 @@ async function fetchStats() {
     weekPosts: weekPosts.count ?? 0,
     weekEvents: weekEvents.count ?? 0,
     weekApprovals: weekApprovals.count ?? 0,
+    totalRegistrations: totalRegistrations.count ?? 0,
+    weekRegistrations: weekRegistrations.count ?? 0,
+    totalAbstracts: totalAbstracts.count ?? 0,
+    pendingAbstracts: pendingAbstracts.count ?? 0,
   };
 }
 

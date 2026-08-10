@@ -131,17 +131,24 @@ export default async function JournalPage() {
               )}
 
               {highlights.length > 0 && (
-                <div className="grid sm:grid-cols-2 gap-3 mb-9">
-                  {highlights.map((h, i) => (
-                    <div key={`${h.label}-${i}`} className="flex items-start gap-3 px-4 py-3 rounded-xl"
-                      style={{ background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.12)" }}>
-                      <span className="text-xl shrink-0" aria-hidden>{h.icon}</span>
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold text-white leading-tight">{h.label}</p>
-                        <p className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,.6)" }}>{h.desc}</p>
+                <div className="mb-9">
+                  <p className="text-[11px] font-black uppercase tracking-[.2em] mb-3" style={{ color: "rgba(126,234,228,.75)" }}>
+                    Au sommaire
+                  </p>
+                  <div className={`grid gap-2.5 ${highlights.length > 6 ? "sm:grid-cols-2 lg:grid-cols-2" : "sm:grid-cols-2"}`}>
+                    {highlights.map((h, i) => (
+                      <div key={`${h.label}-${i}`} className="flex items-start gap-3 px-4 py-3 rounded-xl"
+                        style={{ background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.12)" }}>
+                        <span className="text-xl shrink-0 leading-none mt-0.5" aria-hidden>{h.icon}</span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-white leading-tight">{h.label}</p>
+                          {h.desc && (
+                            <p className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,.6)" }}>{h.desc}</p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               )}
 

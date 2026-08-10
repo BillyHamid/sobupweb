@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminAuthenticated } from "@/lib/supabase/adminAuth";
-import { getBccList } from "@/lib/mail";
-
-const FROM = process.env.RESEND_FROM ?? "SOBUP <onboarding@resend.dev>";
-const SECRETARIAT = process.env.SOBUP_SECRETARIAT_EMAIL ?? "ouattarabillyhamid@gmail.com";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import {
+  sendMail, escapeHtml, emailHeader, emailFooter, SECRETARIAT, SITE_URL,
+} from "@/lib/mail";
 
 function generatePassword(length = 12): string {
   const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -57,24 +54,25 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Erreur mise à jour du mot de passe." }, { status: 500 });
   }
 
-  // Mettre à jour la trace en BDD
-  await supabase
+  // Mémoriser le mot de passe pour la récupération par l'admin.
+  // La colonne peut manquer selon l'état des migrations : on continue quand
+  // même, l'envoi du mot de passe au membre est l'essentiel.
+  let passwordStored = true;
+  const { error: traceErr } = await supabase
     .from("adhesion_requests")
     .update({ generated_password: newPassword })
     .eq("id", id);
+  if (traceErr) {
+    passwordStored = false;
+    console.warn("[admin/reset-password] mot de passe non mémorisé :", traceErr.message);
+  }
 
-  // Envoyer email
-  const apiKey = process.env.RESEND_API_KEY;
-  if (apiKey) {
-    const resend = new Resend(apiKey);
-    const html = `
-      <div style="font-family:system-ui;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
-        <div style="background:linear-gradient(135deg,#0B3D38 0%,#065E52 55%,#31B9AE 100%);padding:24px;text-align:center">
-          <p style="margin:0;color:#fff;font-size:11px;font-weight:800;letter-spacing:.22em;text-transform:uppercase">Société Burkinabè de Pneumologie</p>
-        </div>
+  const html = `
+      <div style="font-family:system-ui,-apple-system,sans-serif;max-width:600px;margin:24px auto;background:#fff;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden">
+        ${emailHeader()}
         <div style="padding:32px">
           <h2 style="margin:0 0 12px;color:#0f172a;font-weight:800;font-size:20px">🔑 Nouveau mot de passe</h2>
-          <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 14px">Bonjour <strong>${request.prenom}</strong>,</p>
+          <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 14px">Bonjour <strong>${escapeHtml(request.prenom)}</strong>,</p>
           <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 18px">Le Bureau SOBUP a réinitialisé votre mot de passe. Voici vos nouveaux identifiants :</p>
           <div style="margin:20px 0;padding:18px;background:#E8F9F7;border:1px solid #31B9AE40;border-radius:12px">
             <p style="margin:0 0 6px;font-size:11px;font-weight:800;color:#065E52;text-transform:uppercase;letter-spacing:.1em">Email</p>
@@ -87,20 +85,32 @@ export async function POST(req: Request) {
           </div>
           <p style="color:#94a3b8;font-size:12px;line-height:1.6;margin:18px 0 0">🔒 L'ancien mot de passe ne fonctionne plus. Pour toute question : <a href="mailto:${SECRETARIAT}" style="color:#31B9AE">${SECRETARIAT}</a>.</p>
         </div>
+        ${emailFooter()}
       </div>`;
 
-    try {
-      await resend.emails.send({
-        from: FROM,
-        to: request.email,
-        bcc: getBccList(),
-        subject: "🔑 Réinitialisation de votre mot de passe SOBUP",
-        html,
-      });
-    } catch (err) {
-      console.warn("[admin/reset-password] Resend error", err);
-    }
+  const mail = await sendMail(
+    {
+      to: request.email,
+      replyTo: SECRETARIAT,
+      subject: "🔑 Réinitialisation de votre mot de passe SOBUP",
+      html,
+    },
+    "reset-password"
+  );
+
+  const warnings: string[] = [];
+  if (!mail.sent) {
+    warnings.push(`L'email n'a pas pu être envoyé au membre (${mail.error}) — communiquez-lui le mot de passe ci-dessus.`);
+  }
+  if (!passwordStored) {
+    warnings.push("Mot de passe non mémorisé pour la récupération admin — lancez la migration SQL.");
   }
 
-  return NextResponse.json({ ok: true, newPassword });
+  // `newPassword` était déjà renvoyé : le Bureau l'affiche dans le back-office.
+  return NextResponse.json({
+    ok: true,
+    newPassword,
+    emailSent: mail.sent,
+    warning: warnings.length ? warnings.join(" ") : undefined,
+  });
 }

@@ -50,13 +50,14 @@ export default function AdhesionsDashboard({
   const [busyId, setBusyId] = useState<string | null>(null);
   // Inversion : on liste ceux MASQUÉS. Par défaut, tous les mots de passe sont visibles.
   const [hidden, setHidden] = useState<Set<string>>(new Set());
-  const [toast, setToast] = useState<{ type: "ok" | "err"; msg: string } | null>(null);
+  const [toast, setToast] = useState<{ type: "ok" | "err" | "warn"; msg: string } | null>(null);
   const [rejectingId, setRejectingId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
 
-  function flash(type: "ok" | "err", msg: string) {
+  function flash(type: "ok" | "err" | "warn", msg: string) {
     setToast({ type, msg });
-    setTimeout(() => setToast(null), 4500);
+    // Un avertissement demande une action du Bureau : on le laisse plus longtemps.
+    setTimeout(() => setToast(null), type === "ok" ? 4500 : 12000);
   }
   function toggleHide(id: string) {
     setHidden((s) => {
@@ -84,7 +85,11 @@ export default function AdhesionsDashboard({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) { flash("err", data.error ?? "Erreur."); return; }
-      flash("ok", `✓ Compte créé. Identifiants envoyés à ${req.email}`);
+      if (data.warning) {
+        flash("warn", data.warning);
+      } else {
+        flash("ok", `✓ Compte créé. Identifiants envoyés à ${req.email}`);
+      }
       startTransition(() => router.refresh());
     } catch { flash("err", "Connexion impossible."); }
     finally { setBusyId(null); }
@@ -100,7 +105,8 @@ export default function AdhesionsDashboard({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) { flash("err", data.error ?? "Erreur."); return; }
-      flash("ok", "Demande refusée. Email envoyé à l'adhérent.");
+      if (data.warning) flash("warn", data.warning);
+      else flash("ok", "Demande refusée. Email envoyé à l'adhérent.");
       setRejectingId(null); setRejectReason("");
       startTransition(() => router.refresh());
     } catch { flash("err", "Connexion impossible."); }
@@ -117,7 +123,11 @@ export default function AdhesionsDashboard({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) { flash("err", data.error ?? "Erreur."); return; }
-      flash("ok", `✓ Nouveau mot de passe envoyé à ${req.email}`);
+      if (data.warning) {
+        flash("warn", `${data.warning} Nouveau mot de passe : ${data.newPassword}`);
+      } else {
+        flash("ok", `✓ Nouveau mot de passe envoyé à ${req.email}`);
+      }
       startTransition(() => router.refresh());
     } catch { flash("err", "Connexion impossible."); }
     finally { setBusyId(null); }
@@ -130,11 +140,11 @@ export default function AdhesionsDashboard({
 
   return (
     <div>
-      <div className="px-8 py-6 border-b border-gray-100 bg-white sticky top-0 z-30">
+      <div className="px-4 sm:px-8 py-5 sm:py-6 border-b border-gray-100 bg-white sticky top-0 z-30">
         <h1 className="text-xl font-black text-gray-900">Gestion des adhésions</h1>
         <p className="text-sm text-gray-500 mt-0.5">Valider, refuser ou consulter les demandes</p>
       </div>
-      <div className="px-8 py-6">
+      <div className="px-4 sm:px-8 py-5 sm:py-6">
         {/* Stats hebdo */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           <StatCard label="Cette semaine" value={stats.pending} sub="en attente" color="#e67e22" />
@@ -174,15 +184,18 @@ export default function AdhesionsDashboard({
 
       {/* Toast */}
       {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-xl shadow-2xl font-bold text-sm text-white animate-fade-up"
-          style={{ background: toast.type === "ok" ? "#31B9AE" : "#dc2626" }}>
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-lg px-5 py-3 rounded-xl shadow-2xl font-bold text-sm text-white animate-fade-up"
+          style={{
+            background:
+              toast.type === "ok" ? "#31B9AE" : toast.type === "warn" ? "#d97706" : "#dc2626",
+          }}>
           {toast.msg}
         </div>
       )}
 
       {/* Modal refus */}
       {rejectingId && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto"
           onClick={(e) => { if (e.target === e.currentTarget) setRejectingId(null); }}>
           <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
             <h3 className="font-black text-gray-900 text-lg mb-2">Refuser la demande</h3>
