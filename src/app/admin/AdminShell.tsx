@@ -6,7 +6,7 @@ import { useEffect, useState, useTransition } from "react";
 import {
   LayoutDashboard, Inbox, Newspaper, Calendar, Users, Image as ImageIcon,
   FileText, BookOpen, Settings, LogOut, RefreshCw, Mail, Menu, X,
-  ClipboardList, FileSignature,
+  ClipboardList, FileSignature, Vote,
 } from "lucide-react";
 
 type NavItem = {
@@ -23,6 +23,8 @@ const NAV: NavItem[] = [
   { href: "/admin/newsletters", label: "Newsletters", icon: Mail, enabled: true },
   { href: "/admin/events", label: "Événements", icon: Calendar, enabled: true },
   { href: "/admin/registrations", label: "Inscriptions", icon: ClipboardList, enabled: true },
+  { href: "/admin/formations", label: "Formations", icon: BookOpen, enabled: true },
+  { href: "/admin/sondages", label: "Sondages", icon: Vote, enabled: true },
   { href: "/admin/abstracts", label: "Abstracts", icon: FileSignature, enabled: true },
   { href: "/admin/members", label: "Membres", icon: Users, enabled: true },
   { href: "/admin/media", label: "Médiathèque", icon: ImageIcon, enabled: true },
@@ -36,9 +38,6 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // Ferme le drawer à chaque navigation
-  useEffect(() => { setDrawerOpen(false); }, [pathname]);
 
   // Bloque le scroll du body quand le drawer est ouvert
   useEffect(() => {
@@ -96,7 +95,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
             );
           }
           return (
-            <Link key={item.href} href={item.href} className={cls} style={style}>
+            <Link key={item.href} href={item.href} onClick={() => setDrawerOpen(false)} className={cls} style={style}>
               <Icon className="w-4 h-4 shrink-0" />
               <span>{item.label}</span>
             </Link>

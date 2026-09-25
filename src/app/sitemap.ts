@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { createPublicClient } from "@/lib/supabase/server";
+import { FORMATIONS } from "@/data/formations";
 
 const SITE_URL = "https://www.sobup.online";
 
@@ -17,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/a-propos`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/gtt`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/evenements`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/formations`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/recommandations`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/mediatheque`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
@@ -66,5 +68,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.warn("[sitemap] Impossible de charger les articles de blog :", err);
   }
 
-  return [...staticPages, ...gttPages, ...eventPages, ...blogPages];
+  const formationPages: MetadataRoute.Sitemap = FORMATIONS.map(({ slug }) => ({
+    url: `${SITE_URL}/formations/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...formationPages, ...gttPages, ...eventPages, ...blogPages];
 }
