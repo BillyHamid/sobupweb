@@ -7,10 +7,11 @@ export const FORMATIONS = [
     title: "RESPIRE-BF",
     subtitle: "Formation en recherche et méthodologie",
     category: "Recherche en santé",
+    image: "/affiches/respire-bf-affiche.png",
     description: "De la conception d’un protocole à la publication scientifique et au montage de projets : développez votre pratique de la recherche.",
     format: "Hybride · En ligne et présentiel",
     modules: RESPIRE_MODULES.length,
     hours: RESPIRE_MODULES.reduce((total, module) => total + module.hours, 0),
-    schedule: "Dates à venir",
+    schedule: "En ligne : 23 nov. – 19 déc. 2026 · Présentiel : 4 – 9 janv. 2027",
   },
 ];
