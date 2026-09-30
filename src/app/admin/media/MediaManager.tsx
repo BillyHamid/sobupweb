@@ -4,7 +4,7 @@ import { uploadDirect } from "@/lib/uploadDirect";
 import { useState, useTransition, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Plus, Trash2, Image as ImageIcon, Video, FileText, Upload, Loader2,
+  Trash2, Image as ImageIcon, Video, FileText, Upload, Loader2,
   X, AlertTriangle, Eye, EyeOff, Star, Pencil, Save,
 } from "lucide-react";
 
@@ -58,11 +58,6 @@ type EditState = {
   display_date: string;
   featured: boolean;
   published: boolean;
-};
-
-const EMPTY: EditState = {
-  title: "", description: "", album_ordinal: "", album_year: "",
-  gtt: "", display_date: "", featured: false, published: true,
 };
 
 export default function MediaManager({ initialItems, loadError }: { initialItems: MediaItem[]; loadError: string | null }) {

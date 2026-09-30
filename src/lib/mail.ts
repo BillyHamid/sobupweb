@@ -81,6 +81,8 @@ export type SendMailOptions = {
   bcc?: boolean;
   /** Joint le logo en CID pour que `emailHeader()` s'affiche (défaut : oui). */
   logo?: boolean;
+  /** Pièces jointes supplémentaires, contenu encodé en base64. */
+  attachments?: { filename: string; content: string }[];
 };
 
 /**
@@ -98,12 +100,12 @@ export async function sendMail(
     return { sent: false, error };
   }
 
-  const attachments =
-    opts.logo === false
-      ? undefined
-      : await getLogoBase64().then((b64) =>
-          b64 ? [{ filename: "logo.png", content: b64, contentId: LOGO_CID }] : undefined
-        );
+  const attachments: { filename: string; content: string; contentId?: string }[] = [];
+  if (opts.logo !== false) {
+    const b64 = await getLogoBase64();
+    if (b64) attachments.push({ filename: "logo.png", content: b64, contentId: LOGO_CID });
+  }
+  if (opts.attachments?.length) attachments.push(...opts.attachments);
 
   try {
     const resend = new Resend(apiKey);
@@ -114,7 +116,7 @@ export async function sendMail(
       replyTo: opts.replyTo,
       subject: opts.subject,
       html: opts.html,
-      attachments,
+      attachments: attachments.length ? attachments : undefined,
     });
 
     // Le SDK ne throw pas : c'est ICI que se trouvent les vrais refus.

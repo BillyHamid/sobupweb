@@ -68,7 +68,10 @@ export default function JourneeInscriptionButton({
   const isSpecialiste = form.fonction === "Médecin spécialiste";
   const isEHU = form.estEHU === "oui";
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    const task = window.setTimeout(() => setMounted(true), 0);
+    return () => window.clearTimeout(task);
+  }, []);
 
   useEffect(() => {
     if (!open) return;

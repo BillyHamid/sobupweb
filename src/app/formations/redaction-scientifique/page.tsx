@@ -154,10 +154,10 @@ export default function RedactionScientifiquePage() {
                 <span style={{ color: "#31B9AE" }}>de la pneumologie africaine</span>
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                L'Afrique subsaharienne ne contribue qu'à <strong>2 % de la production scientifique mondiale</strong>, alors qu'elle supporte l'un des fardeaux de morbidité les plus lourds. En pneumologie, tuberculose, pneumonies, asthme et BPCO représentent des millions de cas — sans les données locales nécessaires pour guider les politiques de santé.
+                L&apos;Afrique subsaharienne ne contribue qu&apos;à <strong>2 % de la production scientifique mondiale</strong>, alors qu&apos;elle supporte l&apos;un des fardeaux de morbidité les plus lourds. En pneumologie, tuberculose, pneumonies, asthme et BPCO représentent des millions de cas — sans les données locales nécessaires pour guider les politiques de santé.
               </p>
               <p className="text-gray-600 leading-relaxed mb-6">
-                La SOBUP s'engage à inverser cette tendance en dotant ses membres des compétences pour <strong>rechercher, écrire, publier et obtenir des financements</strong>. Une formation structurée en 4 modules, du PubMed au grant EDCTP, ancrée dans les réalités du contexte burkinabè.
+                La SOBUP s&apos;engage à inverser cette tendance en dotant ses membres des compétences pour <strong>rechercher, écrire, publier et obtenir des financements</strong>. Une formation structurée en 4 modules, du PubMed au grant EDCTP, ancrée dans les réalités du contexte burkinabè.
               </p>
               <div className="flex flex-col gap-3">
                 {[
@@ -181,7 +181,7 @@ export default function RedactionScientifiquePage() {
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
               </svg>
               <p className="text-white text-lg font-semibold leading-relaxed mb-6 italic">
-                « La recherche médicale africaine existe. Elle manque de visibilité, non de valeur. Former les praticiens à publier et à obtenir des financements, c'est investir dans la santé de millions de patients. »
+                « La recherche médicale africaine existe. Elle manque de visibilité, non de valeur. Former les praticiens à publier et à obtenir des financements, c&apos;est investir dans la santé de millions de patients. »
               </p>
               <div className="border-t border-white/20 pt-4 mb-6">
                 <p className="text-white/60 text-xs">Programme de renforcement des capacités SOBUP</p>
@@ -217,7 +217,7 @@ export default function RedactionScientifiquePage() {
           </div>
 
           <div className="space-y-8">
-            {modules.map((mod, idx) => (
+            {modules.map((mod) => (
               <div key={mod.num} className="bg-background rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="grid lg:grid-cols-3">
                   {/* En-tête module */}
@@ -339,7 +339,7 @@ export default function RedactionScientifiquePage() {
               Livrables
             </span>
             <h2 className="text-3xl font-black text-gray-900">Ce que vous produirez</h2>
-            <p className="text-gray-500 mt-2">Un livrable concret à l'issue de chaque module</p>
+            <p className="text-gray-500 mt-2">Un livrable concret à l&apos;issue de chaque module</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
@@ -377,7 +377,7 @@ export default function RedactionScientifiquePage() {
                 style={{ background: "#E8F9F7", color: "#31B9AE" }}>
                 Public cible
               </span>
-              <h2 className="text-2xl font-black text-gray-900 mb-6">À qui s'adresse cette formation ?</h2>
+              <h2 className="text-2xl font-black text-gray-900 mb-6">À qui s&apos;adresse cette formation ?</h2>
               <div className="space-y-3">
                 {[
                   { icon: "🫁", label: "Pneumologues en exercice", desc: "Souhaitant valoriser leurs cas cliniques et études dans des revues indexées" },
@@ -433,7 +433,7 @@ export default function RedactionScientifiquePage() {
               style={{ background: "#E8F9F7", color: "#31B9AE" }}>
               Conseils
             </span>
-            <h2 className="text-3xl font-black text-gray-900">8 règles d'or pour publier</h2>
+            <h2 className="text-3xl font-black text-gray-900">8 règles d&apos;or pour publier</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
@@ -469,7 +469,7 @@ export default function RedactionScientifiquePage() {
             <Link href="/adhesion"
               className="px-8 py-3.5 rounded-xl font-black text-white text-sm shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
               style={{ background: "#e67e22" }}>
-              S'inscrire à la formation →
+              S&apos;inscrire à la formation →
             </Link>
             <Link href="/contact"
               className="px-8 py-3.5 rounded-xl font-black text-sm border-2 transition-all hover:-translate-y-0.5"

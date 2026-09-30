@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { getBccList } from "@/lib/mail";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { submissionsClosed, SUBMISSION_DEADLINE_LABEL } from "@/lib/abstracts";
 
 const SECRETARIAT = process.env.SOBUP_SECRETARIAT_EMAIL ?? "ouattarabillyhamid@gmail.com";
 const FROM = process.env.RESEND_FROM ?? "SOBUP <onboarding@resend.dev>";
@@ -57,6 +58,15 @@ export async function POST(req: Request) {
     const v = form.get(k);
     return typeof v === "string" ? v.trim() : "";
   };
+
+  // Refus des soumissions tardives. Inactif tant que ENFORCE_DEADLINE est à
+  // false : la date affichée reste alors purement indicative.
+  if (submissionsClosed()) {
+    return NextResponse.json(
+      { error: `Les soumissions sont closes depuis le ${SUBMISSION_DEADLINE_LABEL}. Contactez le secrétariat si votre situation le justifie.` },
+      { status: 403 }
+    );
+  }
 
   // Honeypot anti-bot
   if (get("honeypot") !== "") {

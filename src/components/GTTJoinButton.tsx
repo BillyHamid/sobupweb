@@ -48,7 +48,8 @@ function GTTJoinButtonInner({ gttName, gttColor, label = "Rejoindre ce groupe", 
   // Auto-ouvrir le formulaire si on revient avec ?join=1 et qu'on est connecté
   useEffect(() => {
     if (user && !alreadyMember && searchParams?.get("join") === "1") {
-      setOpen(true);
+      const task = window.setTimeout(() => setOpen(true), 0);
+      return () => window.clearTimeout(task);
     }
   }, [user, alreadyMember, searchParams]);
 

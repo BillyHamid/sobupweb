@@ -7,7 +7,7 @@
 3. Déployer les modifications et vérifier le catalogue `/formations`, la fiche et son formulaire `/formations/respire-bf`, puis `/admin/formations`.
 4. Dans un environnement de test, déposer un CV fictif, avec et sans lettre, puis télécharger les documents depuis l’administration. Vérifier que le téléchargement sans session admin renvoie 401 et que les fichiers ne sont pas accessibles par une URL publique.
 
-La candidature ne déclenche ni email, ni paiement, ni admission automatique. Une référence est affichée uniquement après enregistrement confirmé. Les dates et le lieu restent à renseigner. Les tarifs et le programme proviennent de `RESPIRE_BF_V0_VSPE.docx` fourni par le porteur du projet.
+La candidature ne déclenche ni email, ni paiement, ni admission automatique. Une référence est affichée uniquement après enregistrement confirmé. La formation en ligne est prévue du 23 novembre au 19 décembre 2026 ; le présentiel du 4 au 9 janvier 2027. Le lieu des ateliers reste à préciser. Les tarifs et le programme proviennent de `RESPIRE_BF_V0_VSPE.docx` fourni par le porteur du projet.
 
 ## Vérifications locales
 

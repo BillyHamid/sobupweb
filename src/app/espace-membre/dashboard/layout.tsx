@@ -18,7 +18,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const task = window.setTimeout(() => setMounted(true), 0);
+    return () => window.clearTimeout(task);
   }, []);
 
   useEffect(() => {

@@ -149,14 +149,14 @@ export default function EchographieThoraciquePage() {
                 Pourquoi se former ?
               </span>
               <h2 className="text-3xl font-black text-gray-900 mb-5 leading-tight">
-                L'échographie thoracique,<br />
+                L&apos;échographie thoracique,<br />
                 <span style={{ color: "#31B9AE" }}>nouveau stéthoscope du pneumologue</span>
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                En Afrique subsaharienne, l'accès au scanner et à la radiographie reste limité dans de nombreuses structures de soins. L'échographie thoracique de point-of-care (POCUS) s'impose comme la réponse : portable, immédiate, sans irradiation, et dont la précision diagnostique dépasse la radiographie conventionnelle pour les épanchements, pneumonies et pneumothorax.
+                En Afrique subsaharienne, l&apos;accès au scanner et à la radiographie reste limité dans de nombreuses structures de soins. L&apos;échographie thoracique de point-of-care (POCUS) s&apos;impose comme la réponse : portable, immédiate, sans irradiation, et dont la précision diagnostique dépasse la radiographie conventionnelle pour les épanchements, pneumonies et pneumothorax.
               </p>
               <p className="text-gray-600 leading-relaxed mb-6">
-                Cette formation de 2 jours vous donne les bases théoriques et la pratique supervisée nécessaires pour intégrer l'échographie thoracique dans votre exercice quotidien dès le lendemain de la formation.
+                Cette formation de 2 jours vous donne les bases théoriques et la pratique supervisée nécessaires pour intégrer l&apos;échographie thoracique dans votre exercice quotidien dès le lendemain de la formation.
               </p>
               <div className="flex flex-col gap-3">
                 {[
@@ -179,7 +179,7 @@ export default function EchographieThoraciquePage() {
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
               </svg>
               <p className="text-white text-lg font-semibold leading-relaxed mb-6 italic">
-                « L'échographie pulmonaire au point d'intervention est un outil clinique de premier ordre : sa courbe d'apprentissage est courte, sa précision diagnostique est supérieure à la radiographie conventionnelle pour de nombreuses pathologies. »
+                « L&apos;échographie pulmonaire au point d&apos;intervention est un outil clinique de premier ordre : sa courbe d&apos;apprentissage est courte, sa précision diagnostique est supérieure à la radiographie conventionnelle pour de nombreuses pathologies. »
               </p>
               <div className="border-t border-white/20 pt-4">
                 <p className="text-white/90 text-sm font-bold">Lichtenstein DA, Mezière GA.</p>
@@ -209,7 +209,7 @@ export default function EchographieThoraciquePage() {
               Programme
             </span>
             <h2 className="text-3xl font-black text-gray-900">Contenu de la formation</h2>
-            <p className="text-gray-500 mt-2 max-w-xl mx-auto">2 jours intensifs — 16 heures dont 6h d'ateliers pratiques supervisés en petits groupes</p>
+            <p className="text-gray-500 mt-2 max-w-xl mx-auto">2 jours intensifs — 16 heures dont 6h d&apos;ateliers pratiques supervisés en petits groupes</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8">
@@ -371,7 +371,7 @@ export default function EchographieThoraciquePage() {
                 style={{ background: "#E8F9F7", color: "#31B9AE" }}>
                 Public cible
               </span>
-              <h2 className="text-3xl font-black text-gray-900 mb-6">À qui s'adresse cette formation ?</h2>
+              <h2 className="text-3xl font-black text-gray-900 mb-6">À qui s&apos;adresse cette formation ?</h2>
               <div className="grid sm:grid-cols-2 gap-3">
                 {publics.map((p) => (
                   <div key={p.label} className="flex items-center gap-3 p-4 rounded-xl border border-gray-100 hover:border-primary/30 transition-colors">
@@ -385,7 +385,7 @@ export default function EchographieThoraciquePage() {
               </div>
               <div className="mt-6 p-4 rounded-xl border-l-4" style={{ borderColor: "#31B9AE", background: "#f0fafa" }}>
                 <p className="text-sm font-bold text-gray-900 mb-1">Prérequis</p>
-                <p className="text-sm text-gray-600">Être titulaire d'un diplôme de médecin ou être en formation médicale supervisée. Aucune expérience préalable en échographie n'est requise pour le niveau 1.</p>
+                <p className="text-sm text-gray-600">Être titulaire d&apos;un diplôme de médecin ou être en formation médicale supervisée. Aucune expérience préalable en échographie n&apos;est requise pour le niveau 1.</p>
               </div>
             </div>
 
@@ -421,15 +421,15 @@ export default function EchographieThoraciquePage() {
       {/* ── CTA ── */}
       <section className="py-16" style={{ background: "linear-gradient(135deg, #0B3D38 0%, #065E52 100%)" }}>
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <h2 className="text-3xl font-black text-white mb-4">Prêt à maîtriser l'échographie thoracique ?</h2>
+          <h2 className="text-3xl font-black text-white mb-4">Prêt à maîtriser l&apos;échographie thoracique ?</h2>
           <p className="text-white/75 mb-8 text-lg">
-            Rejoignez les pneumologues qui intègrent l'imagerie au point d'intervention dans leur pratique quotidienne. Places limitées — inscrivez-vous dès maintenant.
+            Rejoignez les pneumologues qui intègrent l&apos;imagerie au point d&apos;intervention dans leur pratique quotidienne. Places limitées — inscrivez-vous dès maintenant.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/adhesion"
               className="px-8 py-3.5 rounded-xl font-black text-white text-sm shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
               style={{ background: "#e67e22" }}>
-              S'inscrire à la formation →
+              S&apos;inscrire à la formation →
             </Link>
             <Link href="/contact"
               className="px-8 py-3.5 rounded-xl font-black text-sm border-2 transition-all hover:-translate-y-0.5"

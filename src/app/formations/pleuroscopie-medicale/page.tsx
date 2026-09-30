@@ -166,7 +166,7 @@ export default function PleuroscopieMedicalePage() {
             <div>
               <span className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4"
                 style={{ background: "#E8F9F7", color: "#31B9AE" }}>
-                Qu'est-ce que la pleuroscopie médicale ?
+                Qu&apos;est-ce que la pleuroscopie médicale ?
               </span>
               <h2 className="text-3xl font-black text-gray-900 mb-5 leading-tight">
                 Le regard direct<br />
@@ -176,7 +176,7 @@ export default function PleuroscopieMedicalePage() {
                 La <strong>pleuroscopie médicale</strong> — également appelée thoracoscopie médicale — est un examen endoscopique de la cavité pleurale réalisé par le pneumologue, sous anesthésie locale et sédation consciente. Elle se distingue de la thoracoscopie chirurgicale (VATS) par sa réalisation en dehors du bloc opératoire, sous ventilation spontanée.
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
-                En Afrique, les pleurésies représentent une cause majeure de consultation en pneumologie. Tuberculose, cancers pleuraux, mésothéliome : autant de pathologies pour lesquelles la pleuroscopie offre un <strong>rendement diagnostique incomparable</strong> — là où les biopsies à l'aveugle échouent dans plus de 40% des cas.
+                En Afrique, les pleurésies représentent une cause majeure de consultation en pneumologie. Tuberculose, cancers pleuraux, mésothéliome : autant de pathologies pour lesquelles la pleuroscopie offre un <strong>rendement diagnostique incomparable</strong> — là où les biopsies à l&apos;aveugle échouent dans plus de 40% des cas.
               </p>
               <p className="text-gray-600 leading-relaxed mb-6">
                 Sur le plan thérapeutique, le talcage pleural sous pleuroscopie constitue le <strong>gold standard</strong> pour la symphyse pleurale dans les épanchements malins récidivants, avec une efficacité de 90 à 95%.
@@ -235,7 +235,7 @@ export default function PleuroscopieMedicalePage() {
               Programme
             </span>
             <h2 className="text-3xl font-black text-gray-900">Contenu de la formation</h2>
-            <p className="text-gray-500 mt-2 max-w-xl mx-auto">2 jours intensifs — 16 heures dont 6h d'ateliers sur simulateur et modèles ex vivo, en petits groupes</p>
+            <p className="text-gray-500 mt-2 max-w-xl mx-auto">2 jours intensifs — 16 heures dont 6h d&apos;ateliers sur simulateur et modèles ex vivo, en petits groupes</p>
           </div>
           <div className="grid lg:grid-cols-2 gap-8">
             {programme.map((jour) => (
@@ -346,7 +346,7 @@ export default function PleuroscopieMedicalePage() {
                 style={{ background: "#E8F9F7", color: "#31B9AE" }}>
                 Public cible
               </span>
-              <h2 className="text-2xl font-black text-gray-900 mb-6">À qui s'adresse cette formation ?</h2>
+              <h2 className="text-2xl font-black text-gray-900 mb-6">À qui s&apos;adresse cette formation ?</h2>
               <div className="space-y-3">
                 {[
                   { icon: "🫁", label: "Pneumologues en exercice", desc: "Compétence essentielle dans la prise en charge des pathologies pleurales" },
@@ -413,7 +413,7 @@ export default function PleuroscopieMedicalePage() {
             <Link href="/adhesion"
               className="px-8 py-3.5 rounded-xl font-black text-white text-sm shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
               style={{ background: "#e67e22" }}>
-              S'inscrire à la formation →
+              S&apos;inscrire à la formation →
             </Link>
             <Link href="/contact"
               className="px-8 py-3.5 rounded-xl font-black text-sm border-2 transition-all hover:-translate-y-0.5"

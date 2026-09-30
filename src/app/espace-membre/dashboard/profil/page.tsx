@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { Camera, Mail, MapPin, Calendar, Briefcase, GraduationCap, Edit3, Save, X, Loader2, Check, AlertTriangle, Phone } from "lucide-react";
 import { useSessionUser, type SessionUser } from "@/lib/userSession";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -29,7 +30,6 @@ type Form = {
   etablissement: string;
 };
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CURRENT_YEAR = new Date().getFullYear();
 
 function toForm(p: Profile): Form {
@@ -338,7 +338,7 @@ export default function ProfilPage() {
                   </div>
                 ) : (
                   <p className="text-xs text-gray-400 italic">
-                    Vous n&apos;avez rejoint aucun GTT. <a href="/gtt" className="font-bold hover:underline" style={{ color: "#31B9AE" }}>Explorer les GTT →</a>
+                    Vous n&apos;avez rejoint aucun GTT. <Link href="/gtt" className="font-bold hover:underline" style={{ color: "#31B9AE" }}>Explorer les GTT →</Link>
                   </p>
                 )}
               </div>

@@ -1,5 +1,6 @@
 import PageHero from "@/components/PageHero";
 import AbstractForm from "./AbstractForm";
+import { SUBMISSION_WINDOW_LABEL } from "@/lib/abstracts";
 
 export default function AbstractsPage() {
   const annee = new Date().getFullYear();
@@ -18,7 +19,7 @@ export default function AbstractsPage() {
         title="Soumission d'abstracts"
         subtitle="Déposez vos travaux scientifiques — communications orales, posters, cas cliniques — pour la Journée Scientifique Régionale."
         breadcrumb={[{ label: "Accueil", href: "/" }, { label: "Abstracts" }]}
-        tag={`Journée Scientifique ${annee} — Soumissions du 31 Juillet au 30 Septembre`}
+        tag={`Journée Scientifique ${annee} — Soumissions ${SUBMISSION_WINDOW_LABEL}`}
         shape="sharp"
       />
 
@@ -29,7 +30,7 @@ export default function AbstractsPage() {
             <span className="text-3xl">⏰</span>
             <div>
               <p className="font-black text-amber-900">
-                Période de soumission : du 31 Juillet au 30 Septembre {annee}
+                Période de soumission prolongée : {SUBMISSION_WINDOW_LABEL}
               </p>
               <p className="text-sm text-amber-700">
                 Les abstracts acceptés seront notifiés après la clôture des soumissions. Les auteurs

@@ -77,7 +77,7 @@ export default function AdminLogin() {
           </button>
 
           <p className="text-[11px] text-gray-400 text-center leading-relaxed pt-2">
-            🔒 Ne partagez ce mot de passe qu'aux membres du Bureau.<br/>
+            🔒 Ne partagez ce mot de passe qu&apos;aux membres du Bureau.<br/>
             Session valable 7 jours après connexion.
           </p>
         </form>

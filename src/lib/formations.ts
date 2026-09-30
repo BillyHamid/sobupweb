@@ -4,6 +4,20 @@ export const RESPIRE_MODULES = [
   { id: 3, title: "Projet et Grant", weeks: 3, hours: 27, online: "2 semaines en ligne + 2 jours en présentiel", description: "Préparez une demande de financement ou un document de planification en santé, selon votre projet et votre profil.", outcome: "Un grant, un plan stratégique ou un plan d’action.", topics: ["Bailleurs et opportunités de financement", "Piste A : demande de financement", "Piste B : planification stratégique", "Finalisation du livrable et présentation devant jury"] },
 ] as const;
 
+/**
+ * Mêmes intitulés que les formulaires d'adhésion et de la Journée Régionale,
+ * plus « Autre » : RESPIRE-BF est une formation à la recherche, ouverte à des
+ * profils (pharmaciens, biologistes, sages-femmes…) que les quatre premiers
+ * choix ne couvrent pas.
+ */
+export const PROFESSIONS = [
+  "Médecin généraliste",
+  "Médecin spécialiste",
+  "Infirmier(ère)",
+  "Étudiant(e)",
+  "Autre",
+] as const;
+
 export const APPLICATION_BUCKET = "formation-applications";
 export const MAX_APPLICATION_FILE_SIZE = 2 * 1024 * 1024;
 export const APPLICATION_FILE_TYPES: Record<string, string> = {

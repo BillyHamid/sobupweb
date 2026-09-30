@@ -85,41 +85,6 @@ const _legacyUpcomingEvents = [
   },
 ];
 
-const latestNews = [
-  {
-    category: "Recommandations",
-    date: "5 Avr 2026",
-    title: "Nouvelles recommandations sur la tuberculose résistante au Burkina Faso",
-    excerpt: "Le GTT Tuberculose publie ses recommandations actualisées pour la prise en charge de la TB-MDR.",
-    gtt: "GT Tuberculose",
-    href: "/blog/recommandations-tb-mdr-2026",
-  },
-  {
-    category: "Recherche",
-    date: "28 Mar 2026",
-    title: "BPCO en Afrique subsaharienne : prévalence et facteurs de risque",
-    excerpt: "Revue de la littérature sur la BPCO dans notre région. Une étude menée par le GT Tabac & BPCO.",
-    gtt: "GT Tabac & BPCO",
-    href: "/blog/bpco-afrique-subsaharienne",
-  },
-  {
-    category: "Actualités",
-    date: "15 Mar 2026",
-    title: "8ème congrès SOBUP : plus de 200 participants réunis",
-    excerpt: "Retour sur le 8ème congrès annuel qui a réuni pneumologues, chercheurs et partenaires.",
-    gtt: null,
-    href: "/blog/bilan-8eme-congres",
-  },
-  {
-    category: "Formation",
-    date: "5 Mar 2026",
-    title: "Nouveau module e-learning : Imagerie thoracique pour cliniciens",
-    excerpt: "Le GT Imagerie thoracique lance un module de formation en ligne accessible à tous les membres.",
-    gtt: "GT Imagerie",
-    href: "/blog/module-elearning-imagerie",
-  },
-];
-
 
 
 /* ─── Page ─── */

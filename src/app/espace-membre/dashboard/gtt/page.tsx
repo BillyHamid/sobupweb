@@ -31,7 +31,8 @@ export default function MesGTTPage() {
   const [latestUser, setLatestUser] = useState<SessionUser | null>(null);
 
   useEffect(() => {
-    setLatestUser(getSessionUser());
+    const task = window.setTimeout(() => setLatestUser(getSessionUser()), 0);
+    return () => window.clearTimeout(task);
   }, [pathname]);
 
   // On prend le plus à jour des deux (par nombre de GTT)

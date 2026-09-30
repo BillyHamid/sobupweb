@@ -125,7 +125,7 @@ export function useSessionUser(): SessionUser | null {
 
   useEffect(() => {
     // Lecture initiale après hydration
-    refresh();
+    const task = window.setTimeout(refresh, 0);
 
     // Écoute des changements (même onglet)
     const onCustom = () => refresh();
@@ -144,6 +144,7 @@ export function useSessionUser(): SessionUser | null {
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
+      window.clearTimeout(task);
       window.removeEventListener(CHANGE_EVENT, onCustom);
       window.removeEventListener("storage", onStorage);
       document.removeEventListener("visibilitychange", onVisibility);

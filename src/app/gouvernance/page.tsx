@@ -1,4 +1,5 @@
 import PageHero from "@/components/PageHero";
+import Image from "next/image";
 
 const bureau = [
   { title: "Président", name: "Dr Abdoul Risgou OUEDRAOGO (MCA)", institution: "CHU Tengadogo", photo: "/bureau/dr-ouedraogo-abdoul-risgou.jpeg" },
@@ -45,10 +46,12 @@ export default function GouvernancePage() {
                   className={`relative flex items-center justify-center overflow-hidden ${member.photo ? "h-64" : "h-40"}`}
                   style={member.photo ? undefined : { background: "#E8F9F7" }}>
                   {member.photo ? (
-                    <img
+                    <Image
                       src={member.photo}
                       alt={`Portrait — ${member.name}`}
-                      className="w-full h-full object-cover object-top"
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover object-top"
                     />
                   ) : (
                     <div className="w-20 h-20 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-3xl"
@@ -84,7 +87,7 @@ export default function GouvernancePage() {
                 <div className={`relative flex items-center justify-center overflow-hidden ${h.photo ? "h-64" : "h-40"}`}
                   style={h.photo ? undefined : { background: "#fef0e6" }}>
                   {h.photo ? (
-                    <img src={h.photo} alt={`Portrait — ${h.name}`} className="w-full h-full object-cover object-top" />
+                    <Image src={h.photo} alt={`Portrait — ${h.name}`} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover object-top" />
                   ) : (
                     <div className="w-20 h-20 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-3xl"
                       style={{ background: "#f59e0b" }}>
@@ -152,10 +155,12 @@ export default function GouvernancePage() {
                   className={`relative flex items-center justify-center overflow-hidden ${person.photo ? "h-64" : "h-40"}`}
                   style={person.photo ? undefined : { background: "#E8F9F7" }}>
                   {person.photo ? (
-                    <img
+                    <Image
                       src={person.photo}
                       alt={`Portrait — ${person.name}`}
-                      className="w-full h-full object-cover object-top"
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover object-top"
                     />
                   ) : (
                     <div className="w-20 h-20 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-3xl"
@@ -188,7 +193,7 @@ export default function GouvernancePage() {
           <div className="inline-block">
             <div className="bg-background rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all group card-shadow text-center" style={{ width: "280px" }}>
               <div className="relative flex items-center justify-center overflow-hidden h-64">
-                <img src="/bureau/sylvie-dabone.jpeg" alt="Portrait — Sylvie DABONE" className="w-full h-full object-cover object-top" />
+                <Image src="/bureau/sylvie-dabone.jpeg" alt="Portrait — Sylvie DABONE" fill sizes="280px" className="object-cover object-top" />
               </div>
               <div className="p-4">
                 <p className="text-xs font-bold uppercase tracking-wide mb-1" style={{ color: "#5BCEC4" }}>

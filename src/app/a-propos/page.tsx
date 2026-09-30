@@ -1,5 +1,4 @@
 import PageHero from "@/components/PageHero";
-import Image from "next/image";
 
 const values = [
   { icon: "🔐", title: "Intégrité scientifique", desc: "Rigueur et honnêteté dans toutes nos productions scientifiques." },
