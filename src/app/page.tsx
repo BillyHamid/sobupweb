@@ -8,8 +8,19 @@ export const dynamic = "force-dynamic";
 
 const MONTHS_SHORT = ["Jan", "Fév", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Déc"];
 
+const MONTH_NAMES = /janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre/gi;
+
 function parseDisplayDate(displayDate: string, isoDate: string) {
-  // Tente d'extraire jour + mois + année depuis "19 – 21 Novembre 2026" ou "31 Juillet 2026"
+  // Tente d'extraire jour + mois + année depuis "19 – 21 Novembre 2026" ou "31 Juillet 2026".
+  // Le mois vient d'`isoDate` : cela n'est valable que si la plage tient dans un seul
+  // mois. Sur "1er Août – 20 Octobre 2026" on obtiendrait le jour d'août avec le mois
+  // d'octobre, soit « 1 Oct ». Dans ce cas on se fie entièrement à `isoDate`.
+  const months = new Set((displayDate.match(MONTH_NAMES) ?? []).map((m) => m.toLowerCase()));
+  // Plage à cheval sur deux mois : la pastille « jour + mois » ne peut pas la
+  // représenter, on affiche donc le libellé complet tel qu'il est saisi.
+  if (months.size > 1) {
+    return { date: "", month: "", year: "", full: displayDate };
+  }
   const dayMatch = displayDate.match(/^(\d+(?:\s*[-–]\s*\d+)?)/);
   const yearMatch = displayDate.match(/(\d{4})/);
   if (dayMatch && yearMatch) {
@@ -18,10 +29,11 @@ function parseDisplayDate(displayDate: string, isoDate: string) {
       date: dayMatch[1].replace(/\s/g, ""),
       month: MONTHS_SHORT[monthIdx],
       year: yearMatch[1],
+      full: "",
     };
   }
   const d = new Date(isoDate);
-  return { date: String(d.getDate()), month: MONTHS_SHORT[d.getMonth()], year: String(d.getFullYear()) };
+  return { date: String(d.getDate()), month: MONTHS_SHORT[d.getMonth()], year: String(d.getFullYear()), full: "" };
 }
 
 function badgeClassFor(label: string, type: string): string {
@@ -107,6 +119,7 @@ export default async function Home() {
       date: parts.date,
       month: parts.month,
       year: parts.year,
+      fullDate: parts.full,
       title: ev.title,
       location: ev.location,
       time: ev.time_range,
@@ -231,16 +244,28 @@ export default async function Home() {
                         Document
                       </span>
                     )}
-                    <div className="absolute bottom-3 left-4 flex items-baseline gap-1.5 text-white">
-                      <span className="text-3xl font-black leading-none">{ev.date}</span>
-                      <span className="text-sm font-medium opacity-90">{ev.month} {ev.year}</span>
+                    <div className="absolute bottom-3 left-4 right-4 flex items-baseline gap-1.5 text-white">
+                      {ev.fullDate ? (
+                        <span className="text-lg font-black leading-tight">{ev.fullDate}</span>
+                      ) : (
+                        <>
+                          <span className="text-3xl font-black leading-none">{ev.date}</span>
+                          <span className="text-sm font-medium opacity-90">{ev.month} {ev.year}</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 ) : (
                   <div className="bg-primary px-6 py-4 flex items-center gap-4">
                     <div className="text-center">
-                      <p className="text-4xl font-bold text-white leading-none">{ev.date}</p>
-                      <p className="text-blue-200 text-sm font-medium">{ev.month} {ev.year}</p>
+                      {ev.fullDate ? (
+                        <p className="text-lg font-bold text-white leading-tight">{ev.fullDate}</p>
+                      ) : (
+                        <>
+                          <p className="text-4xl font-bold text-white leading-none">{ev.date}</p>
+                          <p className="text-blue-200 text-sm font-medium">{ev.month} {ev.year}</p>
+                        </>
+                      )}
                     </div>
                     <div className="ml-auto flex items-center gap-1.5">
                       {ev.hasAttachment && (

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight, Check, Clock, GraduationCap, Laptop, FileCheck2 } from "lucide-react";
-import { RESPIRE_MODULES } from "@/lib/formations";
+import { RESPIRE_DATES, RESPIRE_MODULES, RESPIRE_PEDAGOGICAL_DIRECTOR } from "@/lib/formations";
 import ApplicationForm from "../ApplicationForm";
 
 /** Date limite de paiement des frais de formation, affichée dans le tableau des tarifs. */
@@ -36,11 +36,15 @@ export default function RespireFormationPage() {
               <p className="text-2xl font-bold">Votre projet au cœur<br />de la formation.</p>
               <p className="mt-4 leading-relaxed text-white/70">Un, deux ou trois modules : construisez votre parcours et travaillez sur votre propre sujet, accompagné par les formateurs.</p>
               <div className="mt-8 grid grid-cols-3 gap-3 border-t border-white/15 pt-6">
-                {[["3", "modules"], ["99 h", "au total"], ["80 %", "de pratique"]].map(([value, label]) => <div key={label}><p className="text-2xl font-black text-[#7eeae4]">{value}</p><p className="mt-1 text-xs text-white/65">{label}</p></div>)}
+                {[["3", "modules"], [`${RESPIRE_MODULES.reduce((total, module) => total + module.hours, 0)} h`, "au total"], ["80 %", "de pratique"]].map(([value, label]) => <div key={label}><p className="text-2xl font-black text-[#7eeae4]">{value}</p><p className="mt-1 text-xs text-white/65">{label}</p></div>)}
               </div>
             </div>
           </div>
-          <p className="mt-12 max-w-3xl border-t border-white/15 pt-6 text-sm leading-relaxed text-white/65">Une formation portée par la Société Burkinabè de Pneumologie (SOBUP) et le Département de Santé Publique de l’Université Joseph KI-ZERBO.</p>
+          <div className="mt-12 max-w-3xl border-t border-white/15 pt-6 text-sm leading-relaxed">
+            <p className="font-semibold text-white">Directeur pédagogique : {RESPIRE_PEDAGOGICAL_DIRECTOR.name}</p>
+            <p className="mt-1 text-white/75">{RESPIRE_PEDAGOGICAL_DIRECTOR.role}</p>
+            <p className="mt-4 text-white/65">Une formation portée par la Société Burkinabè de Pneumologie (SOBUP) et le Département de Santé Publique de l’Université Joseph KI-ZERBO.</p>
+          </div>
         </div>
       </section>
       <div className="mx-auto max-w-7xl space-y-16 px-5 py-14 sm:px-8 sm:py-20">
@@ -61,7 +65,7 @@ export default function RespireFormationPage() {
           </div>
         </section>
         <section className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-2xl bg-[#e8f3ef] p-7"><Laptop className="h-7 w-7 text-[#08796c]" /><h2 className="mt-4 text-xl font-bold text-[#0b3d38]">En ligne, puis ensemble en atelier</h2><p className="mt-3 leading-relaxed text-slate-600">Vidéos courtes, lectures, exercices et échanges en ligne préparent deux journées intensives en présentiel par module. Relecture entre pairs, mentorat et usage critique de l’IA accompagnent votre travail.</p><p className="mt-4 text-sm font-semibold text-[#065e52]">En ligne : du 14 décembre 2026 au 10 janvier 2027.<br />Présentiel : du 18 au 23 janvier 2027.<br />Lieu des ateliers : à préciser.</p></div>
+          <div className="rounded-2xl bg-[#e8f3ef] p-7"><Laptop className="h-7 w-7 text-[#08796c]" /><h2 className="mt-4 text-xl font-bold text-[#0b3d38]">En ligne, puis ensemble en atelier</h2><p className="mt-3 leading-relaxed text-slate-600">Vidéos courtes, lectures, exercices et échanges en ligne préparent deux journées intensives en présentiel par module. Relecture entre pairs, mentorat et usage critique de l’IA accompagnent votre travail.</p><p className="mt-4 text-sm font-semibold text-[#065e52]">En ligne : du {RESPIRE_DATES.online}.<br />Présentiel : du {RESPIRE_DATES.inPerson}.<br />Lieu des ateliers : à préciser.</p></div>
           <div className="rounded-2xl border border-slate-200 bg-white p-7"><FileCheck2 className="h-7 w-7 text-[#08796c]" /><h2 className="mt-4 text-xl font-bold text-[#0b3d38]">Un certificat pour chaque module validé</h2><p className="mt-3 leading-relaxed text-slate-600">La validation repose sur les exercices, la participation, les relectures et le livrable final. Une présence d’au moins 80 % et une note supérieure à 12/20 au livrable final sont requises.</p><p className="mt-4 text-sm text-slate-600">Le certificat RESPIRE-BF complet est délivré après validation des trois modules et de leurs trois livrables.</p></div>
         </section>
         <section><p className="text-xs font-bold uppercase tracking-widest text-[#08796c]">Frais de formation</p><h2 className="mt-3 text-3xl font-black text-[#0b3d38]">Choisissez la formule qui vous convient.</h2>

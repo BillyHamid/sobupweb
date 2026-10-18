@@ -50,11 +50,21 @@ export default function FormationsPage() {
                 <p className="mt-1 mb-4 text-sm font-medium text-slate-500">{formation.subtitle}</p>
                 <p className="text-sm leading-relaxed text-slate-600">{formation.description}</p>
                 <div className="mt-6 space-y-3 text-sm text-slate-600">
+                  {formation.pedagogicalDirector && (
+                    <p className="leading-relaxed">
+                      <span className="font-semibold text-[#0b3d38]">Directeur pédagogique : {formation.pedagogicalDirector}</span>
+                      <span className="block">{formation.pedagogicalDirectorRole}</span>
+                    </p>
+                  )}
                   <p className="flex items-center gap-2.5"><Laptop aria-hidden="true" className="h-4 w-4 shrink-0 text-[#08796c]" />{formation.format}</p>
-                  <div className="flex flex-wrap gap-x-5 gap-y-2">
-                    <p className="flex items-center gap-2.5"><Layers aria-hidden="true" className="h-4 w-4 text-[#08796c]" />{formation.modules} modules indépendants</p>
-                    <p className="flex items-center gap-2.5"><Clock aria-hidden="true" className="h-4 w-4 text-[#08796c]" />{formation.hours} h au total</p>
-                  </div>
+                  {formation.practicalSessions ? (
+                    <p className="flex items-start gap-2.5"><Clock aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[#08796c]" />{formation.practicalSessions}</p>
+                  ) : (
+                    <div className="flex flex-wrap gap-x-5 gap-y-2">
+                      <p className="flex items-center gap-2.5"><Layers aria-hidden="true" className="h-4 w-4 text-[#08796c]" />{formation.modules} modules indépendants</p>
+                      <p className="flex items-center gap-2.5"><Clock aria-hidden="true" className="h-4 w-4 text-[#08796c]" />{formation.hours} h au total</p>
+                    </div>
+                  )}
                   <p className="flex items-center gap-2.5"><CalendarDays aria-hidden="true" className="h-4 w-4 shrink-0 text-[#08796c]" />{formation.schedule}</p>
                 </div>
                 <div className="mt-auto pt-7">

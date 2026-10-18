@@ -18,10 +18,10 @@ export const SUBMISSION_DEADLINE_LABEL = "5 octobre 2026 à minuit";
 
 /**
  * Refus effectif des soumissions tardives.
- * Laisser `false` garde le formulaire ouvert au-delà de la date affichée :
- * les envois restent horodatés, le comité tranche lui-même.
+ * `true` : passé `SUBMISSION_CLOSES_AT`, le formulaire disparaît et l'API
+ * refuse tout envoi. Repasser à `false` rouvre immédiatement les soumissions.
  */
-export const ENFORCE_DEADLINE = false;
+export const ENFORCE_DEADLINE = true;
 
 export function submissionsClosed(now: Date = new Date()): boolean {
   return ENFORCE_DEADLINE && now > SUBMISSION_CLOSES_AT;

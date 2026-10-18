@@ -91,7 +91,7 @@ d.rounded_rectangle((91, 450, 735, 458), radius=3, fill=ORANGE)
 
 # Pedagogical split, in chips right under the rule: it was buried in the footer
 # where nobody read it, and the 80 % practice is the strongest selling point.
-chips = [("20 % de théorie", TEAL_2, "white"), ("80 % de pratique", ORANGE, "white"), ("99 h au total", None, TEAL_2)]
+chips = [("20 % de théorie", TEAL_2, "white"), ("80 % de pratique", ORANGE, "white"), ("101 h au total", None, TEAL_2)]
 chip_x = 88
 for label, fill_colour, text_colour in chips:
     chip_font = font(21, True)

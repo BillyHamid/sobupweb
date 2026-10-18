@@ -64,7 +64,7 @@ text(91, 677, "à la publication scientifique.", 39, "white", True)
 
 draw.rounded_rectangle((89, 812, 690, 934), radius=25, fill=(2, 49, 44, 235), outline=(154, 240, 228, 165), width=2)
 text(118, 829, "3 MODULES INDÉPENDANTS", 29, AQUA, True)
-text(118, 876, "99 h au total  •  80 % pratique", 28, "white")
+text(118, 876, "101 h au total  •  80 % pratique", 28, "white")
 
 # An ivory editorial panel carries the substance in a compact, readable ladder.
 draw.rounded_rectangle((72, 1112, 1528, 1658), radius=30, fill=(255, 255, 255, 250), outline=(206, 226, 220, 255), width=2)

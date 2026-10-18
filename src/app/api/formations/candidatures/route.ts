@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { APPLICATION_BUCKET, APPLICATION_FILE_TYPES, MAX_APPLICATION_FILE_SIZE, PROFESSIONS, RESPIRE_MODULES, validModuleSelection } from "@/lib/formations";
+import { APPLICATION_BUCKET, APPLICATION_FILE_TYPES, ECHOT_PROFESSIONS, MAX_APPLICATION_FILE_SIZE, PROFESSIONS, RESPIRE_MODULES, THORACOSCOPY_PROFESSIONS, THORACOSCOPY_REGISTRATION_OPENS_AT, validModuleSelection } from "@/lib/formations";
 import { sendMail, escapeHtml, emailLayout, SECRETARIAT, SITE_URL } from "@/lib/mail";
 
 export const runtime = "nodejs";
@@ -15,11 +15,15 @@ const fail = (error: string, status = 422) => NextResponse.json({ error }, { sta
  * elle, est déjà enregistrée et ne doit jamais être présentée comme perdue.
  */
 async function notifyApplication(app: {
+  formation: "respire-bf" | "echographie-thoracique" | "thoracoscopie-medicale";
   id: string; nom: string; prenom: string; telephone: string; email: string;
   profession: string; specialite: string; lieuExercice: string; modules: number[];
   cv: { bytes: Buffer; ext: string; contentType: string };
 }): Promise<string | undefined> {
-  const reference = `RESPIRE-${app.id}`;
+  const isEcho = app.formation === "echographie-thoracique";
+  const isThoracoscopy = app.formation === "thoracoscopie-medicale";
+  const formationName = isEcho ? "Échographie thoracique" : isThoracoscopy ? "Thoracoscopie médicale" : "RESPIRE-BF";
+  const reference = `${isEcho ? "ECHOT" : isThoracoscopy ? "THORACO" : "RESPIRE"}-${app.id}`;
   const safe = {
     nom: escapeHtml(app.nom), prenom: escapeHtml(app.prenom),
     telephone: escapeHtml(app.telephone), email: escapeHtml(app.email),
@@ -38,7 +42,7 @@ async function notifyApplication(app: {
 
   const secretariatHtml = emailLayout(`
     <div style="padding:28px 32px 8px">
-      <h2 style="margin:0 0 6px;color:#065e52;font-weight:800;font-size:20px">Nouvelle candidature RESPIRE-BF</h2>
+      <h2 style="margin:0 0 6px;color:#065e52;font-weight:800;font-size:20px">Nouvelle candidature ${formationName}</h2>
       <p style="margin:0 0 20px;color:#64748b;font-size:13px">Référence <strong style="color:#0f172a">${reference}</strong></p>
       <table style="width:100%;font-size:14px;border-collapse:collapse;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">
         ${row("Candidat", `<strong>${safe.prenom} ${safe.nom}</strong>`, true)}
@@ -48,10 +52,10 @@ async function notifyApplication(app: {
         ${safe.specialite ? row("Spécialité", safe.specialite, true) : ""}
         ${row("Lieu d’exercice", safe.lieu, !safe.specialite)}
       </table>
-      <div style="margin-top:18px;padding:16px;background:#e8f9f7;border:1px solid #31B9AE40;border-radius:12px">
+      ${app.formation !== "respire-bf" ? "" : `<div style="margin-top:18px;padding:16px;background:#e8f9f7;border:1px solid #31B9AE40;border-radius:12px">
         <p style="margin:0 0 8px;font-size:11px;font-weight:800;color:#065e52;text-transform:uppercase;letter-spacing:.12em">Modules demandés</p>
         <ul style="margin:0;padding-left:18px;font-size:14px;color:#0f172a">${modulesHtml}</ul>
-      </div>
+      </div>`}
       <p style="margin:18px 0 0;font-size:13px;color:#475569">📎 Le CV du candidat est joint à ce message.</p>
       <div style="margin:22px 0 0;text-align:center">
         <a href="${SITE_URL}/admin/formations" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#31B9AE 0%,#065E52 100%);color:#fff;text-decoration:none;border-radius:10px;font-weight:800;font-size:14px">Ouvrir le back-office →</a>
@@ -63,20 +67,20 @@ async function notifyApplication(app: {
     <div style="padding:32px;text-align:center">
       <div style="display:inline-block;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#31B9AE 0%,#065E52 100%);line-height:56px;margin-bottom:16px"><span style="color:#fff;font-size:28px;font-weight:900">✓</span></div>
       <h2 style="margin:0 0 8px;color:#0f172a;font-weight:800;font-size:22px">Candidature bien reçue</h2>
-      <p style="margin:0;color:#64748b;font-size:14px">Formation RESPIRE-BF</p>
+      <p style="margin:0;color:#64748b;font-size:14px">Formation ${formationName}</p>
     </div>
     <div style="padding:0 32px 32px">
       <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 14px">Bonjour <strong>${safe.prenom}</strong>,</p>
-      <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 18px">Votre dossier a bien été transmis à l’équipe RESPIRE-BF. Conservez la référence ci-dessous pour tous vos échanges avec la SOBUP.</p>
+      <p style="color:#475569;line-height:1.7;font-size:14px;margin:0 0 18px">Votre dossier a bien été transmis à l’équipe ${formationName}. Conservez la référence ci-dessous pour tous vos échanges avec la SOBUP.</p>
       <div style="margin:0 0 20px;padding:18px;background:#e8f9f7;border:1px solid #31B9AE40;border-radius:12px;text-align:center">
         <p style="margin:0 0 6px;font-size:11px;font-weight:800;color:#065e52;text-transform:uppercase;letter-spacing:.14em">Votre référence</p>
         <p style="margin:0;font-size:16px;font-weight:900;color:#0f172a;word-break:break-all">${reference}</p>
       </div>
-      <p style="margin:0 0 8px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.1em">Modules demandés</p>
+      ${app.formation !== "respire-bf" ? "" : `<p style="margin:0 0 8px;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.1em">Modules demandés</p>
       <ul style="margin:0 0 20px;padding-left:18px;font-size:14px;color:#0f172a;line-height:1.7">${modulesHtml}</ul>
       <div style="margin:0 0 18px;padding:14px;background:#fff7ed;border-left:3px solid #e67e22;border-radius:6px">
         <p style="margin:0;font-size:13px;color:#92400e;line-height:1.6">Votre inscription et le paiement des frais sont attendus au plus tard le <strong>${PAYMENT_DEADLINE}</strong>.</p>
-      </div>
+      </div>`}
       <p style="color:#475569;line-height:1.7;font-size:14px;margin:0">Le dépôt d’une candidature ne constitue ni un paiement ni une confirmation d’admission. L’équipe reviendra vers vous après examen de votre dossier.</p>
       <p style="color:#94a3b8;line-height:1.6;font-size:12px;margin:20px 0 0">Pour toute question, répondez directement à ce mail.</p>
     </div>`);
@@ -89,12 +93,12 @@ async function notifyApplication(app: {
   const [secretariat, candidat] = await Promise.all([
     sendMail({
       to: SECRETARIAT, replyTo: app.email,
-      subject: `Candidature RESPIRE-BF — ${app.prenom} ${app.nom}`,
+      subject: `Candidature ${formationName} — ${app.prenom} ${app.nom}`,
       html: secretariatHtml, attachments: cvAttachment,
     }, "formations/secretariat"),
     sendMail({
       to: app.email, replyTo: SECRETARIAT,
-      subject: `Candidature RESPIRE-BF bien reçue — ${reference}`,
+      subject: `Candidature ${formationName} bien reçue — ${reference}`,
       html: candidatHtml,
     }, "formations/candidat"),
   ]);
@@ -141,6 +145,12 @@ export async function POST(req: Request) {
   } catch { return fail("Formulaire invalide.", 400); }
   const field = (key: string) => typeof form.get(key) === "string" ? (form.get(key) as string).trim() : "";
   if (field("website")) return fail("Le formulaire n’a pas pu être envoyé.", 400);
+  const formation = field("formation") || "respire-bf";
+  if (formation !== "respire-bf" && formation !== "echographie-thoracique" && formation !== "thoracoscopie-medicale") return fail("Formation inconnue.");
+  if (formation === "thoracoscopie-medicale" && Date.now() < THORACOSCOPY_REGISTRATION_OPENS_AT) return fail("Les candidatures en thoracoscopie médicale ouvriront le 26 octobre 2026.", 403);
+  const isEcho = formation === "echographie-thoracique";
+  const isThoracoscopy = formation === "thoracoscopie-medicale";
+  const referencePrefix = isEcho ? "ECHOT" : isThoracoscopy ? "THORACO" : "RESPIRE";
   const nom = field("nom"), prenom = field("prenom");
   const telephone = field("telephone"), email = field("email");
   const profession = field("profession"), specialite = field("specialite");
@@ -150,29 +160,32 @@ export async function POST(req: Request) {
   const digits = telephone.replace(/\D/g, "");
   if (!/^[+\d\s().-]+$/.test(telephone) || digits.length < 8 || digits.length > 15 || telephone.length > 40) return fail("Indiquez un numéro WhatsApp valide.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 180) return fail("Indiquez une adresse email valide.");
-  if (!PROFESSIONS.includes(profession as (typeof PROFESSIONS)[number])) return fail("Choisissez votre profession.");
-  if (profession === "Médecin spécialiste" && !specialite) return fail("Indiquez votre spécialité.");
+  const validProfession = isEcho ? ECHOT_PROFESSIONS.includes(profession as (typeof ECHOT_PROFESSIONS)[number])
+    : isThoracoscopy ? THORACOSCOPY_PROFESSIONS.includes(profession as (typeof THORACOSCOPY_PROFESSIONS)[number])
+    : PROFESSIONS.includes(profession as (typeof PROFESSIONS)[number]);
+  if (!validProfession) return fail("Choisissez votre profession ou profil.");
+  if (formation === "respire-bf" && profession === "Médecin spécialiste" && !specialite) return fail("Indiquez votre spécialité.");
   if (specialite.length > 120) return fail("Spécialité trop longue (120 caractères maximum).");
   if (!lieuExercice || lieuExercice.length > 160) return fail("Indiquez votre lieu d’exercice (160 caractères maximum).");
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(requestId)) return fail("Rechargez la page avant de soumettre votre candidature.");
   let modules: unknown;
   try { modules = JSON.parse(field("modules")); } catch { return fail("Choisissez au moins un module valide."); }
-  if (!validModuleSelection(modules)) return fail("Choisissez un, deux ou trois modules distincts parmi les modules 1, 2 et 3.");
-  modules.sort();
+  if (formation !== "respire-bf" ? !Array.isArray(modules) || modules.length !== 0 : !validModuleSelection(modules)) return fail(formation !== "respire-bf" ? "Sélection de formation invalide." : "Choisissez un, deux ou trois modules distincts parmi les modules 1, 2 et 3.");
+  const selectedModules = (modules as number[]).sort();
   let cv;
   try { cv = await documentFile(form.get("cv"), true); }
   catch (error) { return fail((error as Error).message); }
   if (!cv) return fail("Veuillez joindre votre CV.");
-  const fingerprint = createHash("sha256").update(JSON.stringify({ nom, prenom, telephone, email, profession, specialite, lieuExercice, modules })).update(cv.bytes).digest("hex");
+  const fingerprint = createHash("sha256").update(JSON.stringify({ formation, nom, prenom, telephone, email, profession, specialite, lieuExercice, modules: selectedModules })).update(cv.bytes).digest("hex");
   const uploaded: string[] = [];
   try {
     const db = createAdminClient();
     const { data: existing, error: lookupError } = await db.from("formation_applications").select("id, fingerprint").eq("request_id", requestId).maybeSingle();
     if (lookupError) throw lookupError;
-    if (existing) return existing.fingerprint === fingerprint ? NextResponse.json({ reference: `RESPIRE-${existing.id}` }) : fail("Cette candidature a déjà été envoyée avec d’autres informations. Rechargez la page pour un nouveau dossier.", 409);
+    if (existing) return existing.fingerprint === fingerprint ? NextResponse.json({ reference: `${referencePrefix}-${existing.id}` }) : fail("Cette candidature a déjà été envoyée avec d’autres informations. Rechargez la page pour un nouveau dossier.", 409);
     // L'email sert de clé anti-doublon : c'est l'identifiant le plus stable.
     const normalizedContact = email.toLowerCase();
-    const { count, error: countError } = await db.from("formation_applications").select("id", { count: "exact", head: true }).eq("contact_normalized", normalizedContact).gte("created_at", new Date(Date.now() - 60_000).toISOString());
+    const { count, error: countError } = await db.from("formation_applications").select("id", { count: "exact", head: true }).eq("formation_slug", formation).eq("contact_normalized", normalizedContact).gte("created_at", new Date(Date.now() - 60_000).toISOString());
     if (countError) throw countError;
     if (count && count > 0) return fail("Une candidature vient d’être reçue pour ce contact. Patientez une minute avant un nouvel envoi.", 429);
     const id = randomUUID();
@@ -182,13 +195,13 @@ export async function POST(req: Request) {
     uploaded.push(cvPath);
     // `motivation_path` reste en base pour les candidatures déjà reçues ;
     // la lettre de motivation n'est simplement plus demandée.
-    const { error } = await db.from("formation_applications").insert({ id, request_id: requestId, fingerprint, nom, prenom, telephone, email: normalizedContact, profession, specialite: specialite || null, lieu_exercice: lieuExercice, contact: email, contact_normalized: normalizedContact, modules, cv_path: cvPath, motivation_path: null });
+    const { error } = await db.from("formation_applications").insert({ id, request_id: requestId, fingerprint, formation_slug: formation, nom, prenom, telephone, email: normalizedContact, profession, specialite: specialite || null, lieu_exercice: lieuExercice, contact: email, contact_normalized: normalizedContact, modules: selectedModules, cv_path: cvPath, motivation_path: null });
     if (error) {
       if (error.code === "23505") {
         const { data: duplicate } = await db.from("formation_applications").select("id, fingerprint").eq("request_id", requestId).maybeSingle();
         await db.storage.from(APPLICATION_BUCKET).remove(uploaded);
         uploaded.length = 0;
-        if (duplicate?.fingerprint === fingerprint) return NextResponse.json({ reference: `RESPIRE-${duplicate.id}` });
+        if (duplicate?.fingerprint === fingerprint) return NextResponse.json({ reference: `${referencePrefix}-${duplicate.id}` });
         return fail("Cette candidature a déjà été envoyée. Rechargez la page pour un nouveau dossier.", 409);
       }
       throw error;
@@ -196,9 +209,9 @@ export async function POST(req: Request) {
     // La candidature est enregistrée : l'envoi des mails ne doit plus pouvoir
     // la faire échouer. `sendMail` ne lève jamais, il renvoie l'échec.
     const warning = await notifyApplication({
-      id, nom, prenom, telephone, email, profession, specialite, lieuExercice, modules, cv,
+      formation, id, nom, prenom, telephone, email, profession, specialite, lieuExercice, modules: selectedModules, cv,
     });
-    return NextResponse.json({ reference: `RESPIRE-${id}`, warning }, { status: 201 });
+    return NextResponse.json({ reference: `${referencePrefix}-${id}`, warning }, { status: 201 });
   } catch (error) {
     // On journalise l'erreur brute : un message générique masquerait la cause
     // réelle (colonne manquante, quota de stockage, RLS…) et rendrait tout
@@ -209,7 +222,7 @@ export async function POST(req: Request) {
         const db = createAdminClient();
         // A lost response can follow a successful INSERT. Keep its documents.
         const { data: saved, error: checkError } = await db.from("formation_applications").select("id, fingerprint").eq("request_id", requestId).maybeSingle();
-        if (saved?.fingerprint === fingerprint) return NextResponse.json({ reference: `RESPIRE-${saved.id}` });
+        if (saved?.fingerprint === fingerprint) return NextResponse.json({ reference: `${referencePrefix}-${saved.id}` });
         if (!checkError) await db.storage.from(APPLICATION_BUCKET).remove(uploaded);
       } catch { console.error("[formations/candidatures] État de l’enregistrement non confirmé ; documents conservés"); }
     }
