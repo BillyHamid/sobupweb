@@ -37,7 +37,7 @@ export const FORMATIONS: FormationCard[] = [
     title: "Échographie thoracique",
     subtitle: "Formation hybride pour pneumologues et médecins en formation",
     category: "Pratique clinique",
-    image: "/affiches/echographie-thoracique.png",
+    image: "/affiches/echographie-thoracique-v2.png",
     description: "Apprenez à réaliser et interpréter une échographie thoracique de base, avec quatre jours de pratique supervisée et un mentorat après la formation.",
     format: "Hybride · Théorie en ligne et pratique en présentiel",
     schedule: `Théorie : dès le ${ECHOT_DATES.onlineStart} · Pratique : dès le ${ECHOT_DATES.practiceStart}`,
