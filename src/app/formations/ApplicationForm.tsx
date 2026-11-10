@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { ECHOT_PROFESSIONS, MAX_APPLICATION_FILE_SIZE, RESPIRE_MODULES, PROFESSIONS, THORACOSCOPY_PROFESSIONS } from "@/lib/formations";
 
-export default function ApplicationForm({ formation = "respire-bf" }: { formation?: "respire-bf" | "echographie-thoracique" | "thoracoscopie-medicale" }) {
+export default function ApplicationForm({ formation }: { formation: "respire-bf" | "echographie-thoracique" | "thoracoscopie-medicale" }) {
   const isEcho = formation === "echographie-thoracique";
   const isThoracoscopy = formation === "thoracoscopie-medicale";
   const hasModules = formation === "respire-bf";
@@ -47,6 +47,7 @@ export default function ApplicationForm({ formation = "respire-bf" }: { formatio
   return <form onSubmit={submit} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
     <fieldset disabled={pending} className="space-y-6 disabled:opacity-70">
       <legend className="sr-only">Candidature {formationName}</legend>
+      <p className="rounded-xl bg-[#e8f9f7] p-4 text-sm font-semibold text-[#065e52]">Formation choisie : {formationName}</p>
       <p className="text-sm text-slate-500">Les champs marqués d’un astérisque sont obligatoires.</p>
       <div className="grid gap-5 sm:grid-cols-2"><label className="text-sm font-semibold">Nom *<input name="nom" autoComplete="family-name" required maxLength={100} className={inputClass} /></label><label className="text-sm font-semibold">Prénom *<input name="prenom" autoComplete="given-name" required maxLength={100} className={inputClass} /></label></div>
       <div className="grid gap-5 sm:grid-cols-2">

@@ -16,8 +16,14 @@ export default async function FormationApplicationsPage({ searchParams }: { sear
   let query = db.from("formation_applications").select("id, formation_slug, nom, prenom, telephone, email, profession, specialite, lieu_exercice, contact, modules, motivation_path, created_at", { count: "exact" }).eq("formation_slug", formation).order("created_at", { ascending: false }).range((page - 1) * pageSize, page * pageSize - 1);
   if (moduleId) query = query.contains("modules", [moduleId]);
   const { data, error, count } = await query;
+  const formationLinks = [
+    { slug: "respire-bf", label: "RESPIRE-BF" },
+    { slug: "echographie-thoracique", label: "Échographie thoracique" },
+    { slug: "thoracoscopie-medicale", label: "Thoracoscopie médicale" },
+  ];
   return <div className="space-y-6 p-5 sm:p-8">
     <div><p className="text-xs font-bold uppercase tracking-widest text-[#08796c]">{formation === "respire-bf" ? "RESPIRE-BF" : formation === "echographie-thoracique" ? "Échographie thoracique" : "Thoracoscopie médicale"}</p><h1 className="mt-2 text-2xl font-black text-slate-900">Candidatures aux formations</h1><p className="mt-2 text-sm text-slate-500">Coordonnées et CV des candidats, classés par formation.</p></div>
+    <nav aria-label="Candidatures par formation" className="flex flex-wrap gap-2">{formationLinks.map(item => <Link key={item.slug} href={`?formation=${item.slug}`} aria-current={formation === item.slug ? "page" : undefined} className={`rounded-lg border px-4 py-3 text-sm font-semibold ${formation === item.slug ? "border-[#065e52] bg-[#065e52] text-white" : "border-slate-200 bg-white text-[#065e52] hover:border-[#065e52]"}`}>{item.label}</Link>)}</nav>
     <form className="flex flex-wrap items-end gap-3"><label className="text-sm font-medium">Formation<select name="formation" defaultValue={formation} className="mt-2 block rounded-lg border border-slate-300 bg-white p-3"><option value="respire-bf">RESPIRE-BF</option><option value="echographie-thoracique">Échographie thoracique</option><option value="thoracoscopie-medicale">Thoracoscopie médicale</option></select></label>{formation === "respire-bf" && <label className="text-sm font-medium">Filtrer par module<select name="module" defaultValue={String(moduleId)} className="mt-2 block rounded-lg border border-slate-300 bg-white p-3"><option value="0">Tous les modules</option>{RESPIRE_MODULES.map(m => <option key={m.id} value={m.id}>Module {m.id} — {m.title}</option>)}</select></label>}<button className="rounded-lg bg-[#065e52] px-4 py-3 text-sm font-bold text-white">Filtrer</button></form>
     {error ? <div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900">Chargement des candidatures impossible. Vérifiez la connexion Supabase et l’application du script supabase-formations.sql.</div> : <>
       <p className="text-sm text-slate-600">{count ?? 0} candidature(s)</p>

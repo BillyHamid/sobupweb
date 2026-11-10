@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { APPLICATION_BUCKET, APPLICATION_FILE_TYPES, ECHOT_PROFESSIONS, MAX_APPLICATION_FILE_SIZE, PROFESSIONS, RESPIRE_MODULES, THORACOSCOPY_PROFESSIONS, THORACOSCOPY_REGISTRATION_OPENS_AT, validModuleSelection } from "@/lib/formations";
+import { APPLICATION_BUCKET, APPLICATION_FILE_TYPES, ECHOT_PROFESSIONS, ECHOT_REGISTRATION_CLOSES_AT, MAX_APPLICATION_FILE_SIZE, PROFESSIONS, RESPIRE_MODULES, THORACOSCOPY_PROFESSIONS, THORACOSCOPY_REGISTRATION_CLOSES_AT, THORACOSCOPY_REGISTRATION_OPENS_AT, validModuleSelection } from "@/lib/formations";
 import { sendMail, escapeHtml, emailLayout, SECRETARIAT, SITE_URL } from "@/lib/mail";
 
 export const runtime = "nodejs";
@@ -145,9 +145,11 @@ export async function POST(req: Request) {
   } catch { return fail("Formulaire invalide.", 400); }
   const field = (key: string) => typeof form.get(key) === "string" ? (form.get(key) as string).trim() : "";
   if (field("website")) return fail("Le formulaire n’a pas pu être envoyé.", 400);
-  const formation = field("formation") || "respire-bf";
+  const formation = field("formation");
   if (formation !== "respire-bf" && formation !== "echographie-thoracique" && formation !== "thoracoscopie-medicale") return fail("Formation inconnue.");
+  if (formation === "echographie-thoracique" && Date.now() >= ECHOT_REGISTRATION_CLOSES_AT) return fail("Les candidatures en échographie thoracique sont closes depuis le 25 octobre 2026.", 403);
   if (formation === "thoracoscopie-medicale" && Date.now() < THORACOSCOPY_REGISTRATION_OPENS_AT) return fail("Les candidatures en thoracoscopie médicale ouvriront le 26 octobre 2026.", 403);
+  if (formation === "thoracoscopie-medicale" && Date.now() >= THORACOSCOPY_REGISTRATION_CLOSES_AT) return fail("Les candidatures en thoracoscopie médicale sont closes depuis le 15 novembre 2026.", 403);
   const isEcho = formation === "echographie-thoracique";
   const isThoracoscopy = formation === "thoracoscopie-medicale";
   const referencePrefix = isEcho ? "ECHOT" : isThoracoscopy ? "THORACO" : "RESPIRE";

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight, Award, Check, Clock, Laptop, ScanLine, Users } from "lucide-react";
-import { ECHOT_DATES } from "@/lib/formations";
+import { ECHOT_DATES, ECHOT_REGISTRATION_CLOSES_AT } from "@/lib/formations";
 import ApplicationForm from "../ApplicationForm";
 
 export const metadata: Metadata = {
@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "Formation hybride en échographie thoracique pour pneumologues, internes et résidents : théorie en ligne, quatre jours de pratique supervisée et mentorat.",
   alternates: { canonical: "/formations/echographie-thoracique" },
 };
+
+export const dynamic = "force-dynamic";
 
 const competencies = [
   "Réaliser un examen échographique thoracique systématique et reconnaître l’aspect normal",
@@ -25,6 +27,7 @@ const practice = [
 ];
 
 export default function EchographieThoraciquePage() {
+  const applicationsClosed = Date.now() >= ECHOT_REGISTRATION_CLOSES_AT;
   return (
     <div className="bg-[#f7faf9] text-slate-800">
       <section className="relative overflow-hidden bg-[#0b3d38] text-white">
@@ -37,7 +40,7 @@ export default function EchographieThoraciquePage() {
               <h1 className="max-w-3xl text-4xl font-black tracking-tight sm:text-6xl">Échographie <span className="text-[#7eeae4]">thoracique</span></h1>
               <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/80">Apprenez à réaliser, interpréter et intégrer une échographie thoracique de base dans votre pratique, avec un entraînement supervisé en petit groupe.</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#inscription" className="inline-flex items-center gap-3 rounded-xl bg-[#e67e22] px-6 py-3.5 font-bold text-white transition hover:bg-[#ce6c18]">Modalités d’inscription <ArrowUpRight className="h-5 w-5" /></a>
+                <a href="#candidature" className="inline-flex items-center gap-3 rounded-xl bg-[#e67e22] px-6 py-3.5 font-bold text-white transition hover:bg-[#ce6c18]">{applicationsClosed ? "Candidatures closes" : "Déposer ma candidature"} <ArrowUpRight className="h-5 w-5" /></a>
                 <a href="#programme" className="inline-flex items-center gap-3 rounded-xl border border-white/25 px-6 py-3.5 font-bold hover:bg-white/10">Voir le programme <ArrowDown className="h-4 w-4" /></a>
               </div>
             </div>
@@ -77,7 +80,7 @@ export default function EchographieThoraciquePage() {
         </section>
 
         <section id="inscription" className="scroll-mt-24"><p className="text-xs font-bold uppercase tracking-widest text-[#08796c]">Participation</p><h2 className="mt-3 text-3xl font-black text-[#0b3d38]">Tarifs et candidature.</h2><div className="mt-7 grid gap-5 md:grid-cols-2"><div className="rounded-2xl border border-slate-200 bg-white p-6"><p className="text-sm text-slate-500">Membres SOBUP à jour de cotisation</p><p className="mt-2 text-3xl font-black text-[#065e52]">40 000 FCFA</p></div><div className="rounded-2xl border border-slate-200 bg-white p-6"><p className="text-sm text-slate-500">Autres participants</p><p className="mt-2 text-3xl font-black text-[#065e52]">70 000 FCFA</p></div></div><p className="mt-5 max-w-3xl leading-relaxed text-slate-600">Les frais couvrent les quatre jours de pratique, les supports, les consommables d’atelier, les évaluations, le mentorat et l’attestation. Le déplacement et l’hébergement restent à la charge des participants.</p></section>
-        <section className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]"><div><p className="text-xs font-bold uppercase tracking-widest text-[#08796c]">Candidature en ligne</p><h2 className="mt-3 text-3xl font-black text-[#0b3d38]">Rejoignez une session pratique.</h2><p className="mt-5 max-w-md leading-relaxed text-slate-600">Renseignez vos coordonnées et joignez votre CV. La candidature est ouverte aux pneumologues, internes et résidents en pneumologie, dans la limite de 25 places.</p></div><ApplicationForm formation="echographie-thoracique" /></section>
+        <section id="candidature" className="grid scroll-mt-24 gap-8 lg:grid-cols-[0.8fr_1.2fr]"><div><p className="text-xs font-bold uppercase tracking-widest text-[#08796c]">Candidature en ligne</p><h2 className="mt-3 text-3xl font-black text-[#0b3d38]">Candidature — Échographie thoracique.</h2><p className="mt-5 max-w-md leading-relaxed text-slate-600">{applicationsClosed ? `La date limite de candidature était le ${ECHOT_DATES.registrationDeadline}. Le dépôt des dossiers est terminé pour cette session.` : "Renseignez vos coordonnées et joignez votre CV. La candidature est ouverte aux pneumologues, internes et résidents en pneumologie, dans la limite de 25 places."}</p></div>{applicationsClosed ? <div className="rounded-2xl border border-slate-200 bg-white p-8"><p className="text-lg font-bold text-[#0b3d38]">Candidatures closes depuis le {ECHOT_DATES.registrationDeadline}</p><p className="mt-3 leading-relaxed text-slate-600">Le formulaire de dépôt n’est plus disponible pour cette session.</p></div> : <ApplicationForm formation="echographie-thoracique" />}</section>
       </div>
     </div>
   );

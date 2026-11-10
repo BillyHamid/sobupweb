@@ -17,7 +17,10 @@ export const RESPIRE_PEDAGOGICAL_DIRECTOR = {
 export const ECHOT_DATES = {
   onlineStart: "26 octobre 2026",
   practiceStart: "5 novembre 2026",
+  registrationDeadline: "25 octobre 2026",
 } as const;
+
+export const ECHOT_REGISTRATION_CLOSES_AT = Date.UTC(2026, 9, 26);
 
 export const ECHOT_PROFESSIONS = ["Pneumologue", "Interne en pneumologie", "Résident en pneumologie"] as const;
 
@@ -26,9 +29,11 @@ export const THORACOSCOPY_DATES = {
   initiation: "7 au 11 décembre 2026",
   consolidation: "à partir du 11 janvier 2027",
   registration: "26 octobre 2026",
+  registrationDeadline: "15 novembre 2026",
 } as const;
 
 export const THORACOSCOPY_REGISTRATION_OPENS_AT = Date.UTC(2026, 9, 26);
+export const THORACOSCOPY_REGISTRATION_CLOSES_AT = Date.UTC(2026, 10, 16);
 
 export const THORACOSCOPY_PROFESSIONS = [
   "Pneumologue",

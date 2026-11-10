@@ -74,7 +74,7 @@ export default function RespireFormationPage() {
         </section>
         <section id="candidature" className="grid scroll-mt-24 gap-8 lg:grid-cols-[0.8fr_1.2fr]">
           <div><p className="text-xs font-bold uppercase tracking-widest text-[#08796c]">Candidature en ligne</p><h2 className="mt-3 text-3xl font-black text-[#0b3d38]">Votre prochain projet<br />commence ici.</h2><p className="mt-5 max-w-md leading-relaxed text-slate-600">Indiquez vos coordonnées, choisissez un ou plusieurs modules et joignez votre CV.</p><p className="mt-4 max-w-md text-sm leading-relaxed text-slate-500">Aucun compte n’est nécessaire. Vos coordonnées et documents sont réservés à l’équipe chargée des candidatures RESPIRE-BF.</p></div>
-          <ApplicationForm />
+          <ApplicationForm formation="respire-bf" />
         </section>
       </div>
     </div>

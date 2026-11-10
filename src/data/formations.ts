@@ -49,7 +49,7 @@ export const FORMATIONS: FormationCard[] = [
     subtitle: "Formation en trois phases avec pratique supervisée",
     category: "Pratique clinique",
     image: "/affiches/thoracoscopie-medicale.png",
-    description: "Préparation en ligne, initiation à Ouagadougou et séminaires pratiques de consolidation dans deux CHU.",
+    description: "Préparation en ligne, initiation en présentiel et séminaires pratiques de consolidation dans deux CHU.",
     format: "Hybride · Préparation en ligne et formation en présentiel",
     schedule: `Préparation : ${THORACOSCOPY_DATES.preparation} · Initiation : du ${THORACOSCOPY_DATES.initiation}`,
     practicalSessions: "5 séminaires pratiques de 5 jours · 10 places",
